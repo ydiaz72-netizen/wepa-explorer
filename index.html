@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wepa Explorer — Coming Soon</title>
+  <meta name="description" content="Travel the world through food. Coming soon.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0600;
+      --cream: #f2ece0;
+      --gold: #e8a83e;
+      --muted: rgba(242,236,224,0.45);
+      --faint: rgba(242,236,224,0.07);
+      --font: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: var(--font);
+      color: var(--cream);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── BACKGROUND GLOW ── */
+    .bg-glow {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(232,168,62,0.1) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 30% at 80% 80%, rgba(232,168,62,0.05) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── LAYOUT ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    /* ── FLOATING FLAGS ── */
+    .flags {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.1s ease forwards;
+    }
+
+    .flag {
+      font-size: 28px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .flag:nth-child(1)  { animation-delay: 0.0s; }
+    .flag:nth-child(2)  { animation-delay: 0.2s; }
+    .flag:nth-child(3)  { animation-delay: 0.4s; }
+    .flag:nth-child(4)  { animation-delay: 0.6s; }
+    .flag:nth-child(5)  { animation-delay: 0.8s; }
+    .flag:nth-child(6)  { animation-delay: 1.0s; }
+    .flag:nth-child(7)  { animation-delay: 1.2s; }
+    .flag:nth-child(8)  { animation-delay: 1.4s; }
+    .flag:nth-child(9)  { animation-delay: 1.6s; }
+    .flag:nth-child(10) { animation-delay: 1.8s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-6px); }
+    }
+
+    /* ── MASCOT ── */
+    .mascot {
+      font-size: 80px;
+      margin-bottom: 24px;
+      display: block;
+      opacity: 0;
+      animation: popIn 0.8s 0.2s cubic-bezier(0.34,1.56,0.64,1) forwards;
+      filter: drop-shadow(0 8px 32px rgba(232,168,62,0.3));
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.5); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* ── EYEBROW ── */
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0;
+      animation: fadeUp 0.8s 0.3s ease forwards;
+      margin-bottom: 16px;
+    }
+
+    /* ── HEADLINE ── */
+    .headline {
+      font-size: clamp(42px, 9vw, 88px);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -2px;
+      color: var(--cream);
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s ease forwards;
+      margin-bottom: 8px;
+    }
+
+    .headline .gold { color: var(--gold); }
+
+    /* ── SUBHEADLINE ── */
+    .subline {
+      font-size: clamp(15px, 2.5vw, 20px);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 500px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.5s ease forwards;
+      margin-bottom: 48px;
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 52px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s ease forwards;
+    }
+
+    .feature-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(242,236,224,0.05);
+      border: 1px solid var(--faint);
+      border-radius: 99px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(242,236,224,0.7);
+      white-space: nowrap;
+    }
+
+    .feature-pill span { font-size: 16px; }
+
+    /* ── SIGNUP ── */
+    .signup-wrap {
+      width: 100%;
+      max-width: 400px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.7s ease forwards;
+      margin-bottom: 48px;
+    }
+
+    .signup-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.7;
+      margin-bottom: 14px;
+    }
+
+    .signup-row {
+      display: flex;
+      background: rgba(242,236,224,0.04);
+      border: 1px solid rgba(242,236,224,0.1);
+      border-radius: 99px;
+      padding: 5px 5px 5px 22px;
+      transition: border-color 0.2s;
+    }
+
+    .signup-row:focus-within { border-color: rgba(232,168,62,0.4); }
+
+    .signup-row input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      font-family: var(--font);
+      font-size: 14px;
+      color: var(--cream);
+      outline: none;
+      min-width: 0;
+      padding: 8px 0;
+    }
+
+    .signup-row input::placeholder { color: rgba(242,236,224,0.2); }
+
+    .signup-row button {
+      background: var(--gold);
+      color: var(--bg);
+      border: none;
+      padding: 12px 22px;
+      border-radius: 99px;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    .signup-row button:hover { background: #f0b84a; }
+
+    .signup-note {
+      font-size: 11px;
+      color: rgba(242,236,224,0.18);
+      margin-top: 10px;
+      letter-spacing: 0.3px;
+    }
+
+    .signup-success {
+      display: none;
+      padding: 14px 20px;
+      border: 1px solid rgba(45,122,79,0.3);
+      border-radius: 14px;
+      font-size: 14px;
+      color: #6fcf97;
+    }
+
+    /* ── COUNTRIES PREVIEW ── */
+    .countries {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      max-width: 500px;
+      width: 100%;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s ease forwards;
+      margin-bottom: 48px;
+    }
+
+    .country-card {
+      background: rgba(242,236,224,0.03);
+      border: 1px solid var(--faint);
+      border-radius: 14px;
+      padding: 14px 8px;
+      text-align: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .country-card:hover {
+      border-color: rgba(232,168,62,0.25);
+      background: rgba(232,168,62,0.05);
+    }
+
+    .country-flag { font-size: 24px; margin-bottom: 6px; display: block; }
+    .country-name { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 0.5px; }
+
+    /* ── TAGLINE ── */
+    .tagline {
+      font-size: 13px;
+      font-weight: 500;
+      font-style: italic;
+      color: rgba(242,236,224,0.2);
+      letter-spacing: 0.5px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.9s ease forwards;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      margin-top: 48px;
+      font-size: 11px;
+      color: rgba(242,236,224,0.15);
+      letter-spacing: 0.5px;
+      opacity: 0;
+      animation: fadeUp 0.8s 1.0s ease forwards;
+    }
+
+    .footer a { color: rgba(232,168,62,0.3); text-decoration: none; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .countries { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+      .country-card { padding: 10px 4px; }
+      .country-flag { font-size: 20px; }
+      .features { gap: 8px; }
+      .feature-pill { font-size: 12px; padding: 8px 14px; }
+      .signup-row { flex-direction: column; border-radius: 16px; padding: 12px 16px; gap: 8px; }
+      .signup-row button { width: 100%; border-radius: 10px; padding: 13px; }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<div class="page">
+
+  <!-- Floating flags -->
+  <div class="flags">
+    <span class="flag">🇵🇷</span>
+    <span class="flag">🇩🇪</span>
+    <span class="flag">🇲🇦</span>
+    <span class="flag">🇹🇷</span>
+    <span class="flag">🇮🇳</span>
+    <span class="flag">🇯🇵</span>
+    <span class="flag">🇹🇭</span>
+    <span class="flag">🇨🇴</span>
+    <span class="flag">🇧🇷</span>
+    <span class="flag">🇲🇽</span>
+  </div>
+
+  <!-- Mascot -->
+  <span class="mascot">🐸</span>
+
+  <!-- Eyebrow -->
+  <p class="eyebrow">Coming Soon</p>
+
+  <!-- Headline -->
+  <h1 class="headline">
+    Wepa<br>
+    <span class="gold">Explorer</span>
+  </h1>
+
+  <!-- Subline -->
+  <p class="subline">
+    Travel the world through food.<br>
+    Collect countries. Discover cultures. Earn rewards.
+  </p>
+
+  <!-- Features -->
+  <div class="features">
+    <div class="feature-pill"><span>🌍</span> World Discovery Map</div>
+    <div class="feature-pill"><span>🏆</span> Weekly Leaderboard</div>
+    <div class="feature-pill"><span>✨</span> Golden Coquí</div>
+    <div class="feature-pill"><span>🎓</span> Cultural Fun Facts</div>
+    <div class="feature-pill"><span>🎁</span> Real Rewards</div>
+  </div>
+
+  <!-- Signup -->
+  <div class="signup-wrap">
+    <p class="signup-label">Be first to explore</p>
+    <div class="signup-row" id="signupRow">
+      <input type="email" id="email" placeholder="your@email.com" />
+      <button onclick="doSignup()">Notify me</button>
+    </div>
+    <p class="signup-note" id="signupNote">No spam. Just the launch date.</p>
+    <div class="signup-success" id="signupSuccess">
+      ✓ &nbsp;You're on the explorer list!
+    </div>
+  </div>
+
+  <!-- Countries -->
+  <div class="countries">
+    <div class="country-card"><span class="country-flag">🇵🇷</span><div class="country-name">Puerto Rico</div></div>
+    <div class="country-card"><span class="country-flag">🇩🇪</span><div class="country-name">Germany</div></div>
+    <div class="country-card"><span class="country-flag">🇲🇦</span><div class="country-name">Morocco</div></div>
+    <div class="country-card"><span class="country-flag">🇹🇷</span><div class="country-name">Turkey</div></div>
+    <div class="country-card"><span class="country-flag">🇮🇳</span><div class="country-name">India</div></div>
+    <div class="country-card"><span class="country-flag">🇯🇵</span><div class="country-name">Japan</div></div>
+    <div class="country-card"><span class="country-flag">🇹🇭</span><div class="country-name">Thailand</div></div>
+    <div class="country-card"><span class="country-flag">🇨🇴</span><div class="country-name">Colombia</div></div>
+    <div class="country-card"><span class="country-flag">🇧🇷</span><div class="country-name">Brazil</div></div>
+    <div class="country-card"><span class="country-flag">🇲🇽</span><div class="country-name">Mexico</div></div>
+  </div>
+
+  <!-- Tagline -->
+  <p class="tagline">"No passports required." — Wepa the Coquí</p>
+
+  <!-- Footer -->
+  <div class="footer">
+    © 2026 Wepa Explorer · <a href="https://streetfoodfusion.de">Wepa Street Food Fusion</a> · Powered by <a href="https://setzio.com">Setzio</a>
+  </div>
+
+</div>
+
+<script>
+  async function doSignup() {
+    const email = document.getElementById('email').value.trim();
+    if (!email || !email.includes('@')) {
+      document.getElementById('email').style.outline = '1px solid rgba(192,57,43,0.6)';
+      document.getElementById('email').focus();
+      return;
+    }
+    const btn = document.querySelector('.signup-row button');
+    btn.textContent = '...';
+    btn.disabled = true;
+    try {
+      const res = await fetch('https://dgkcmyyafzhbtzdvtvji.supabase.co/rest/v1/wepa_waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRna2NteXlhZnpoYnR6ZHZ0dmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1OTEzMjcsImV4cCI6MjA5MDE2NzMyN30.itt1fnbd8gcPKKDmTmdsaoi2e5yzXoNwDnzR8jD3q9M',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ email, source: 'wepaexplorer.com' })
+      });
+      document.getElementById('signupRow').style.display = 'none';
+      document.getElementById('signupNote').style.display = 'none';
+      document.getElementById('signupSuccess').style.display = 'block';
+    } catch(e) {
+      btn.textContent = 'Notify me';
+      btn.disabled = false;
+    }
+  }
+
+  document.getElementById('email').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doSignup();
+  });
+</script>
+
+</body>
+</html>
