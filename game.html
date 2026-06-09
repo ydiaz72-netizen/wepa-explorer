@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Wepa Explorer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0600; --cream: #f2ece0; --gold: #e8a83e;
+      --gold-dark: #c97600; --green: #2d7a4f;
+      --muted: rgba(242,236,224,0.5); --faint: rgba(242,236,224,0.08);
+      --font: 'Plus Jakarta Sans', sans-serif;
+    }
+    html, body { height: 100%; background: var(--bg); font-family: var(--font); color: var(--cream); overflow: hidden; -webkit-font-smoothing: antialiased; touch-action: none; }
+
+    /* ── SCREENS ── */
+    .screen { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; z-index: 10; }
+    .screen.hidden { display: none; }
+
+    /* ── LOADING ── */
+    #screen-loading .spinner { width: 40px; height: 40px; border: 3px solid var(--gold); border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 16px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── NOT AUTHORIZED ── */
+    #screen-auth .emoji { font-size: 64px; margin-bottom: 16px; }
+    #screen-auth h2 { font-size: 24px; font-weight: 900; margin-bottom: 12px; }
+    #screen-auth p { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 320px; margin: 0 auto 24px; }
+    .btn-gold { background: var(--gold); color: var(--bg); border: none; padding: 16px 32px; border-radius: 99px; font-family: var(--font); font-size: 15px; font-weight: 800; cursor: pointer; text-decoration: none; display: inline-block; transition: background 0.2s; }
+    .btn-gold:hover { background: #f0b84a; }
+
+    /* ── START SCREEN ── */
+    #screen-start { background: var(--bg); }
+    #screen-start .mascot { font-size: 72px; margin-bottom: 8px; animation: bounce 1.5s ease-in-out infinite; }
+    @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    #screen-start h1 { font-size: clamp(32px, 8vw, 56px); font-weight: 900; letter-spacing: -1px; margin-bottom: 6px; }
+    #screen-start h1 span { color: var(--gold); }
+    .passport-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(232,168,62,0.1); border: 1px solid rgba(232,168,62,0.25); border-radius: 99px; padding: 8px 16px; font-size: 13px; font-weight: 700; color: var(--gold); margin: 12px 0 20px; }
+    .best-score { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+    .best-score span { color: var(--cream); font-weight: 800; }
+    .start-btn { font-size: 20px; padding: 20px 48px; margin-bottom: 16px; display: block; width: 100%; max-width: 320px; border-radius: 18px; }
+    .how-to { font-size: 13px; color: var(--muted); }
+    .how-to strong { color: var(--cream); }
+    .featured-badge { background: rgba(232,168,62,0.08); border: 1px solid var(--faint); border-radius: 12px; padding: 12px 16px; margin: 16px 0; font-size: 13px; color: var(--muted); max-width: 320px; }
+    .featured-badge strong { color: var(--gold); }
+
+    /* ── GAME HUD ── */
+    #hud { position: fixed; top: 0; left: 0; right: 0; z-index: 5; padding: 12px 20px; display: none; align-items: center; justify-content: space-between; background: linear-gradient(to bottom, rgba(10,6,0,0.9), transparent); }
+    #hud.active { display: flex; }
+    .hud-score { font-size: 22px; font-weight: 900; color: var(--cream); }
+    .hud-combo { font-size: 14px; font-weight: 800; color: var(--gold); }
+    .hud-level { font-size: 13px; font-weight: 700; color: var(--muted); }
+
+    /* ── CANVAS ── */
+    #gameCanvas { position: fixed; inset: 0; width: 100%; height: 100%; display: none; }
+    #gameCanvas.active { display: block; }
+
+    /* ── POPUPS ── */
+    .popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(10,6,0,0.95); border: 1px solid rgba(232,168,62,0.3); border-radius: 24px; padding: 28px 24px; text-align: center; z-index: 20; max-width: 340px; width: 90%; animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards; display: none; }
+    .popup.show { display: block; }
+    @keyframes popIn { from { opacity:0; transform: translate(-50%,-50%) scale(0.7); } to { opacity:1; transform: translate(-50%,-50%) scale(1); } }
+    .popup-emoji { font-size: 52px; margin-bottom: 12px; }
+    .popup-title { font-size: 22px; font-weight: 900; margin-bottom: 8px; }
+    .popup-sub { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+    .popup-fact { font-size: 13px; color: var(--cream); background: rgba(232,168,62,0.08); border-radius: 12px; padding: 12px; line-height: 1.6; margin-bottom: 16px; font-style: italic; }
+    .popup-close { background: var(--gold); color: var(--bg); border: none; padding: 12px 28px; border-radius: 99px; font-family: var(--font); font-size: 15px; font-weight: 800; cursor: pointer; transition: background 0.2s; }
+    .popup-close:hover { background: #f0b84a; }
+
+    /* ── GOLDEN COQUI ── */
+    .golden-popup { border-color: var(--gold); background: rgba(20,12,0,0.98); }
+    .golden-popup .popup-title { color: var(--gold); font-size: 26px; }
+
+    /* ── GAME OVER ── */
+    #screen-gameover { background: rgba(10,6,0,0.97); }
+    #screen-gameover h2 { font-size: 32px; font-weight: 900; margin-bottom: 8px; }
+    .go-score { font-size: 56px; font-weight: 900; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+    .go-best { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
+    .go-countries { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; max-width: 320px; }
+    .go-country { background: rgba(232,168,62,0.1); border: 1px solid rgba(232,168,62,0.2); border-radius: 8px; padding: 6px 10px; font-size: 13px; font-weight: 700; }
+    .go-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 280px; }
+    .btn-secondary { background: rgba(242,236,224,0.08); color: var(--cream); border: 1px solid var(--faint); padding: 14px 28px; border-radius: 99px; font-family: var(--font); font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .btn-secondary:hover { background: rgba(242,236,224,0.14); }
+
+    /* ── LEADERBOARD ── */
+    #screen-leaderboard { background: rgba(10,6,0,0.98); overflow-y: auto; justify-content: flex-start; padding-top: 60px; }
+    #screen-leaderboard h2 { font-size: 26px; font-weight: 900; margin-bottom: 4px; }
+    .lb-week { font-size: 12px; color: var(--gold); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+    .lb-list { width: 100%; max-width: 400px; margin-bottom: 20px; }
+    .lb-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--faint); }
+    .lb-row:last-child { border-bottom: none; }
+    .lb-rank { font-size: 18px; font-weight: 900; width: 32px; flex-shrink: 0; color: var(--muted); }
+    .lb-rank.gold { color: var(--gold); }
+    .lb-rank.silver { color: #c0c0c0; }
+    .lb-rank.bronze { color: #cd7f32; }
+    .lb-name { flex: 1; font-size: 15px; font-weight: 700; text-align: left; }
+    .lb-you { color: var(--gold); }
+    .lb-score { font-size: 16px; font-weight: 900; color: var(--cream); }
+    .lb-type { font-size: 11px; color: var(--muted); }
+    .lb-empty { font-size: 14px; color: var(--muted); padding: 32px; }
+    .lb-reward { background: rgba(232,168,62,0.08); border: 1px solid rgba(232,168,62,0.2); border-radius: 14px; padding: 14px 18px; margin-bottom: 16px; max-width: 400px; width: 100%; }
+    .lb-reward-label { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+    .lb-reward-text { font-size: 16px; font-weight: 800; color: var(--cream); }
+  </style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="screen" id="screen-loading">
+  <div class="spinner"></div>
+  <div style="font-size:14px;color:var(--muted);">Loading Wepa Explorer...</div>
+</div>
+
+<!-- NOT AUTHORIZED -->
+<div class="screen hidden" id="screen-auth">
+  <div class="emoji">🐸</div>
+  <h2>Passport Required</h2>
+  <p>Wepa Explorer is exclusive to Wepa passport holders. Tap your NFC card or scan the QR code to get your passport first.</p>
+  <a href="https://streetfoodfusion.de" class="btn-gold">Get My Passport →</a>
+</div>
+
+<!-- START -->
+<div class="screen hidden" id="screen-start">
+  <div class="mascot">🐸</div>
+  <h1>Wepa <span>Explorer</span></h1>
+  <div class="passport-badge" id="passport-badge">🎫 Loading...</div>
+  <div class="best-score">Your best: <span id="best-score-display">0</span> pts</div>
+  <div class="featured-badge" id="featured-badge">
+    ⭐ This week: <strong id="featured-country-name">Puerto Rico</strong> — <strong id="featured-multiplier">3x</strong> points!
+  </div>
+  <button class="btn-gold start-btn" onclick="startGame()">🌍 Play Now</button>
+  <p class="how-to"><strong>Tap</strong> to jump · <strong>Collect</strong> ingredients · <strong>Discover</strong> the world</p>
+  <button class="btn-secondary" style="margin-top:16px;padding:10px 24px;border-radius:99px;" onclick="showLeaderboard()">🏆 Leaderboard</button>
+</div>
+
+<!-- HUD -->
+<div id="hud">
+  <div>
+    <div class="hud-score" id="hud-score">0</div>
+    <div class="hud-level" id="hud-level">Level 1</div>
+  </div>
+  <div class="hud-combo" id="hud-combo"></div>
+  <button onclick="pauseGame()" style="background:rgba(242,236,224,0.1);border:1px solid var(--faint);color:var(--cream);padding:8px 14px;border-radius:8px;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;">⏸</button>
+</div>
+
+<!-- CANVAS -->
+<canvas id="gameCanvas"></canvas>
+
+<!-- COUNTRY UNLOCK POPUP -->
+<div class="popup" id="popup-unlock">
+  <div class="popup-emoji" id="pu-flag">🇵🇷</div>
+  <div class="popup-title" id="pu-name">Puerto Rico Unlocked!</div>
+  <div class="popup-sub" id="pu-sub">🥇 New country discovered!</div>
+  <div class="popup-fact" id="pu-fact">Fun fact here</div>
+  <button class="popup-close" onclick="closeUnlockPopup()">Keep Exploring →</button>
+</div>
+
+<!-- GOLDEN COQUI POPUP -->
+<div class="popup golden-popup" id="popup-golden">
+  <div class="popup-emoji">✨🐸✨</div>
+  <div class="popup-title">Golden Coquí!</div>
+  <div class="popup-sub">You caught the legendary Golden Coquí! You've earned this week's special reward.</div>
+  <div class="popup-fact" id="golden-reward-text">Free Dessert 🍮</div>
+  <button class="popup-close" onclick="closeGoldenPopup()">Claim Reward →</button>
+</div>
+
+<!-- GAME OVER -->
+<div class="screen hidden" id="screen-gameover">
+  <div style="font-size:48px;margin-bottom:8px;">🐸</div>
+  <h2>Game Over!</h2>
+  <div class="go-score" id="go-score">0</div>
+  <div class="go-best" id="go-best">New best!</div>
+  <div class="go-countries" id="go-countries"></div>
+  <div class="go-btns">
+    <button class="btn-gold" style="padding:16px;" onclick="startGame()">🔄 Play Again</button>
+    <button class="btn-secondary" onclick="showLeaderboard()">🏆 Leaderboard</button>
+    <button class="btn-secondary" onclick="showStart()">← Back</button>
+  </div>
+</div>
+
+<!-- LEADERBOARD -->
+<div class="screen hidden" id="screen-leaderboard">
+  <h2>🏆 Leaderboard</h2>
+  <div class="lb-week" id="lb-week">This Week</div>
+  <div class="lb-reward" id="lb-reward-box">
+    <div class="lb-reward-label">This Week's Prize</div>
+    <div class="lb-reward-text" id="lb-reward-text">Loading...</div>
+  </div>
+  <div class="lb-list" id="lb-list">
+    <div class="lb-empty">Loading scores...</div>
+  </div>
+  <button class="btn-secondary" onclick="hideLeaderboard()">← Back</button>
+</div>
+
+<script>
+const SB_URL = 'https://dgkcmyyafzhbtzdvtvji.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRna2NteXlhZnpoYnR6ZHZ0dmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1OTEzMjcsImV4cCI6MjA5MDE2NzMyN30.itt1fnbd8gcPKKDmTmdsaoi2e5yzXoNwDnzR8jD3q9M';
+
+// ── COUNTRIES DATA ──
+const COUNTRIES = {
+  PR: { name: 'Puerto Rico', flag: '🇵🇷', ingredient: '🫔', ingredientName: 'Empanada',
+    facts: ['The coquí frog is Puerto Rico\'s national symbol — its song fills the island every night.','Puerto Rico has over 270 beaches along its 311-mile coastline.','Mofongo, made from fried plantains, is one of Puerto Rico\'s most beloved dishes with roots in West Africa.','Puerto Rico is home to the only tropical rainforest in the US National Forest system — El Yunque.'] },
+  DE: { name: 'Germany', flag: '🇩🇪', ingredient: '🥨', ingredientName: 'Pretzel',
+    facts: ['Germany has over 1,500 different types of beer and more than 1,300 breweries.','The pretzel has been a German symbol since the 12th century — monks gave them to children as rewards.','Germany invented the Christmas tree tradition, now celebrated worldwide.','There are over 300 different types of bread baked in Germany — more than any other country.'] },
+  MA: { name: 'Morocco', flag: '🇲🇦', ingredient: '🫕', ingredientName: 'Tagine',
+    facts: ['Morocco is the only African country with coastlines on both the Atlantic Ocean and the Mediterranean Sea.','Mint tea in Morocco is a symbol of hospitality — refusing it is considered impolite.','The city of Fes has the world\'s oldest university, founded in 859 AD.','Moroccan tagine gets its name from the conical clay pot it\'s cooked in — the shape traps steam and keeps food moist.'] },
+  TR: { name: 'Turkey', flag: '🇹🇷', ingredient: '🥙', ingredientName: 'Döner',
+    facts: ['Turkey is the world\'s largest producer of hazelnuts, supplying 70% of global demand.','Istanbul is the only city in the world that spans two continents — Europe and Asia.','Turkish coffee was the world\'s first coffee shop culture, dating back to 1475 in Istanbul.','The döner kebab was invented in Turkey in the 1800s and later became Germany\'s favourite street food.'] },
+  IN: { name: 'India', flag: '🇮🇳', ingredient: '🍛', ingredientName: 'Curry',
+    facts: ['India is the birthplace of chess, yoga, and the number zero.','India has the world\'s largest vegetarian population — about 400 million people.','Chai tea is consumed by over a billion people in India daily — it\'s the national drink.','The spice trade with India was so valuable it changed the entire course of world history and exploration.'] },
+  JP: { name: 'Japan', flag: '🇯🇵', ingredient: '🍜', ingredientName: 'Ramen',
+    facts: ['Japan has over 100 different regional ramen styles — each city has its own unique recipe.','The Japanese concept of "Ikigai" means finding purpose in life through passion, mission, and contribution.','Japan has more vending machines per capita than any other country — one for every 23 people.','Sushi was originally street food in Tokyo — it was fast food before fast food existed.'] },
+  TH: { name: 'Thailand', flag: '🇹🇭', ingredient: '🥭', ingredientName: 'Mango',
+    facts: ['Thailand is the world\'s largest exporter of rice, feeding much of the planet.','Pad Thai was invented in the 1930s as part of a national campaign to promote Thai identity.','Thailand has over 40,000 Buddhist temples — religion is deeply woven into daily life and food culture.','The mango sticky rice dessert is considered Thailand\'s most iconic dish internationally.'] },
+  CO: { name: 'Colombia', flag: '🇨🇴', ingredient: '🌶️', ingredientName: 'Ají',
+    facts: ['Colombia is the only country in South America with coastlines on both the Pacific Ocean and the Caribbean Sea.','Colombia produces about 12% of the world\'s coffee and is famous for its mild, smooth beans.','The arepas of Colombia and Venezuela are among the oldest foods in the Americas, dating back 3,000 years.','Colombia has more species of birds than any other country in the world — over 1,900 species.'] },
+  BR: { name: 'Brazil', flag: '🇧🇷', ingredient: '🍍', ingredientName: 'Pineapple',
+    facts: ['Brazil is home to 60% of the Amazon rainforest — the world\'s largest tropical forest.','Feijoada, a black bean and pork stew, is Brazil\'s national dish with roots in Portuguese and African cuisine.','Brazil produces about a third of the world\'s coffee — it\'s been the top producer for over 150 years.','Carnival in Brazil is the world\'s largest festival, with over 2 million people on the streets of Rio daily.'] },
+  MX: { name: 'Mexico', flag: '🇲🇽', ingredient: '🌮', ingredientName: 'Taco',
+    facts: ['Mexico is the birthplace of chocolate — the Aztecs used cacao beans as currency.','Mexican cuisine is one of only two in the world recognized by UNESCO as an Intangible Cultural Heritage.','The avocado originated in Mexico over 10,000 years ago — the name comes from the Nahuatl word "ahuacatl".','Mexico has 35 UNESCO World Heritage Sites — more than any other country in the Americas.'] },
+};
+
+const COUNTRY_CODES = Object.keys(COUNTRIES);
+const OBSTACLES = ['☁️', '🧳', '🚧', '🛢️'];
+
+// ── GAME STATE ──
+let passportId = null;
+let passportData = null;
+let gameSettings = { featured_country: 'PR', featured_multiplier: 3, explorer_reward: 'Secret Badge 🏅' };
+let bestScore = 0;
+let currentScore = 0;
+let gameRunning = false;
+let gamePaused = false;
+let animFrame = null;
+let sessionCountries = [];
+let discoveredCountries = [];
+let combo = 0;
+let comboTimer = null;
+let goldenCoquiShown = false;
+
+// ── CANVAS SETUP ──
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+function resizeCanvas() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+// ── GAME OBJECTS ──
+let wepa, ingredients, obstacles, particles, ground;
+let speed, frameCount, level;
+
+function initGame() {
+  speed = 4;
+  frameCount = 0;
+  level = 1;
+  currentScore = 0;
+  combo = 0;
+  sessionCountries = [];
+  goldenCoquiShown = false;
+  ingredients = [];
+  obstacles = [];
+  particles = [];
+  ground = H * 0.75;
+
+  wepa = {
+    x: W * 0.15,
+    y: ground - 60,
+    vy: 0,
+    size: 52,
+    jumping: false,
+    dead: false,
+    frameAnim: 0,
+  };
+}
+
+// ── PHYSICS ──
+const GRAVITY = 0.55;
+const JUMP_FORCE = -13;
+
+function jump() {
+  if (!gameRunning || gamePaused || wepa.dead) return;
+  if (!wepa.jumping) {
+    wepa.vy = JUMP_FORCE;
+    wepa.jumping = true;
+  }
+}
+
+canvas.addEventListener('click', jump);
+canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); }, { passive: false });
+document.addEventListener('keydown', (e) => { if (e.code === 'Space') { e.preventDefault(); jump(); } });
+
+// ── SPAWN ──
+function spawnIngredient() {
+  const sessionPool = COUNTRY_CODES.filter(c => !sessionCountries.includes(c));
+  const pool = sessionPool.length > 0 ? sessionPool : COUNTRY_CODES;
+  const countryCode = pool[Math.floor(Math.random() * pool.length)];
+  const country = COUNTRIES[countryCode];
+  const isGolden = !goldenCoquiShown && Math.random() < 0.002;
+
+  ingredients.push({
+    x: W + 40,
+    y: ground - 40 - Math.random() * 80,
+    code: countryCode,
+    emoji: isGolden ? '✨' : country.ingredient,
+    isGolden,
+    size: isGolden ? 44 : 36,
+    collected: false,
+  });
+}
+
+function spawnObstacle() {
+  const h = 40 + Math.random() * 30;
+  obstacles.push({
+    x: W + 40,
+    y: ground - h,
+    w: 30 + Math.random() * 20,
+    h,
+    emoji: OBSTACLES[Math.floor(Math.random() * OBSTACLES.length)],
+  });
+}
+
+// ── COLLISION ──
+function circleRect(cx, cy, cr, rx, ry, rw, rh) {
+  const nearX = Math.max(rx, Math.min(cx, rx + rw));
+  const nearY = Math.max(ry, Math.min(cy, ry + rh));
+  const dx = cx - nearX, dy = cy - nearY;
+  return dx * dx + dy * dy < cr * cr;
+}
+
+// ── PARTICLES ──
+function spawnParticles(x, y, color, count) {
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x, y,
+      vx: (Math.random() - 0.5) * 6,
+      vy: (Math.random() - 0.5) * 6 - 2,
+      life: 1, color,
+      size: 4 + Math.random() * 6,
+    });
+  }
+}
+
+// ── DRAW ──
+function drawBackground() {
+  // Sky gradient
+  const grad = ctx.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, '#0a0600');
+  grad.addColorStop(0.7, '#120b00');
+  grad.addColorStop(1, '#1a0f00');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Stars
+  ctx.fillStyle = 'rgba(242,236,224,0.4)';
+  for (let i = 0; i < 40; i++) {
+    const sx = ((i * 137.5 + frameCount * 0.1) % W);
+    const sy = (i * 73) % (ground * 0.7);
+    const ss = 1 + (i % 3) * 0.5;
+    ctx.beginPath();
+    ctx.arc(sx, sy, ss, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Ground
+  ctx.fillStyle = '#1a0f00';
+  ctx.fillRect(0, ground, W, H - ground);
+
+  // Ground line
+  const lineGrad = ctx.createLinearGradient(0, ground, W, ground);
+  lineGrad.addColorStop(0, 'transparent');
+  lineGrad.addColorStop(0.5, 'rgba(232,168,62,0.4)');
+  lineGrad.addColorStop(1, 'transparent');
+  ctx.strokeStyle = lineGrad;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(0, ground);
+  ctx.lineTo(W, ground);
+  ctx.stroke();
+
+  // Scrolling ground dots
+  ctx.fillStyle = 'rgba(232,168,62,0.15)';
+  for (let i = 0; i < 20; i++) {
+    const dx = ((i * 80 - frameCount * speed * 0.5) % W + W) % W;
+    ctx.beginPath();
+    ctx.arc(dx, ground + 12, 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawWepa() {
+  const w = wepa;
+  ctx.save();
+  if (w.dead) ctx.globalAlpha = 0.5;
+
+  // Shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.beginPath();
+  ctx.ellipse(w.x, ground + 6, w.size * 0.5, 6, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Body glow when jumping
+  if (w.jumping) {
+    ctx.shadowColor = 'rgba(232,168,62,0.4)';
+    ctx.shadowBlur = 20;
+  }
+
+  ctx.font = `${w.size}px serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  // Squish/stretch
+  const scaleY = w.jumping ? 1.2 : 0.95;
+  const scaleX = w.jumping ? 0.85 : 1.05;
+  ctx.translate(w.x, w.y + w.size / 2);
+  ctx.scale(scaleX, scaleY);
+  ctx.fillText('🐸', 0, 0);
+  ctx.restore();
+}
+
+function drawIngredients() {
+  ingredients.forEach(ing => {
+    if (ing.collected) return;
+    ctx.save();
+    if (ing.isGolden) {
+      ctx.shadowColor = 'rgba(255,215,0,0.8)';
+      ctx.shadowBlur = 20;
+      const pulse = 1 + Math.sin(frameCount * 0.1) * 0.1;
+      ctx.scale(pulse, pulse);
+    }
+    ctx.font = `${ing.size}px serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(ing.emoji, ing.x, ing.y);
+    ctx.restore();
+  });
+}
+
+function drawObstacles() {
+  obstacles.forEach(obs => {
+    ctx.font = '36px serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(obs.emoji, obs.x + obs.w / 2, obs.y + obs.h);
+  });
+}
+
+function drawParticles() {
+  particles.forEach(p => {
+    ctx.save();
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  });
+}
+
+function drawScore() {
+  // Score
+  ctx.fillStyle = 'rgba(242,236,224,0.9)';
+  ctx.font = `bold ${Math.min(28, W * 0.06)}px ${getComputedStyle(document.body).fontFamily}`;
+  ctx.textAlign = 'left';
+  ctx.fillText(Math.floor(currentScore), 20, 50);
+
+  // Combo
+  if (combo > 1) {
+    ctx.fillStyle = 'rgba(232,168,62,0.9)';
+    ctx.font = `bold ${Math.min(20, W * 0.045)}px ${getComputedStyle(document.body).fontFamily}`;
+    ctx.textAlign = 'center';
+    ctx.fillText(`${combo}x COMBO!`, W / 2, 50);
+  }
+}
+
+// ── GAME LOOP ──
+function gameLoop() {
+  if (!gameRunning || gamePaused) return;
+  frameCount++;
+
+  // Update speed / level
+  speed = 4 + Math.floor(frameCount / 300) * 0.5;
+  level = Math.min(4, 1 + Math.floor(frameCount / 300));
+  document.getElementById('hud-level').textContent = `Level ${level}`;
+
+  // Spawn
+  if (frameCount % Math.max(60, 100 - level * 10) === 0) spawnIngredient();
+  if (frameCount % Math.max(80, 130 - level * 8) === 0) spawnObstacle();
+
+  // Update Wepa
+  wepa.vy += GRAVITY;
+  wepa.y += wepa.vy;
+  if (wepa.y >= ground - wepa.size) {
+    wepa.y = ground - wepa.size;
+    wepa.vy = 0;
+    wepa.jumping = false;
+  }
+
+  // Update ingredients
+  ingredients.forEach(ing => { ing.x -= speed; });
+  ingredients = ingredients.filter(ing => ing.x > -60);
+
+  // Update obstacles
+  obstacles.forEach(obs => { obs.x -= speed; });
+  obstacles = obstacles.filter(obs => obs.x > -60);
+
+  // Update particles
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    p.vy += 0.1; p.life -= 0.04;
+  });
+  particles = particles.filter(p => p.life > 0);
+
+  // Score
+  currentScore += speed * 0.05;
+  document.getElementById('hud-score').textContent = Math.floor(currentScore);
+
+  // Collisions — ingredients
+  ingredients.forEach(ing => {
+    if (ing.collected) return;
+    const cr = wepa.size * 0.45;
+    const cx = wepa.x, cy = wepa.y + wepa.size / 2;
+    const ir = ing.size * 0.5;
+    const dx = cx - ing.x, dy = cy - ing.y;
+    if (dx * dx + dy * dy < (cr + ir) * (cr + ir)) {
+      ing.collected = true;
+      if (ing.isGolden) {
+        goldenCoquiShown = true;
+        showGoldenPopup();
+      } else {
+        collectIngredient(ing);
+      }
+    }
+  });
+
+  // Collisions — obstacles
+  for (const obs of obstacles) {
+    if (circleRect(wepa.x, wepa.y + wepa.size / 2, wepa.size * 0.4, obs.x, obs.y, obs.w, obs.h)) {
+      spawnParticles(wepa.x, wepa.y, '#e8a83e', 12);
+      endGame();
+      return;
+    }
+  }
+
+  // Draw
+  drawBackground();
+  drawIngredients();
+  drawObstacles();
+  drawWepa();
+  drawParticles();
+
+  animFrame = requestAnimationFrame(gameLoop);
+}
+
+function collectIngredient(ing) {
+  const country = COUNTRIES[ing.code];
+  const isFeatured = ing.code === gameSettings.featured_country;
+  const multiplier = isFeatured ? gameSettings.featured_multiplier : 1;
+  const points = 50 * multiplier * Math.max(1, combo);
+  currentScore += points;
+  combo++;
+  clearTimeout(comboTimer);
+  comboTimer = setTimeout(() => { combo = 0; }, 2000);
+  spawnParticles(ing.x, ing.y, '#e8a83e', 8);
+
+  // Country unlock
+  if (!sessionCountries.includes(ing.code)) {
+    sessionCountries.push(ing.code);
+    if (!discoveredCountries.includes(ing.code)) {
+      discoveredCountries.push(ing.code);
+      showUnlockPopup(ing.code);
+    }
+  }
+}
+
+// ── POPUPS ── 
+function showUnlockPopup(code) {
+  gamePaused = true;
+  const country = COUNTRIES[code];
+  const fact = country.facts[Math.floor(Math.random() * country.facts.length)];
+  document.getElementById('pu-flag').textContent = country.flag;
+  document.getElementById('pu-name').textContent = country.name + ' Unlocked!';
+  document.getElementById('pu-sub').textContent = `You discovered ${country.ingredientName}!`;
+  document.getElementById('pu-fact').textContent = '🌍 ' + fact;
+  document.getElementById('popup-unlock').classList.add('show');
+}
+
+function closeUnlockPopup() {
+  document.getElementById('popup-unlock').classList.remove('show');
+  gamePaused = false;
+  animFrame = requestAnimationFrame(gameLoop);
+}
+
+function showGoldenPopup() {
+  gamePaused = true;
+  document.getElementById('golden-reward-text').textContent = gameSettings.explorer_reward;
+  document.getElementById('popup-golden').classList.add('show');
+}
+
+function closeGoldenPopup() {
+  document.getElementById('popup-golden').classList.remove('show');
+  gamePaused = false;
+  animFrame = requestAnimationFrame(gameLoop);
+}
+
+// ── START / END ──
+function startGame() {
+  showScreen(null);
+  document.getElementById('hud').classList.add('active');
+  document.getElementById('gameCanvas').classList.add('active');
+  initGame();
+  gameRunning = true;
+  gamePaused = false;
+  animFrame = requestAnimationFrame(gameLoop);
+}
+
+function pauseGame() {
+  if (!gameRunning) return;
+  gamePaused = !gamePaused;
+  if (!gamePaused) animFrame = requestAnimationFrame(gameLoop);
+}
+
+async function endGame() {
+  gameRunning = false;
+  cancelAnimationFrame(animFrame);
+  document.getElementById('hud').classList.remove('active');
+  document.getElementById('gameCanvas').classList.remove('active');
+
+  const score = Math.floor(currentScore);
+  const isNewBest = score > bestScore;
+  if (isNewBest) bestScore = score;
+
+  // Save score
+  try {
+    await fetch(`${SB_URL}/rest/v1/wepa_scores`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: SB_KEY, Prefer: 'return=minimal' },
+      body: JSON.stringify({
+        passport_id: passportId,
+        passport_type: passportData?.passport_type || 'senior',
+        score,
+        countries_unlocked: sessionCountries
+      })
+    });
+    // Save discoveries
+    for (const code of sessionCountries) {
+      await fetch(`${SB_URL}/rest/v1/wepa_discoveries`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: SB_KEY, Prefer: 'return=minimal' },
+        body: JSON.stringify({ passport_id: passportId, country_code: code })
+      }).catch(() => {});
+    }
+  } catch(e) { console.error('Save error', e); }
+
+  // Show game over
+  document.getElementById('go-score').textContent = score;
+  document.getElementById('go-best').textContent = isNewBest ? '🎉 New personal best!' : `Best: ${bestScore} pts`;
+  document.getElementById('best-score-display').textContent = bestScore;
+
+  const countriesEl = document.getElementById('go-countries');
+  countriesEl.innerHTML = sessionCountries.map(c =>
+    `<div class="go-country">${COUNTRIES[c].flag} ${COUNTRIES[c].name}</div>`
+  ).join('') || '<div style="color:var(--muted);font-size:13px;">No countries collected this run</div>';
+
+  showScreen('screen-gameover');
+}
+
+// ── LEADERBOARD ──
+async function showLeaderboard() {
+  showScreen('screen-leaderboard');
+  document.getElementById('lb-reward-text').textContent = gameSettings.explorer_reward;
+
+  // Get start of current week (Monday)
+  const now = new Date();
+  const day = now.getDay();
+  const diff = (day === 0 ? -6 : 1 - day);
+  const monday = new Date(now);
+  monday.setDate(now.getDate() + diff);
+  monday.setHours(0, 0, 0, 0);
+
+  document.getElementById('lb-week').textContent =
+    `Week of ${monday.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`;
+
+  try {
+    const res = await fetch(
+      `${SB_URL}/rest/v1/wepa_scores?played_at=gte.${monday.toISOString()}&order=score.desc&limit=10&select=score,passport_id,passport_type,wepa_passports(name)`,
+      { headers: { apikey: SB_KEY } }
+    );
+    const rows = await res.json();
+    const el = document.getElementById('lb-list');
+    if (!rows || rows.length === 0) {
+      el.innerHTML = '<div class="lb-empty">No scores yet this week. Be the first! 🌍</div>';
+      return;
+    }
+    const rankClass = ['gold', 'silver', 'bronze'];
+    el.innerHTML = rows.map((r, i) => {
+      const name = r.wepa_passports?.name || 'Wepa Explorer';
+      const shortId = r.passport_id?.slice(-4) || '????';
+      const isYou = r.passport_id === passportId;
+      const typeEmoji = { senior: '👑', kids: '🧒', pet: '🐾' }[r.passport_type] || '🐸';
+      return `<div class="lb-row">
+        <div class="lb-rank ${rankClass[i] || ''}">${i < 3 ? ['🥇','🥈','🥉'][i] : i + 1}</div>
+        <div>
+          <div class="lb-name ${isYou ? 'lb-you' : ''}">${name}${isYou ? ' (You)' : ''}</div>
+          <div class="lb-type">${typeEmoji} · WEPA-${shortId}</div>
+        </div>
+        <div class="lb-score">${r.score}</div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    document.getElementById('lb-list').innerHTML = '<div class="lb-empty">Could not load scores.</div>';
+  }
+}
+
+function hideLeaderboard() {
+  showScreen('screen-start');
+}
+
+// ── SCREENS ──
+function showScreen(id) {
+  ['screen-loading','screen-auth','screen-start','screen-gameover','screen-leaderboard']
+    .forEach(s => document.getElementById(s).classList.add('hidden'));
+  if (id) document.getElementById(id).classList.remove('hidden');
+}
+
+function showStart() {
+  showScreen('screen-start');
+}
+
+// ── INIT ──
+async function init() {
+  showScreen('screen-loading');
+
+  // Get passport ID from URL
+  const params = new URLSearchParams(window.location.search);
+  passportId = params.get('passport');
+
+  if (!passportId) {
+    showScreen('screen-auth');
+    return;
+  }
+
+  try {
+    // Load passport
+    const pRes = await fetch(`${SB_URL}/rest/v1/wepa_passports?id=eq.${passportId}&select=*`, { headers: { apikey: SB_KEY } });
+    const passports = await pRes.json();
+    if (!passports || passports.length === 0) { showScreen('screen-auth'); return; }
+    passportData = passports[0];
+
+    // Load settings
+    const sRes = await fetch(`${SB_URL}/rest/v1/wepa_settings?select=*`, { headers: { apikey: SB_KEY } });
+    const settings = await sRes.json();
+    if (Array.isArray(settings)) {
+      settings.forEach(s => {
+        if (s.key === 'explorer_featured_country') gameSettings.featured_country = s.value;
+        if (s.key === 'explorer_featured_multiplier') gameSettings.featured_multiplier = parseInt(s.value) || 3;
+        if (s.key === 'explorer_reward') gameSettings.explorer_reward = s.value;
+      });
+    }
+
+    // Load best score
+    const bRes = await fetch(`${SB_URL}/rest/v1/wepa_scores?passport_id=eq.${passportId}&order=score.desc&limit=1`, { headers: { apikey: SB_KEY } });
+    const best = await bRes.json();
+    if (best && best.length > 0) bestScore = best[0].score;
+
+    // Load discoveries
+    const dRes = await fetch(`${SB_URL}/rest/v1/wepa_discoveries?passport_id=eq.${passportId}`, { headers: { apikey: SB_KEY } });
+    const disc = await dRes.json();
+    if (Array.isArray(disc)) discoveredCountries = disc.map(d => d.country_code);
+
+    // Update UI
+    const typeEmoji = { senior: '👑', kids: '🧒', pet: '🐾' }[passportData.passport_type] || '🐸';
+    document.getElementById('passport-badge').textContent = `${typeEmoji} ${passportData.name || 'Explorer'} · ${passportId}`;
+    document.getElementById('best-score-display').textContent = bestScore;
+    const fc = COUNTRIES[gameSettings.featured_country];
+    if (fc) {
+      document.getElementById('featured-country-name').textContent = `${fc.flag} ${fc.name}`;
+      document.getElementById('featured-multiplier').textContent = gameSettings.featured_multiplier + 'x';
+    }
+
+    showScreen('screen-start');
+  } catch(e) {
+    console.error('Init error', e);
+    showScreen('screen-auth');
+  }
+}
+
+init();
+</script>
+</body>
+</html>
