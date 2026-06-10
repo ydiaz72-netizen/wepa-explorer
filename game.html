@@ -100,17 +100,16 @@
     #spirit-flash.show { display: block; animation: spiritGlow 1s ease forwards; background: radial-gradient(circle at center,rgba(232,168,62,0.6),transparent 70%); }
     @keyframes spiritGlow { 0%{opacity:0;}25%{opacity:1;}100%{opacity:0;} }
 
-    /* DISH COMPLETE */
-    #dish-complete { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 50; display: none; text-align: center; }
-    #dish-complete.show { display: block; animation: dishPop 0.6s cubic-bezier(0.34,1.56,0.64,1); }
-    @keyframes dishPop { from{transform:translate(-50%,-50%) scale(0.3);}to{transform:translate(-50%,-50%) scale(1);} }
-    .dish-complete-inner { background: #fff; border-radius: 28px; padding: 28px 32px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); border: 3px solid var(--gold); max-width: 320px; }
-    .dish-complete-emoji { font-size: 72px; margin-bottom: 8px; animation: dishSpin 0.8s ease; }
+    /* DISH COMPLETE BANNER — slides in from top, no pause */
+    #dish-banner { position: fixed; top: -140px; left: 50%; transform: translateX(-50%); z-index: 50; width: 90%; max-width: 420px; background: #fff; border-radius: 20px; border: 3px solid var(--gold); box-shadow: 0 8px 32px rgba(0,0,0,0.18); padding: 16px 20px; display: flex; align-items: center; gap: 14px; transition: top 0.5s cubic-bezier(0.34,1.56,0.64,1); pointer-events: none; }
+    #dish-banner.show { top: 70px; }
+    #dish-banner-emoji { font-size: 48px; flex-shrink: 0; animation: dishSpin 0.6s ease; }
     @keyframes dishSpin { from{transform:rotate(-20deg) scale(0.5);}to{transform:rotate(0) scale(1);} }
-    .dish-complete-title { font-size: 24px; font-weight: 900; color: var(--text); margin-bottom: 6px; }
-    .dish-complete-country { font-size: 16px; font-weight: 800; color: var(--gold-dark); margin-bottom: 10px; }
-    .dish-complete-fact { font-size: 13px; color: var(--soft); line-height: 1.6; background: var(--gold-light); border-radius: 12px; padding: 12px; margin-bottom: 16px; font-style: italic; }
-    .dish-complete-pts { font-size: 28px; font-weight: 900; color: var(--gold-dark); margin-bottom: 14px; }
+    #dish-banner-content { flex: 1; text-align: left; }
+    #dish-banner-title { font-size: 17px; font-weight: 900; color: var(--text); margin-bottom: 2px; }
+    #dish-banner-country { font-size: 13px; font-weight: 800; color: var(--gold-dark); margin-bottom: 3px; }
+    #dish-banner-pts { font-size: 22px; font-weight: 900; color: var(--gold-dark); }
+    #dish-banner-new { display: inline-block; background: #2d7a4f; color: #fff; font-size: 10px; font-weight: 900; padding: 2px 8px; border-radius: 99px; letter-spacing: 1px; text-transform: uppercase; margin-left: 6px; vertical-align: middle; }
 
     /* UNLOCK TOAST */
     #unlock-toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%) translateY(-140px); z-index: 40; background: #fff; border-radius: 18px; padding: 12px 18px; display: flex; align-items: center; gap: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); border: 2px solid var(--gold); min-width: 260px; max-width: 340px; transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1); pointer-events: none; }
@@ -291,15 +290,13 @@
   <div><div id="ut-title">First catch!</div><div id="ut-fact">Fact here</div></div>
 </div>
 
-<!-- DISH COMPLETE -->
-<div id="dish-complete">
-  <div class="dish-complete-inner">
-    <div class="dish-complete-emoji" id="dc-emoji">🍚</div>
-    <div class="dish-complete-title" id="dc-title">Mofongo Complete!</div>
-    <div class="dish-complete-country" id="dc-country">🇵🇷 Puerto Rico Mastered!</div>
-    <div class="dish-complete-fact" id="dc-fact">Fun fact here</div>
-    <div class="dish-complete-pts" id="dc-pts">+500 pts!</div>
-    <button class="btn-primary" style="width:100%;padding:16px;" onclick="closeDishComplete()">Keep Exploring! 🌍</button>
+<!-- DISH COMPLETE BANNER — slides in, game keeps running -->
+<div id="dish-banner">
+  <div id="dish-banner-emoji">🍚</div>
+  <div id="dish-banner-content">
+    <div id="dish-banner-title">Mofongo Complete!</div>
+    <div id="dish-banner-country">🇵🇷 Puerto Rico Mastered! <span id="dish-banner-new">NEW</span></div>
+    <div id="dish-banner-pts">+500 pts</div>
   </div>
 </div>
 
@@ -762,33 +759,33 @@ function collectItem(item){
 function completeDish(){
   if(dishCompleteShowing) return;
   dishCompleteShowing=true;
-  gamePaused=true;
   var c=WORLD[currentCountry];
   var isNew=!discoveredCountries.includes(currentCountry);
   if(isNew){ discoveredCountries.push(currentCountry); sessionDishes.push(currentCountry); }
   var bonus=isNew?500:200;
   currentScore+=bonus;
-  // Big celebration particles
-  for(var i=0;i<5;i++) setTimeout(function(){ spawnParticles(W/2,H/2,c.color,16); },i*120);
-  document.getElementById('dc-emoji').textContent=c.dishEmoji;
-  document.getElementById('dc-title').textContent=c.dish+' Complete!';
-  document.getElementById('dc-country').textContent=c.flag+' '+(isNew?c.name+' Mastered!':'Great cook!');
-  document.getElementById('dc-fact').textContent=c.facts[Math.floor(Math.random()*c.facts.length)];
-  document.getElementById('dc-pts').textContent='+'+(bonus)+' pts'+(isNew?' 🎉 NEW!':'');
-  var dc=document.getElementById('dish-complete');
-  dc.classList.add('show');
-  wepa.expression='celebrate'; wepa.expressionT=120;
-  soundDishComplete();
-}
 
-function closeDishComplete(){
-  document.getElementById('dish-complete').classList.remove('show');
-  dishCompleteShowing=false;
-  gamePaused=false;
-  currentDish=[];
-  pickNewCountry();
-  animFrame=requestAnimationFrame(gameLoop);
+  // Celebration particles — game keeps running
+  for(var i=0;i<6;i++) setTimeout(function(){ spawnParticles(wepa.x+50,laneY(wepa.currentLane),c.color,10); },i*80);
+  wepa.expression='celebrate'; wepa.expressionT=90;
+  soundDishComplete();
+
+  // Slide-in banner — no pause
+  document.getElementById('dish-banner-emoji').textContent=c.dishEmoji;
+  document.getElementById('dish-banner-title').textContent=c.dish+' Complete! 🎉';
+  document.getElementById('dish-banner-country').innerHTML=c.flag+' '+c.name+(isNew?' <span id="dish-banner-new">NEW</span>':'');
+  document.getElementById('dish-banner-pts').textContent='+'+bonus+' pts';
+  var banner=document.getElementById('dish-banner');
+  banner.classList.add('show');
+  if(dishBannerTimer) clearTimeout(dishBannerTimer);
+  dishBannerTimer=setTimeout(function(){
+    banner.classList.remove('show');
+    dishCompleteShowing=false;
+    currentDish=[];
+    pickNewCountry();
+  },3000);
 }
+var dishBannerTimer=null;
 
 // ── DRAW ENVIRONMENT ──
 function drawEnvironment(){
@@ -1185,7 +1182,7 @@ async function endGame(){
   document.getElementById('hud').classList.remove('active');
   document.getElementById('dish-hud').classList.remove('active');
   document.getElementById('gameCanvas').classList.remove('active');
-  document.getElementById('dish-complete').classList.remove('show');
+  document.getElementById('dish-banner').classList.remove('show');
 
   var score=Math.floor(currentScore);
   var isNewBest=score>bestScore; if(isNewBest) bestScore=score;
