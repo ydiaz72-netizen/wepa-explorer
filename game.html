@@ -210,6 +210,46 @@
     .cm-fact-count { font-size: 13px; color: var(--soft); font-weight: 600; } left: 50%; transform: translateX(-50%); font-size: 16px; font-weight: 900; color: var(--gold-dark); background: rgba(255,255,255,0.9); padding: 10px 22px; border-radius: 99px; border: 2px solid var(--gold); pointer-events: none; display: none; box-shadow: 0 4px 16px rgba(232,168,62,0.3); }
     #tap-hint.active { display: block; animation: hintFade 5s ease forwards; }
     @keyframes hintFade { 0%,50%{opacity:1;}100%{opacity:0;} }
+
+    /* ── LEVEL SYSTEM ── */
+    #screen-levelcomplete { background: linear-gradient(180deg,#fff8ed,#ffefc8); }
+    #screen-levelcomplete h2 { font-size: 30px; font-weight: 900; margin-bottom: 4px; }
+    .lc-world { font-size: 44px; margin-bottom: 6px; }
+    .lc-score { font-size: 60px; font-weight: 900; color: var(--gold-dark); line-height: 1; margin-bottom: 4px; }
+    .lc-gate { font-size: 14px; color: var(--soft); margin-bottom: 10px; font-weight: 600; }
+    .lc-gate.pass { color: #2d7a4f; font-size: 16px; }
+    .lc-gate.fail { color: #e74c3c; font-size: 16px; }
+    .lc-progress { width: 100%; max-width: 280px; height: 10px; background: rgba(26,26,26,0.1); border-radius: 99px; margin-bottom: 16px; overflow: hidden; }
+    .lc-progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg,var(--gold),#f5c842); }
+    .lc-tip { font-size: 13px; color: var(--soft); max-width: 280px; margin-bottom: 20px; font-style: italic; line-height: 1.6; }
+    #screen-boss { background: linear-gradient(180deg,#1a0800,#0d0400); }
+    .boss-intro-title { font-size: 12px; font-weight: 800; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
+    .boss-name { font-size: clamp(24px,5vw,38px); font-weight: 900; color: #fff; margin-bottom: 6px; }
+    .boss-emoji-big { font-size: 72px; margin: 6px 0; animation: bossShake 0.5s ease-in-out infinite alternate; }
+    @keyframes bossShake { from{transform:rotate(-4deg) scale(1);}to{transform:rotate(4deg) scale(1.1);} }
+    .boss-quote { font-size: 15px; color: rgba(255,255,255,0.65); font-style: italic; max-width: 300px; margin-bottom: 12px; line-height: 1.6; text-align: center; }
+    .boss-weapon-row { display: flex; align-items: center; gap: 12px; background: rgba(232,168,62,0.08); border: 2px solid rgba(232,168,62,0.25); border-radius: 16px; padding: 12px 18px; margin-bottom: 18px; max-width: 300px; width: 100%; }
+    .boss-weapon-emoji { font-size: 32px; flex-shrink: 0; }
+    .boss-weapon-name { font-size: 14px; font-weight: 900; color: var(--gold); margin-bottom: 2px; }
+    .boss-weapon-desc { font-size: 11px; color: rgba(255,255,255,0.5); }
+    #screen-bossdefeated { background: linear-gradient(180deg,#061206,#0a1a0a); }
+    .bd-title { font-size: 26px; font-weight: 900; color: var(--gold); margin-bottom: 6px; }
+    .bd-boss { font-size: 68px; margin-bottom: 8px; animation: bossBoast 0.4s ease-in-out infinite alternate; }
+    @keyframes bossBoast { from{transform:scale(1) rotate(-3deg);}to{transform:scale(1.18) rotate(3deg);} }
+    .bd-quote { font-size: 16px; color: #fff; font-style: italic; max-width: 300px; line-height: 1.7; margin-bottom: 10px; text-align: center; }
+    .bd-pts { font-size: 38px; font-weight: 900; color: var(--gold); margin-bottom: 14px; }
+    #boss-hud { position: fixed; top: 58px; left: 50%; transform: translateX(-50%); z-index: 6; display: none; background: rgba(10,4,0,0.92); border-radius: 14px; padding: 8px 18px; border: 1.5px solid rgba(231,76,60,0.5); min-width: 220px; text-align: center; pointer-events: none; }
+    #boss-hud.active { display: block; }
+    .boss-hud-name { font-size: 11px; font-weight: 700; color: #ff6b6b; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; }
+    .boss-hud-track { height: 10px; background: rgba(255,255,255,0.1); border-radius: 99px; overflow: hidden; }
+    .boss-hud-fill { height: 100%; background: linear-gradient(90deg,#e74c3c,#ff6b6b); border-radius: 99px; transition: width 0.35s ease; }
+    .boss-hud-hits { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 3px; }
+    #score-gate-hud { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); z-index: 6; display: none; background: rgba(255,255,255,0.9); border-radius: 12px; padding: 7px 16px; border: 1.5px solid var(--gold); pointer-events: none; text-align: center; min-width: 200px; }
+    #score-gate-hud.active { display: block; }
+    .sg-label { font-size: 9px; font-weight: 700; color: var(--soft); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
+    .sg-track { height: 7px; background: rgba(26,26,26,0.1); border-radius: 99px; overflow: hidden; margin-bottom: 3px; }
+    .sg-fill { height: 100%; background: linear-gradient(90deg,var(--gold),#f5c842); border-radius: 99px; transition: width 0.3s ease; }
+    .sg-text { font-size: 10px; font-weight: 700; color: var(--gold-dark); }
   </style>
 </head>
 <body>
@@ -366,6 +406,57 @@
   </div>
 </div>
 
+<!-- BOSS HUD (in-game) -->
+<div id="boss-hud">
+  <div class="boss-hud-name" id="boss-hud-name">El Hambriento</div>
+  <div class="boss-hud-track"><div class="boss-hud-fill" id="boss-hud-fill" style="width:100%"></div></div>
+  <div class="boss-hud-hits" id="boss-hud-hits">Hit him 3 times!</div>
+</div>
+
+<!-- SCORE GATE HUD -->
+<div id="score-gate-hud">
+  <div class="sg-label">Level Goal</div>
+  <div class="sg-track"><div class="sg-fill" id="sg-fill" style="width:0%"></div></div>
+  <div class="sg-text" id="sg-text">500 pts to advance</div>
+</div>
+
+<!-- LEVEL COMPLETE -->
+<div class="screen hidden" id="screen-levelcomplete">
+  <div class="lc-world" id="lc-world">🇵🇷</div>
+  <h2 id="lc-title">Level 1 Complete!</h2>
+  <div class="lc-score" id="lc-score">0</div>
+  <div class="lc-gate" id="lc-gate">✅ Score goal reached!</div>
+  <div class="lc-progress"><div class="lc-progress-fill" id="lc-fill" style="width:0%"></div></div>
+  <div class="lc-tip" id="lc-tip">Boss incoming! Collect the special weapon to defeat him.</div>
+  <button class="btn-primary" style="padding:18px 40px;font-size:18px;" id="lc-btn" onclick="startBossIntro()">⚔️ Face the Boss!</button>
+</div>
+
+<!-- BOSS INTRO -->
+<div class="screen hidden" id="screen-boss">
+  <div class="boss-intro-title">⚠️ Boss Battle</div>
+  <div class="boss-name" id="boss-name">El Hambriento</div>
+  <div class="boss-emoji-big" id="boss-emoji">🧌</div>
+  <div class="boss-quote" id="boss-quote">"Ha! You think you can stop me from eating all the food?"</div>
+  <div class="boss-weapon-row">
+    <div class="boss-weapon-emoji" id="boss-weapon-emoji">🟤</div>
+    <div>
+      <div class="boss-weapon-name" id="boss-weapon-name">Mofongo Bomb</div>
+      <div class="boss-weapon-desc" id="boss-weapon-desc">Collect it and fire — rolls like a bowling ball!</div>
+    </div>
+  </div>
+  <button class="btn-primary" style="padding:18px 40px;font-size:18px;" onclick="startBossBattle()">🔫 Fight!</button>
+</div>
+
+<!-- BOSS DEFEATED -->
+<div class="screen hidden" id="screen-bossdefeated">
+  <div class="bd-title" id="bd-title">🎉 Boss Staggered!</div>
+  <div class="bd-boss" id="bd-boss">🧌</div>
+  <div class="bd-quote" id="bd-quote">"Ay ay ay! You haven't seen the last of me! I'll be back STRONGER! 💪"</div>
+  <div class="bd-pts" id="bd-pts">+1000 pts!</div>
+  <button class="btn-primary" style="padding:18px 40px;font-size:19px;margin-bottom:12px;" id="bd-next-btn" onclick="advanceLevel()">🌍 Next World!</button>
+  <p style="font-size:13px;color:rgba(255,255,255,0.4);">He escaped... but he'll be back tougher.</p>
+</div>
+
 <!-- GAME OVER -->
 <div class="screen hidden" id="screen-gameover">
   <div style="font-size:56px;margin-bottom:4px;">🐸</div>
@@ -454,7 +545,293 @@ function closeCountryModal(e){
 const SB_URL='https://dgkcmyyafzhbtzdvtvji.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRna2NteXlhZnpoYnR6ZHZ0dmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1OTEzMjcsImV4cCI6MjA5MDE2NzMyN30.itt1fnbd8gcPKKDmTmdsaoi2e5yzXoNwDnzR8jD3q9M';
 
-// ── SOUND ──
+// ── LANGUAGE ──
+var gameLang = new URLSearchParams(window.location.search).get('lang')||'en';
+
+const T = {
+  en: {
+    loading:'Loading Wepa Explorer...',
+    passportRequired:'Passport Required',
+    passportDesc:'Wepa Explorer is exclusive to Wepa passport holders. Visit us to get yours!',
+    getPassport:'Get My Passport →',
+    bestScore:'Best:',
+    pts:'pts',
+    spiritWaiting:'👑 Your Spirit is waiting in the game!',
+    thisWeek:'⭐ This week:',
+    points:'pts!',
+    playNow:'🌍 Play Now',
+    howToPlay:'Tap to shoot · Swipe to dodge · Build the dish',
+    fireModeLabel:'🔫 Fire mode',
+    tapMode:'👆 Tap',
+    autoMode:'⚡ Auto',
+    leaderboard:'🏆 Leaderboard',
+    discoveries:'🗺️ Discoveries',
+    tapToShoot:'🔫 TAP TO SHOOT',
+    autoFire:'🔫 AUTO FIRE',
+    tapHint:'👆 Tap to shoot!',
+    levelGoal:'Level Goal',
+    ptsToAdvance:'pts to boss battle!',
+    bossIncoming:'🔥 Boss incoming!',
+    weaponLoaded:'💥 WEAPON LOADED — SHOOT THE BOSS!',
+    getWeapon:'🛡️ Get the weapon!',
+    fireHit:'💥 FIRE!',
+    worldComplete:'World Complete!',
+    goalReached:'✅ Goal reached! Boss battle unlocked!',
+    goalFailed:'pts — you got',
+    goalNeed:'❌ Need',
+    keepShooting:'Keep shooting! You keep 50% of your score. Dish bonuses help a lot!',
+    faceBoss:'⚔️ Face',
+    tryAgain:'🔄 Try Again!',
+    bossBattle:'⚠️ Boss Battle',
+    fight:'🔫 Fight!',
+    bossDefeated:'🎉 Boss Staggered!',
+    nextWorld:'🌍 Next World!',
+    champion:'🏆 YOU ARE THE WEPA EXPLORER CHAMPION!',
+    playAgain:'🎉 Play Again!',
+    bossEscaped:'He escaped... but he\'ll be back tougher.',
+    gameOver:'Game Over!',
+    playAgainBtn:'🔄 Play Again',
+    back:'← Back',
+    buildingLabel:'Building:',
+    dishComplete:'Complete! 🎉',
+    nowIn:'🌍 Now in',
+    collect:'Collect',
+    toMake:'to make',
+    tutTitle:'How to Play 🔫',
+    tutSub:'Wepa is a food shooter!',
+    tutTapLabel:'TAP to shoot',
+    tutTapSub:'Hit food = points + dish fills!',
+    tutSwipeLabel:'SWIPE to aim',
+    tutSwipeSub:'Move between lanes!',
+    tutDodgeLabel:'DODGE skulls',
+    tutDodgeSub:'Hit them = lose a heart!',
+    letsCook:"Let's Cook! 🍳",
+    paused:'⏸ Paused',
+    resume:'▶️ Resume',
+    quit:'🚪 Quit',
+    weekPrize:'This Week\'s Prize',
+    noScores:'No scores yet — be first! 🌍',
+    hitsRemaining:'Hits remaining:',
+    hitMsg:'Hit him ',
+    times:' times!',
+    collected:'ready!',
+    weaponNeeded:'Weapon needed!',
+    mapTitle:'🗺️ Discovery Map',
+    discovered:'discovered',
+    mastered:'Mastered',
+    undiscovered:'🔒 Undiscovered',
+    tapFacts:'— tap for facts',
+    tapPeek:'— tap to peek',
+    bossIntroTitle:'⚠️ Boss Battle'
+  },
+  de: {
+    loading:'Wepa Explorer lädt...',
+    passportRequired:'Passport erforderlich',
+    passportDesc:'Wepa Explorer ist exklusiv für Wepa-Passport-Inhaber. Besuche uns, um deinen zu erhalten!',
+    getPassport:'Meinen Passport holen →',
+    bestScore:'Bestleistung:',
+    pts:'Pkt.',
+    spiritWaiting:'👑 Dein Geist wartet im Spiel!',
+    thisWeek:'⭐ Diese Woche:',
+    points:'Pkt.!',
+    playNow:'🌍 Jetzt spielen',
+    howToPlay:'Tippen zum Schießen · Wischen zum Ausweichen · Gericht kochen',
+    fireModeLabel:'🔫 Feuermodus',
+    tapMode:'👆 Tippen',
+    autoMode:'⚡ Auto',
+    leaderboard:'🏆 Bestenliste',
+    discoveries:'🗺️ Entdeckungen',
+    tapToShoot:'🔫 TIPPEN ZUM SCHISSEN',
+    autoFire:'🔫 AUTO-FEUER',
+    tapHint:'👆 Tippen zum Schießen!',
+    levelGoal:'Level-Ziel',
+    ptsToAdvance:'Pkt. bis zum Boss!',
+    bossIncoming:'🔥 Boss kommt!',
+    weaponLoaded:'💥 WAFFE BEREIT — SCHIESS DEN BOSS!',
+    getWeapon:'🛡️ Hol die Waffe!',
+    fireHit:'💥 FEUER!',
+    worldComplete:'Welt abgeschlossen!',
+    goalReached:'✅ Ziel erreicht! Boss-Kampf freigeschaltet!',
+    goalFailed:'Pkt. — du hattest',
+    goalNeed:'❌ Du brauchst',
+    keepShooting:'Weiter schießen! Du behältst 50% deiner Punkte. Gericht-Boni helfen!',
+    faceBoss:'⚔️ Kämpfe gegen',
+    tryAgain:'🔄 Nochmal versuchen!',
+    bossBattle:'⚠️ Boss-Kampf',
+    fight:'🔫 Kämpfen!',
+    bossDefeated:'🎉 Boss erschüttert!',
+    nextWorld:'🌍 Nächste Welt!',
+    champion:'🏆 DU BIST DER WEPA EXPLORER CHAMPION!',
+    playAgain:'🎉 Nochmal spielen!',
+    bossEscaped:'Er entkam... aber er kommt stärker zurück.',
+    gameOver:'Spiel vorbei!',
+    playAgainBtn:'🔄 Nochmal spielen',
+    back:'← Zurück',
+    buildingLabel:'Koche:',
+    dishComplete:'Fertig! 🎉',
+    nowIn:'🌍 Jetzt in',
+    collect:'Sammle',
+    toMake:'für',
+    tutTitle:'Wie man spielt 🔫',
+    tutSub:'Wepa ist ein Lebensmittelschütze!',
+    tutTapLabel:'TIPPEN zum Schießen',
+    tutTapSub:'Essen treffen = Punkte + Gericht!',
+    tutSwipeLabel:'WISCHEN zum Zielen',
+    tutSwipeSub:'Zwischen Spuren wechseln!',
+    tutDodgeLabel:'Totenkopf AUSWEICHEN',
+    tutDodgeSub:'Treffer = Herz verlieren!',
+    letsCook:'Los geht\'s! 🍳',
+    paused:'⏸ Pausiert',
+    resume:'▶️ Weiter',
+    quit:'🚪 Beenden',
+    weekPrize:'Preis dieser Woche',
+    noScores:'Noch keine Punkte — sei der Erste! 🌍',
+    hitsRemaining:'Verbleibende Treffer:',
+    hitMsg:'Triff ihn ',
+    times:' Mal!',
+    collected:'bereit!',
+    weaponNeeded:'Waffe benötigt!',
+    mapTitle:'🗺️ Entdeckungskarte',
+    discovered:'entdeckt',
+    mastered:'Gemeistert',
+    undiscovered:'🔒 Unentdeckt',
+    tapFacts:'— tippen für Fakten',
+    tapPeek:'— tippen zum Schauen',
+    bossIntroTitle:'⚠️ Boss-Kampf'
+  },
+  es: {
+    loading:'Cargando Wepa Explorer...',
+    passportRequired:'Pasaporte Requerido',
+    passportDesc:'Wepa Explorer es exclusivo para portadores del Pasaporte Wepa. ¡Visítanos para obtener el tuyo!',
+    getPassport:'Obtener mi Pasaporte →',
+    bestScore:'Mejor:',
+    pts:'pts',
+    spiritWaiting:'👑 ¡Tu espíritu te espera en el juego!',
+    thisWeek:'⭐ Esta semana:',
+    points:'¡pts!',
+    playNow:'🌍 Jugar ahora',
+    howToPlay:'Toca para disparar · Desliza para esquivar · Construye el plato',
+    fireModeLabel:'🔫 Modo de fuego',
+    tapMode:'👆 Tocar',
+    autoMode:'⚡ Auto',
+    leaderboard:'🏆 Clasificación',
+    discoveries:'🗺️ Descubrimientos',
+    tapToShoot:'🔫 TOCA PARA DISPARAR',
+    autoFire:'🔫 FUEGO AUTOMÁTICO',
+    tapHint:'👆 ¡Toca para disparar!',
+    levelGoal:'Meta del nivel',
+    ptsToAdvance:'pts hasta el jefe!',
+    bossIncoming:'🔥 ¡Viene el jefe!',
+    weaponLoaded:'💥 ¡ARMA LISTA — DISPARA AL JEFE!',
+    getWeapon:'🛡️ ¡Consigue el arma!',
+    fireHit:'💥 ¡FUEGO!',
+    worldComplete:'¡Mundo completado!',
+    goalReached:'✅ ¡Meta alcanzada! ¡Batalla contra el jefe desbloqueada!',
+    goalFailed:'pts — obtuviste',
+    goalNeed:'❌ Necesitas',
+    keepShooting:'¡Sigue disparando! Conservas el 50% de tus puntos. ¡Los bonos de platos ayudan!',
+    faceBoss:'⚔️ Enfréntate a',
+    tryAgain:'🔄 ¡Intentar de nuevo!',
+    bossBattle:'⚠️ Batalla contra el jefe',
+    fight:'🔫 ¡Luchar!',
+    bossDefeated:'🎉 ¡Jefe tambaleado!',
+    nextWorld:'🌍 ¡Siguiente mundo!',
+    champion:'🏆 ¡ERES EL CAMPEÓN EXPLORADOR WEPA!',
+    playAgain:'🎉 ¡Jugar de nuevo!',
+    bossEscaped:'Escapó... pero volverá más fuerte.',
+    gameOver:'¡Juego terminado!',
+    playAgainBtn:'🔄 Jugar de nuevo',
+    back:'← Atrás',
+    buildingLabel:'Cocinando:',
+    dishComplete:'¡Completo! 🎉',
+    nowIn:'🌍 Ahora en',
+    collect:'Recoge',
+    toMake:'para hacer',
+    tutTitle:'Cómo jugar 🔫',
+    tutSub:'¡Wepa es un lanzador de comida!',
+    tutTapLabel:'TOCA para disparar',
+    tutTapSub:'¡Golpea comida = puntos + plato!',
+    tutSwipeLabel:'DESLIZA para apuntar',
+    tutSwipeSub:'¡Muévete entre carriles!',
+    tutDodgeLabel:'ESQUIVA las calaveras',
+    tutDodgeSub:'¡Te golpean = pierdes corazón!',
+    letsCook:'¡A cocinar! 🍳',
+    paused:'⏸ Pausado',
+    resume:'▶️ Continuar',
+    quit:'🚪 Salir',
+    weekPrize:'Premio de esta semana',
+    noScores:'Sin puntuaciones — ¡sé el primero! 🌍',
+    hitsRemaining:'Golpes restantes:',
+    hitMsg:'¡Golpéalo ',
+    times:' veces!',
+    collected:'¡lista!',
+    weaponNeeded:'¡Necesitas el arma!',
+    mapTitle:'🗺️ Mapa de Descubrimientos',
+    discovered:'descubiertos',
+    mastered:'Dominado',
+    undiscovered:'🔒 Sin descubrir',
+    tapFacts:'— toca para datos',
+    tapPeek:'— toca para ver',
+    bossIntroTitle:'⚠️ Batalla contra el jefe'
+  }
+};
+
+function t(key){ return (T[gameLang]||T.en)[key]||T.en[key]||key; }
+
+function applyTranslations(){
+  // Loading
+  document.querySelector('#screen-loading div:last-child').textContent=t('loading');
+  // Auth
+  document.querySelector('#screen-auth h2').textContent=t('passportRequired');
+  document.querySelector('#screen-auth p').textContent=t('passportDesc');
+  document.querySelector('#screen-auth a').textContent=t('getPassport');
+  // Start
+  document.querySelector('.best-row').innerHTML=t('bestScore')+' <strong id="best-display">'+bestScore+'</strong> '+t('pts');
+  document.querySelector('.how-play').innerHTML='<strong>'+t('playNow').replace('🌍 ','')+'</strong> — '+t('howToPlay');
+  document.querySelector('.start-btn').textContent=t('playNow');
+  document.getElementById('btn-tap').textContent=t('tapMode');
+  document.getElementById('btn-auto').textContent=t('autoMode');
+  document.querySelector('.fire-mode-label').textContent=t('fireModeLabel');
+  // Leaderboard & map buttons
+  var startBtns=document.querySelectorAll('#screen-start .btn-outline');
+  if(startBtns[0]) startBtns[0].textContent=t('leaderboard');
+  if(startBtns[1]) startBtns[1].textContent=t('discoveries');
+  // Tutorial
+  document.querySelector('.tut-title').textContent=t('tutTitle');
+  document.querySelector('.tut-sub').textContent=t('tutSub');
+  var tutCards=document.querySelectorAll('.tut-card');
+  if(tutCards[0]){ tutCards[0].querySelector('.tut-card-label').textContent=t('tutTapLabel'); tutCards[0].querySelector('.tut-card-sub').textContent=t('tutTapSub'); }
+  if(tutCards[1]){ tutCards[1].querySelector('.tut-card-label').textContent=t('tutSwipeLabel'); tutCards[1].querySelector('.tut-card-sub').textContent=t('tutSwipeSub'); }
+  if(tutCards[2]){ tutCards[2].querySelector('.tut-card-label').textContent=t('tutDodgeLabel'); tutCards[2].querySelector('.tut-card-sub').textContent=t('tutDodgeSub'); }
+  document.querySelector('#tutorial-overlay .btn-primary').textContent=t('letsCook');
+  // Pause
+  document.querySelector('.pause-title').textContent=t('paused');
+  document.querySelector('#pause-menu .btn-primary').textContent=t('resume');
+  var pauseBtns=document.querySelectorAll('#pause-menu .btn-outline');
+  if(pauseBtns[0]) pauseBtns[0].textContent=t('quit');
+  document.getElementById('pause-btn-tap').textContent=t('tapMode');
+  document.getElementById('pause-btn-auto').textContent=t('autoMode');
+  // Boss intro
+  document.querySelector('.boss-intro-title').textContent=t('bossIntroTitle');
+  document.querySelector('#screen-boss .btn-primary').textContent=t('fight');
+  // Boss defeated
+  document.querySelector('#screen-bossdefeated p').textContent=t('bossEscaped');
+  // Level complete
+  document.querySelector('.sg-label').textContent=t('levelGoal');
+  // Game over
+  document.querySelector('#screen-gameover h2').textContent=t('gameOver');
+  var goBtns=document.querySelectorAll('.go-btns button');
+  if(goBtns[0]) goBtns[0].textContent=t('playAgainBtn');
+  if(goBtns[2]) goBtns[2].textContent=t('back');
+  // Map
+  document.querySelector('#screen-map h2').textContent=t('mapTitle');
+  // Tap hint
+  document.getElementById('tap-hint').textContent=t('tapHint');
+  // Dish HUD label
+  document.querySelector('.dish-hud-label').textContent=t('buildingLabel');
+  // Fire indicator
+  document.getElementById('fire-indicator').textContent=fireMode==='tap'?t('tapToShoot'):t('autoFire');
+}
 var audioCtx=null;
 function getAudio(){ if(!audioCtx){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}} return audioCtx; }
 function playTone(freq,type,dur,vol,startFreq){
@@ -495,6 +872,62 @@ const COUNTRY_CODES=Object.keys(WORLD);
 const BAD_ITEMS=['💀','🦠','⚡','🚫','💣'];
 const SPIRIT_FACTS={senior:'Your loyalty makes Wepa what it is. Thank you. 👑',kids:'You are a true Wepa Explorer! 🌍',pet:'Every paw print tells a story. 🐾'};
 
+// ── LEVEL CONFIG ──
+const LEVELS = [
+  { num:1, name:'Puerto Rico', worldKey:'PR', scoreGate:400,
+    badChance:0, speed:2.8, spawnRate:90,
+    countries:['PR'],
+    boss:{ name:'El Hambriento', emoji:'🧌', hp:3,
+      quote:'"Ha! All this mofongo is MINE! You cannot stop me, little frog!"',
+      weapon:'🟤', weaponName:'Mofongo Bomb', weaponDesc:'Rolls down the lane like a bowling ball!',
+      boast:'"Ay ay ay! That plantain hit me hard! But I will return STRONGER! 💪"',
+      color:'#8B4513' }
+  },
+  { num:2, name:'Germany', worldKey:'DE', scoreGate:700,
+    badChance:0.18, speed:3.2, spawnRate:80,
+    countries:['PR','DE'],
+    boss:{ name:'Der Fresser', emoji:'👹', hp:3,
+      quote:'"Ich esse ALLES! Your pretzels are no match for my hunger!"',
+      weapon:'🥨', weaponName:'Pretzel Boomerang', weaponDesc:'Spins and comes back if you miss — 2nd chance!',
+      boast:'"Mein Gott! A pretzel hit me! Impossible! I shall return with MORE appetite! 💪"',
+      color:'#4ecdc4' }
+  },
+  { num:3, name:'Morocco', worldKey:'MA', scoreGate:1100,
+    badChance:0.25, speed:3.6, spawnRate:70,
+    countries:['PR','DE','MA'],
+    boss:{ name:'The Sand Thief', emoji:'🌀', hp:4,
+      quote:'"I hide in the sands! You will NEVER find all my stolen tagines!"',
+      weapon:'🫖', weaponName:'Mint Tea Splash', weaponDesc:'Hot tea area effect — slows the boss for 3 seconds!',
+      boast:'"The mint tea! My one weakness! I retreat to the dunes... for NOW! 💪"',
+      color:'#e8965a' }
+  },
+  { num:4, name:'Japan', worldKey:'JP', scoreGate:1600,
+    badChance:0.32, speed:4.0, spawnRate:60,
+    countries:['PR','DE','MA','JP'],
+    boss:{ name:'Oni the Snatcher', emoji:'👺', hp:4,
+      quote:'"RAHHH! I move between lanes faster than your bullets! All ramen is MINE!"',
+      weapon:'🍱', weaponName:'Bento Explosion', weaponDesc:'Explodes into ingredients — hits ALL lanes at once!',
+      boast:'"NANI?! A bento explosion! You are worthy, little frog! But the final world awaits... 💪"',
+      color:'#ff6b9d' }
+  },
+  { num:5, name:'All Worlds', worldKey:'MX', scoreGate:2200,
+    badChance:0.40, speed:4.5, spawnRate:50,
+    countries:['PR','DE','MA','JP','MX'],
+    boss:{ name:'The Great Glutton', emoji:'😈', hp:5,
+      quote:'"I am ALL the bosses combined! Every dish in every world belongs to ME!!!"',
+      weapon:'🌮', weaponName:'Flying Taco', weaponDesc:'Falls apart mid-air — toppings shower ALL lanes!',
+      boast:'"IMPOSSIBLE!! A flying taco defeated me?! Fine... I will eat somewhere else... FOR NOW! You are the TRUE Wepa Explorer!! 👑💪"',
+      color:'#e17055' }
+  }
+];
+
+// ── BOSS STATE ──
+let currentLevelNum=1, levelConfig=LEVELS[0];
+let bossActive=false, bossPhase=false;
+let boss=null;
+let bossWeaponSpawned=false, bossWeaponCollected=false;
+let levelFrameCount=0, levelScoreAtStart=0;
+
 // ── STATE ──
 let fireMode='tap'; // 'tap' or 'auto'
 let tutorialShown=false;
@@ -526,20 +959,28 @@ let wepa,items,bullets,particles;
 let speed,frameCount,level;
 
 function initGame(){
-  speed=3; frameCount=0; level=1;
+  levelConfig=LEVELS[currentLevelNum-1]||LEVELS[LEVELS.length-1];
+  speed=levelConfig.speed; frameCount=0; level=currentLevelNum;
+  levelFrameCount=0; levelScoreAtStart=currentScore;
   currentScore=0; combo=0;
   sessionDishes=[]; goldenShown=false; spiritCaught=false;
   items=[]; bullets=[]; particles=[];
   currentCountry=null; currentDish=[];
   dishCompleteShowing=false; envOffset=0;
+  bossActive=false; bossPhase=false; boss=null;
+  bossWeaponSpawned=false; bossWeaponCollected=false;
   wepa={
     x:W*0.12, lane:1, laneT:1, targetLane:1,
     size:56, expression:'happy', expressionT:0,
     shaking:0, missed:0
   };
-  pickNewCountry();
+  // Set current country pool for this level
+  var pool=levelConfig.countries;
+  currentCountry=pool[Math.floor(Math.random()*pool.length)];
+  currentDish=[];
   renderDishHUD();
   updateLivesHUD();
+  updateScoreGateHUD();
   if(fireMode==='auto') startAutoFire();
 }
 
@@ -571,34 +1012,40 @@ function stopAutoFire(){
 // ── BULLET ──
 function fireBullet(){
   if(!gameRunning||gamePaused) return;
-  // Lane-locked: can only fire once Wepa is fully in his lane (not mid-swipe)
   if(wepa.laneT<0.85) return;
-  var c=WORLD[currentCountry];
-  var bulletEmoji=c.ingredients[currentDish.length%c.ingredients.length];
+  var c=WORLD[currentCountry]||WORLD['PR'];
+  var bulletEmoji=bossWeaponCollected?(levelConfig.boss.weapon):c.ingredients[currentDish.length%c.ingredients.length];
+  var bulletSize=bossWeaponCollected?36:28;
   bullets.push({
     x:wepa.x+wepa.size*0.8,
     y:laneY(wepa.lane),
     lane:wepa.lane,
     emoji:bulletEmoji,
-    speed:12+speed*0.5,
-    size:28,
-    active:true
+    speed:bossWeaponCollected?16:12+speed*0.5,
+    size:bulletSize,
+    active:true,
+    isBossWeaponBullet:bossWeaponCollected
   });
   soundShoot();
   wepa.expression='shooting'; wepa.expressionT=8;
+  if(bossWeaponCollected){
+    // Flash
+    showCatchFlash(t('fireHit'));
+  }
 }
 
 // ── PICK COUNTRY ──
 function pickNewCountry(){
-  var undone=COUNTRY_CODES.filter(function(c){return !sessionDishes.includes(c);});
-  if(undone.length===0) undone=COUNTRY_CODES.slice();
+  var pool=levelConfig?levelConfig.countries:COUNTRY_CODES;
+  var undone=pool.filter(function(c){return !sessionDishes.includes(c);});
+  if(undone.length===0) undone=pool.slice();
   var undiscovered=undone.filter(function(c){return !discoveredCountries.includes(c);});
-  var pool=undiscovered.length>0?undiscovered:undone;
-  currentCountry=pool[Math.floor(Math.random()*pool.length)];
+  var pick=undiscovered.length>0?undiscovered:undone;
+  currentCountry=pick[Math.floor(Math.random()*pick.length)];
   currentDish=[];
   renderDishHUD();
   var c=WORLD[currentCountry];
-  showToast(c.flag,'🌍 Now in '+c.name+'!','Collect '+c.ingredientNames.join(', ')+' to make '+c.dish);
+  showToast(c.flag,t('nowIn')+' '+c.name+'!',t('collect')+' '+c.ingredientNames.join(', ')+' '+t('toMake')+' '+c.dish);
 }
 
 // ── DISH HUD ──
@@ -613,6 +1060,71 @@ function renderDishHUD(){
     div.textContent=i<currentDish.length?c.ingredients[i]:'';
     slots.appendChild(div);
   }
+}
+
+function updateScoreGateHUD(){
+  if(!levelConfig) return;
+  var pct=Math.min(100,Math.round((currentScore/levelConfig.scoreGate)*100));
+  var remaining=Math.max(0,levelConfig.scoreGate-Math.floor(currentScore));
+  document.getElementById('sg-fill').style.width=pct+'%';
+  document.getElementById('sg-text').textContent=remaining>0?remaining+' '+t('ptsToAdvance'):t('bossIncoming');
+}
+
+function checkLevelComplete(){
+  if(bossPhase||bossActive) return;
+  if(currentScore>=levelConfig.scoreGate){
+    // Trigger boss phase
+    triggerBossPhase();
+  }
+}
+
+function triggerBossPhase(){
+  bossPhase=true;
+  items=[]; // clear field
+  // Spawn boss
+  var bd=levelConfig.boss;
+  boss={
+    x:W+80, y:laneY(1), lane:1,
+    targetLane:1, laneT:1,
+    hp:bd.hp, maxHp:bd.hp,
+    size:72,
+    emoji:bd.emoji,
+    color:bd.color||'#8B4513',
+    staggered:false, staggerT:0,
+    moving:true, moveTimer:0,
+    weaponSpawned:false
+  };
+  bossActive=true;
+  bossWeaponSpawned=false;
+  bossWeaponCollected=false;
+  // Show boss HUD
+  document.getElementById('boss-hud').classList.add('active');
+  document.getElementById('boss-hud-name').textContent=bd.name;
+  updateBossHUD();
+  document.getElementById('score-gate-hud').classList.remove('active');
+  // Hide dish HUD during boss
+  document.getElementById('dish-hud').classList.remove('active');
+  showToast('⚔️',t('bossBattle')+'!',bd.name+' — '+t('collect')+' '+bd.weaponName+'!');
+}
+
+function updateBossHUD(){
+  if(!boss) return;
+  var pct=(boss.hp/boss.maxHp)*100;
+  document.getElementById('boss-hud-fill').style.width=pct+'%';
+  document.getElementById('boss-hud-hits').textContent=t('hitsRemaining')+' '+boss.hp+' / '+boss.maxHp;
+}
+
+function spawnBossWeapon(){
+  if(bossWeaponSpawned) return;
+  bossWeaponSpawned=true;
+  var bd=levelConfig.boss;
+  // Spawn weapon item in Wepa's current lane
+  items.push({
+    x:W*0.5, lane:wepa.lane, y:laneY(wepa.lane),
+    emoji:bd.weapon, code:null, size:60, color:'#e8a83e',
+    isSpirit:false, isGolden:false, isBad:false, isBossWeapon:true,
+    hit:false, missed:false, wobble:0, speedMult:0.5
+  });
 }
 
 function updateLivesHUD(){
@@ -676,7 +1188,8 @@ function swipeLane(dir){
 function spawnItem(){
   var isSpirit=spiritActive&&!spiritCaught&&Math.random()<0.06;
   var isGolden=!isSpirit&&!goldenShown&&Math.random()<0.002;
-  var isBad=!isSpirit&&!isGolden&&level>=2&&Math.random()<0.28;
+  var badChance=bossPhase?0:(levelConfig?levelConfig.badChance:0.28);
+  var isBad=!isSpirit&&!isGolden&&Math.random()<badChance;
   var emoji,code,size,color;
   if(isSpirit){
     var te={senior:'👑',kids:'🧒',pet:'🐾'};
@@ -702,6 +1215,25 @@ function spawnItem(){
 function checkCollisions(){
   bullets.forEach(function(b){
     if(!b.active) return;
+
+    // Check boss hit
+    if(bossActive&&boss&&!boss.staggered){
+      if(b.lane===boss.lane){
+        var dist=Math.abs(b.x-boss.x);
+        if(dist<(boss.size*0.7)){
+          b.active=false;
+          if(b.isBossWeaponBullet){
+            hitBossWithWeapon(b.x,b.y);
+          } else {
+            boss.staggered=true; boss.staggerT=12;
+            spawnParticles(boss.x,boss.y,'#aaaaaa',4);
+            showCatchFlash(t('getWeapon'));
+          }
+          return;
+        }
+      }
+    }
+
     items.forEach(function(item){
       if(item.hit||item.missed) return;
       if(b.lane!==item.lane) return;
@@ -709,7 +1241,9 @@ function checkCollisions(){
       if(dist<(b.size*0.5+item.size*0.5)){
         b.active=false;
         item.hit=true;
-        if(item.isSpirit){ spiritCaught=true; collectHit(item); showSpiritPopup(); }
+        if(item.isBossWeapon){
+          collectBossWeapon(item);
+        } else if(item.isSpirit){ spiritCaught=true; collectHit(item); showSpiritPopup(); }
         else if(item.isGolden){ goldenShown=true; collectHit(item); showGoldenPopup(); }
         else if(item.isBad){ takeDamage(item.x,item.y); }
         else { collectHit(item); }
@@ -717,13 +1251,40 @@ function checkCollisions(){
     });
   });
 
-  // Auto-hit: bad items that reach Wepa without being shot
+  // Auto-hit: bad items that reach Wepa
   items.forEach(function(item){
     if(item.hit||item.missed||!item.isBad) return;
     if(item.lane===wepa.lane&&item.x<=wepa.x+wepa.size*0.7&&item.x>=wepa.x-20){
       item.hit=true; takeDamage(wepa.x,laneY(wepa.lane));
     }
   });
+}
+
+function collectBossWeapon(item){
+  bossWeaponCollected=true;
+  var bd=levelConfig.boss;
+  spawnParticles(item.x,item.y,'#e8a83e',16);
+  soundDish();
+  showCatchFlash('💥 '+bd.weaponName+' '+t('collected'));
+  wepa.expression='celebrate'; wepa.expressionT=30;
+  // Next bullet becomes the boss weapon
+}
+
+function hitBossWithWeapon(x,y){
+  boss.hp--;
+  boss.staggered=true; boss.staggerT=40;
+  bossWeaponCollected=false; // need to collect weapon again for next hit
+  bossWeaponSpawned=false;
+  soundHeartLost();
+  spawnParticles(boss.x,boss.y,boss.color||'#e74c3c',20);
+  showCatchFlash('💥 HIT! '+boss.hp+' HP left!');
+  updateBossHUD();
+  if(boss.hp<=0){
+    setTimeout(showBossDefeated,800);
+  } else {
+    // Respawn weapon after delay
+    setTimeout(function(){ if(bossActive) spawnBossWeapon(); },2000);
+  }
 }
 
 function collectHit(item){
@@ -775,7 +1336,7 @@ function completeDish(){
   wepa.expression='celebrate'; wepa.expressionT=90;
   soundDish();
   document.getElementById('dish-banner-emoji').textContent=c.dishEmoji;
-  document.getElementById('dish-banner-title').textContent=c.dish+' Complete! 🎉';
+  document.getElementById('dish-banner-title').textContent=c.dish+' '+t('dishComplete');
   document.getElementById('dish-banner-country').textContent=c.flag+' '+c.name+(isNew?' ✅ NEW!':'');
   document.getElementById('dish-banner-pts').textContent='+'+bonus+' pts';
   var banner=document.getElementById('dish-banner');
@@ -903,6 +1464,81 @@ function drawWepa(){
   }
 }
 
+function drawBoss(){
+  if(!boss||!bossActive) return;
+
+  // Boss lane movement — switches lanes to dodge/steal
+  boss.moveTimer++;
+  if(boss.moveTimer>90){
+    boss.moveTimer=0;
+    var newLane=Math.floor(Math.random()*3);
+    boss.targetLane=newLane;
+    boss.laneT=0;
+  }
+  if(boss.laneT<1){
+    boss.laneT=Math.min(1,boss.laneT+0.08);
+    var fromY=laneY(boss.lane),toY=laneY(boss.targetLane);
+    var ease=boss.laneT*boss.laneT*(3-2*boss.laneT);
+    boss.y=fromY+(toY-fromY)*ease;
+    if(boss.laneT>=1){boss.lane=boss.targetLane;}
+  } else {
+    boss.y=laneY(boss.lane);
+  }
+
+  // Boss slides in from right
+  if(boss.x>W*0.72) boss.x-=4;
+
+  // Stagger effect
+  var shakeX=0;
+  if(boss.staggered){
+    boss.staggerT--;
+    shakeX=(Math.random()-0.5)*12;
+    if(boss.staggerT<=0){ boss.staggered=false; }
+  }
+
+  // Pulse scale
+  var pulse=1+Math.sin(frameCount*0.15)*0.08;
+  if(boss.staggered) pulse=0.85+Math.sin(frameCount*0.4)*0.2;
+
+  // Shadow
+  ctx.save();
+  ctx.fillStyle='rgba(0,0,0,0.2)';
+  ctx.beginPath();
+  ctx.ellipse(boss.x+shakeX,boss.y+boss.size*0.6,boss.size*0.5,10,0,0,Math.PI*2);
+  ctx.fill();
+
+  // Glow
+  ctx.shadowColor=boss.color||'#8B4513';
+  ctx.shadowBlur=20+Math.sin(frameCount*0.1)*8;
+
+  // Boss emoji
+  ctx.font=(boss.size*pulse)+'px serif';
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  ctx.fillText(boss.emoji,boss.x+shakeX,boss.y);
+
+  // Health bar above boss
+  var barW=boss.size*2, barH=10;
+  var barX=boss.x+shakeX-barW/2, barY=boss.y-boss.size*0.9;
+  ctx.fillStyle='rgba(0,0,0,0.5)';
+  ctx.beginPath(); ctx.roundRect(barX,barY,barW,barH,5); ctx.fill();
+  ctx.fillStyle='#e74c3c';
+  ctx.beginPath(); ctx.roundRect(barX,barY,barW*(boss.hp/boss.maxHp),barH,5); ctx.fill();
+
+  // Boss name
+  ctx.shadowBlur=0;
+  ctx.font='bold 13px sans-serif';
+  ctx.fillStyle='#fff';
+  ctx.fillText(levelConfig.boss.name,boss.x+shakeX,boss.y-boss.size*0.9-16);
+
+  ctx.restore();
+
+  // Spawn weapon when boss is half health
+  if(boss.hp<=Math.ceil(boss.maxHp/2)&&!bossWeaponSpawned){
+    spawnBossWeapon();
+  }
+}
+
 function getClosestEnemy(){
   var zone=W*0.6; var closest=null; var closestD=Infinity;
   items.forEach(function(item){
@@ -1000,33 +1636,34 @@ function drawParticles(){
 // ── GAME LOOP ──
 function gameLoop(){
   if(!gameRunning||gamePaused) return;
-  frameCount++;
+  frameCount++; levelFrameCount++;
 
-  var newLevel=Math.min(6,1+Math.floor(frameCount/500));
-  if(newLevel>level){level=newLevel;soundLevelUp();}
-  speed=3+Math.floor(frameCount/500)*0.3;
-  document.getElementById('hud-level').textContent='Level '+level;
+  speed=levelConfig.speed+(Math.floor(levelFrameCount/600)*0.2);
+  document.getElementById('hud-level').textContent='World '+currentLevelNum+' / 5';
   document.getElementById('hud-score').textContent=Math.floor(currentScore);
 
-  var spawnRate=Math.max(50,85-level*7);
+  // Score gate check
+  if(!bossPhase&&!bossActive) checkLevelComplete();
+  updateScoreGateHUD();
+
+  var spawnRate=bossPhase?999:(levelConfig.spawnRate||80);
   if(frameCount%spawnRate===0) spawnItem();
-  currentScore+=speed*0.03;
+  if(!bossPhase) currentScore+=speed*0.025;
   envOffset+=speed*0.4;
 
   // Move items
   items.forEach(function(item){item.x-=speed*(item.speedMult||1);});
   // Move bullets
   bullets.forEach(function(b){if(b.active)b.x+=b.speed;});
-  // Deactivate off-screen bullets
   bullets.forEach(function(b){if(b.x>W+50)b.active=false;});
 
   checkCollisions();
 
-  // Miss — items past Wepa
+  // Miss check
   items.forEach(function(item){
     if(!item.hit&&!item.missed&&item.x<wepa.x-60){
       item.missed=true;
-      if(!item.isBad&&!item.isSpirit&&!item.isGolden&&!dishCompleteShowing){
+      if(!item.isBad&&!item.isSpirit&&!item.isGolden&&!item.isBossWeapon&&!dishCompleteShowing){
         combo=0; document.getElementById('hud-combo').classList.remove('show');
       }
     }
@@ -1036,6 +1673,14 @@ function gameLoop(){
   bullets=bullets.filter(function(b){return b.active&&b.x<W+60;});
   particles.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=0.15;p.life-=0.03;});
   particles=particles.filter(function(p){return p.life>0;});
+
+  // Draw
+  drawEnvironment();
+  drawItems();
+  drawBullets();
+  if(bossActive) drawBoss();
+  drawWepa();
+  drawParticles();
 
   // Danger warning
   items.forEach(function(item){
@@ -1047,26 +1692,111 @@ function gameLoop(){
     }
   });
 
-  drawEnvironment();
-  drawItems();
-  drawBullets();
-  drawWepa();
-  drawParticles();
-
-  // Danger warning on top
-  items.forEach(function(item){
-    if(item.hit||item.missed||!item.isBad) return;
-    if(item.lane===wepa.lane&&item.x<W*0.6&&item.x>wepa.x+50){
-      var alpha=0.4+Math.sin(frameCount*0.45)*0.5;
-      ctx.save(); ctx.globalAlpha=alpha; ctx.font='24px serif'; ctx.textAlign='center';
-      ctx.fillText('⚠️',wepa.x,laneY(item.lane)-52); ctx.restore();
-    }
-  });
+  // Boss weapon glow indicator
+  if(bossWeaponCollected){
+    ctx.save();
+    var alpha=0.6+Math.sin(frameCount*0.3)*0.4;
+    ctx.globalAlpha=alpha;
+    ctx.font='16px sans-serif'; ctx.fillStyle='#e8a83e';
+    ctx.textAlign='center';
+    ctx.fillText(t('weaponLoaded'),W/2,30);
+    ctx.restore();
+  }
 
   animFrame=requestAnimationFrame(gameLoop);
 }
 
-// ── UI HELPERS ──
+// ── BOSS SCREENS ──
+function showBossDefeated(){
+  gameRunning=false; cancelAnimationFrame(animFrame);
+  stopAutoFire();
+  bossActive=false;
+  document.getElementById('boss-hud').classList.remove('active');
+  var bd=levelConfig.boss;
+  var bonus=500+currentLevelNum*200;
+  currentScore+=bonus;
+  document.getElementById('bd-boss').textContent=bd.emoji;
+  document.getElementById('bd-quote').textContent=bd.boast;
+  document.getElementById('bd-pts').textContent='+'+bonus+' pts!';
+  if(currentLevelNum>=5){
+    document.getElementById('bd-title').textContent=t('champion');
+    document.getElementById('bd-next-btn').textContent=t('playAgain');
+  } else {
+    document.getElementById('bd-title').textContent=t('bossDefeated')+' World '+(currentLevelNum+1)+' Unlocked!';
+    document.getElementById('bd-next-btn').textContent=t('nextWorld');
+  }
+  soundDish();
+  for(var i=0;i<8;i++) setTimeout(function(){ spawnParticles(Math.random()*W,Math.random()*H,'#e8a83e',12); },i*150);
+  showScreen('screen-bossdefeated');
+}
+
+function startBossIntro(){
+  var bd=levelConfig.boss;
+  document.getElementById('boss-name').textContent=bd.name;
+  document.getElementById('boss-emoji').textContent=bd.emoji;
+  document.getElementById('boss-quote').textContent=bd.quote;
+  document.getElementById('boss-weapon-emoji').textContent=bd.weapon;
+  document.getElementById('boss-weapon-name').textContent=bd.weaponName;
+  document.getElementById('boss-weapon-desc').textContent=bd.weaponDesc;
+  showScreen('screen-boss');
+}
+
+function startBossBattle(){
+  showScreen(null);
+  document.getElementById('hud').classList.add('active');
+  document.getElementById('gameCanvas').classList.add('active');
+  // Keep boss state from level, restart loop
+  gameRunning=true; gamePaused=false;
+  triggerBossPhase();
+  animFrame=requestAnimationFrame(gameLoop);
+  if(fireMode==='auto') startAutoFire();
+}
+
+function advanceLevel(){
+  if(currentLevelNum>=5){
+    currentLevelNum=1; currentScore=0;
+  } else {
+    currentLevelNum++;
+  }
+  levelConfig=LEVELS[currentLevelNum-1];
+  startGame();
+}
+
+// ── SHOW LEVEL COMPLETE ──
+function showLevelComplete(){
+  gameRunning=false; cancelAnimationFrame(animFrame);
+  stopAutoFire();
+  document.getElementById('hud').classList.remove('active');
+  document.getElementById('dish-hud').classList.remove('active');
+  document.getElementById('gameCanvas').classList.remove('active');
+  document.getElementById('boss-hud').classList.remove('active');
+  document.getElementById('score-gate-hud').classList.remove('active');
+
+  var score=Math.floor(currentScore);
+  var passed=score>=levelConfig.scoreGate;
+  var pct=Math.min(100,Math.round((score/levelConfig.scoreGate)*100));
+  var c=WORLD[levelConfig.worldKey];
+
+  document.getElementById('lc-world').textContent=c.flag;
+  document.getElementById('lc-title').textContent='World '+currentLevelNum+' — '+t('worldComplete');
+  document.getElementById('lc-fill').style.width=pct+'%';
+
+  if(passed){
+    document.getElementById('lc-gate').textContent=t('goalReached');
+    document.getElementById('lc-gate').className='lc-gate pass';
+    document.getElementById('lc-tip').textContent=t('collect')+' '+levelConfig.boss.weaponName+' — '+t('collected');
+    document.getElementById('lc-btn').textContent=t('faceBoss')+' '+levelConfig.boss.name+'!';
+    document.getElementById('lc-btn').onclick=startBossIntro;
+  } else {
+    document.getElementById('lc-gate').textContent=t('goalNeed')+' '+levelConfig.scoreGate+' '+t('pts')+' — '+t('goalFailed')+' '+score;
+    document.getElementById('lc-gate').className='lc-gate fail';
+    document.getElementById('lc-tip').textContent=t('keepShooting');
+    document.getElementById('lc-btn').textContent=t('tryAgain');
+    document.getElementById('lc-btn').onclick=function(){ currentScore=Math.floor(score*0.5); startGame(); };
+  }
+  showScreen('screen-levelcomplete');
+  soundLevelUp();
+}
 function showCatchFlash(txt){
   var el=document.getElementById('catch-flash');
   el.textContent=txt; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
@@ -1151,6 +1881,7 @@ function startGame(){
   document.getElementById('hud').classList.add('active');
   document.getElementById('dish-hud').classList.add('active');
   document.getElementById('gameCanvas').classList.add('active');
+  document.getElementById('score-gate-hud').classList.add('active');
   document.getElementById('fire-indicator').classList.add('active');
   document.getElementById('fire-indicator').textContent=fireMode==='tap'?'🔫 TAP TO SHOOT':'🔫 AUTO FIRE';
   setTimeout(function(){document.getElementById('fire-indicator').classList.remove('active');},3000);
@@ -1194,6 +1925,8 @@ async function endGame(){
   document.getElementById('go-score').textContent=score;
   document.getElementById('go-best').textContent=isNewBest?'🎉 New personal best!':'Best: '+bestScore+' pts';
   document.getElementById('best-display').textContent=bestScore;
+  // Reset level on game over
+  currentLevelNum=1; levelConfig=LEVELS[0];
   var dishesEl=document.getElementById('go-dishes');
   dishesEl.innerHTML=sessionDishes.map(function(c){
     return '<div class="go-dish">'+WORLD[c].flag+' '+WORLD[c].dish+'</div>';
@@ -1209,7 +1942,7 @@ function showMap(){
     var div=document.createElement('div');
     div.className='country-card '+(isDisc?'discovered':'undiscovered');
     div.style.cursor='pointer';
-    div.innerHTML='<div class="country-card-flag">'+c.flag+'</div><div class="country-card-dish">'+c.dishEmoji+'</div><div class="country-card-name">'+c.name+'</div><div class="country-card-status">'+(isDisc?'✅ '+c.dish+' — tap for facts':'🔒 Undiscovered — tap to peek')+'</div>';
+    div.innerHTML='<div class="country-card-flag">'+c.flag+'</div><div class="country-card-dish">'+c.dishEmoji+'</div><div class="country-card-name">'+c.name+'</div><div class="country-card-status">'+(isDisc?'✅ '+c.dish+' '+t('tapFacts'):t('undiscovered')+' '+t('tapPeek'))+'</div>';
     div.addEventListener('click',function(){openCountryModal(code);});
     grid.appendChild(div);
   });
@@ -1240,9 +1973,14 @@ async function showLeaderboard(){
 }
 
 function showScreen(id){
-  ['screen-loading','screen-auth','screen-start','screen-gameover','screen-map','screen-leaderboard'].forEach(function(s){
-    document.getElementById(s).classList.add('hidden');
+  ['screen-loading','screen-auth','screen-start','screen-gameover','screen-map','screen-leaderboard','screen-levelcomplete','screen-boss','screen-bossdefeated'].forEach(function(s){
+    var el=document.getElementById(s); if(el) el.classList.add('hidden');
   });
+  document.getElementById('hud').classList.remove('active');
+  document.getElementById('dish-hud').classList.remove('active');
+  document.getElementById('gameCanvas').classList.remove('active');
+  document.getElementById('boss-hud').classList.remove('active');
+  document.getElementById('score-gate-hud').classList.remove('active');
   if(id) document.getElementById(id).classList.remove('hidden');
 }
 function showStart(){showScreen('screen-start');}
@@ -1290,6 +2028,7 @@ async function init(){
       document.getElementById('featured-mult').textContent=gameSettings.featured_multiplier+'x';
     }
     showScreen('screen-start');
+    applyTranslations();
   }catch(e){console.error(e);showScreen('screen-auth');}
 }
 
