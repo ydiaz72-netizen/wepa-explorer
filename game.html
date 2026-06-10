@@ -3,791 +3,1170 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Wepa Explorer</title>
+  <title>Wepa Explorer 🌍</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0a0600; --cream: #f2ece0; --gold: #e8a83e;
-      --gold-dark: #c97600; --green: #2d7a4f;
-      --muted: rgba(242,236,224,0.5); --faint: rgba(242,236,224,0.08);
+      --gold: #e8a83e; --gold-dark: #c97600; --gold-light: #fff3cc;
+      --text: #1a1a1a; --soft: rgba(26,26,26,0.55);
       --font: 'Plus Jakarta Sans', sans-serif;
     }
-    html, body { height: 100%; background: var(--bg); font-family: var(--font); color: var(--cream); overflow: hidden; -webkit-font-smoothing: antialiased; touch-action: none; }
+    html, body { height: 100%; background: #fff8ed; font-family: var(--font); color: var(--text); overflow: hidden; -webkit-font-smoothing: antialiased; touch-action: none; user-select: none; }
 
     /* ── SCREENS ── */
     .screen { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; z-index: 10; }
     .screen.hidden { display: none; }
 
-    /* ── LOADING ── */
-    #screen-loading .spinner { width: 40px; height: 40px; border: 3px solid var(--gold); border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 16px; }
+    /* LOADING */
+    #screen-loading { background: #fff8ed; }
+    .spinner { width: 48px; height: 48px; border: 4px solid var(--gold); border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 20px; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-frog { font-size: 56px; margin-bottom: 16px; animation: loadBounce 0.8s ease-in-out infinite alternate; }
+    @keyframes loadBounce { from { transform: translateY(0); } to { transform: translateY(-16px); } }
 
-    /* ── NOT AUTHORIZED ── */
-    #screen-auth .emoji { font-size: 64px; margin-bottom: 16px; }
-    #screen-auth h2 { font-size: 24px; font-weight: 900; margin-bottom: 12px; }
-    #screen-auth p { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 320px; margin: 0 auto 24px; }
-    .btn-gold { background: var(--gold); color: var(--bg); border: none; padding: 16px 32px; border-radius: 99px; font-family: var(--font); font-size: 15px; font-weight: 800; cursor: pointer; text-decoration: none; display: inline-block; transition: background 0.2s; }
-    .btn-gold:hover { background: #f0b84a; }
+    /* AUTH */
+    #screen-auth { background: linear-gradient(180deg,#fff8ed,#ffefc8); }
+    #screen-auth .big-emoji { font-size: 80px; margin-bottom: 16px; }
+    #screen-auth h2 { font-size: 28px; font-weight: 900; margin-bottom: 12px; }
+    #screen-auth p { font-size: 16px; color: var(--soft); line-height: 1.7; max-width: 300px; margin: 0 auto 28px; }
 
-    /* ── START SCREEN ── */
-    #screen-start { background: var(--bg); }
-    #screen-start .mascot { font-size: 72px; margin-bottom: 8px; animation: bounce 1.5s ease-in-out infinite; }
-    @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-    #screen-start h1 { font-size: clamp(32px, 8vw, 56px); font-weight: 900; letter-spacing: -1px; margin-bottom: 6px; }
-    #screen-start h1 span { color: var(--gold); }
-    .passport-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(232,168,62,0.1); border: 1px solid rgba(232,168,62,0.25); border-radius: 99px; padding: 8px 16px; font-size: 13px; font-weight: 700; color: var(--gold); margin: 12px 0 20px; }
-    .best-score { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
-    .best-score span { color: var(--cream); font-weight: 800; }
-    .start-btn { font-size: 20px; padding: 20px 48px; margin-bottom: 16px; display: block; width: 100%; max-width: 320px; border-radius: 18px; }
-    .how-to { font-size: 13px; color: var(--muted); }
-    .how-to strong { color: var(--cream); }
-    .featured-badge { background: rgba(232,168,62,0.08); border: 1px solid var(--faint); border-radius: 12px; padding: 12px 16px; margin: 16px 0; font-size: 13px; color: var(--muted); max-width: 320px; }
-    .featured-badge strong { color: var(--gold); }
+    /* BUTTONS */
+    .btn-primary { background: linear-gradient(135deg,var(--gold),#f5c842); color: #3d2000; border: none; padding: 18px 40px; border-radius: 18px; font-family: var(--font); font-size: 18px; font-weight: 900; cursor: pointer; text-decoration: none; display: inline-block; box-shadow: 0 6px 20px rgba(232,168,62,0.45), 0 2px 0 rgba(0,0,0,0.1); transition: transform 0.15s; letter-spacing: 0.2px; }
+    .btn-primary:active { transform: scale(0.96) translateY(2px); }
+    .btn-outline { background: transparent; color: var(--gold-dark); border: 2px solid var(--gold); padding: 14px 28px; border-radius: 14px; font-family: var(--font); font-size: 15px; font-weight: 800; cursor: pointer; transition: background 0.15s; }
+    .btn-outline:hover { background: var(--gold-light); }
 
-    /* ── GAME HUD ── */
-    #hud { position: fixed; top: 0; left: 0; right: 0; z-index: 5; padding: 12px 20px; display: none; align-items: center; justify-content: space-between; background: linear-gradient(to bottom, rgba(10,6,0,0.9), transparent); }
+    /* START SCREEN */
+    #screen-start { background: linear-gradient(180deg,#fff8ed 0%,#ffefc8 60%,#ffd87a 100%); }
+    .start-frog { font-size: 88px; margin-bottom: 4px; animation: startBounce 2s ease-in-out infinite; filter: drop-shadow(0 12px 20px rgba(232,168,62,0.4)); }
+    @keyframes startBounce { 0%,100%{transform:translateY(0) rotate(-5deg);} 50%{transform:translateY(-18px) rotate(5deg);} }
+    #screen-start h1 { font-size: clamp(28px,7vw,48px); font-weight: 900; color: var(--text); letter-spacing:-1px; margin-bottom: 4px; }
+    #screen-start h1 em { font-style: normal; color: var(--gold-dark); }
+    .passport-pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(201,118,0,0.1); border: 2px solid rgba(201,118,0,0.25); border-radius: 99px; padding: 8px 18px; font-size: 14px; font-weight: 800; color: var(--gold-dark); margin: 12px 0 6px; }
+    .best-row { font-size: 15px; color: var(--soft); margin-bottom: 10px; font-weight: 600; }
+    .best-row strong { color: var(--gold-dark); font-size: 20px; }
+
+    /* SPIRIT BANNER */
+    .spirit-strip { background: linear-gradient(135deg,#ffe066,#ffb800); border-radius: 16px; padding: 12px 18px; margin-bottom: 12px; max-width: 320px; width: 100%; box-shadow: 0 4px 20px rgba(232,168,62,0.4); animation: stripPulse 1.8s ease-in-out infinite; }
+    @keyframes stripPulse { 0%,100%{box-shadow:0 4px 20px rgba(232,168,62,0.4);} 50%{box-shadow:0 4px 36px rgba(232,168,62,0.7);} }
+    .spirit-strip-title { font-size: 15px; font-weight: 900; color: #3d2000; }
+    .spirit-strip-timer { font-size: 22px; font-weight: 900; color: #3d2000; }
+
+    .featured-strip { background: rgba(201,118,0,0.08); border: 1.5px solid rgba(201,118,0,0.2); border-radius: 12px; padding: 10px 16px; margin-bottom: 14px; font-size: 14px; color: var(--soft); max-width: 320px; width: 100%; font-weight: 600; }
+    .featured-strip strong { color: var(--gold-dark); font-weight: 900; }
+
+    .start-btn { font-size: 22px; padding: 22px 0; width: 100%; max-width: 320px; border-radius: 20px; margin-bottom: 12px; }
+    .how-play { font-size: 14px; color: var(--soft); font-weight: 600; }
+    .how-play strong { color: var(--text); }
+
+    /* DISCOVERY MAP BTN */
+    .map-btn { display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 2px solid rgba(26,26,26,0.1); border-radius: 12px; padding: 12px 20px; font-size: 14px; font-weight: 800; color: var(--text); cursor: pointer; margin-top: 10px; }
+
+    /* HUD */
+    #hud { position: fixed; top: 0; left: 0; right: 0; z-index: 5; padding: 12px 18px 8px; display: none; align-items: center; justify-content: space-between; background: linear-gradient(to bottom,rgba(255,248,237,0.96),transparent); pointer-events: none; }
     #hud.active { display: flex; }
-    .hud-score { font-size: 22px; font-weight: 900; color: var(--cream); }
-    .hud-combo { font-size: 14px; font-weight: 800; color: var(--gold); }
-    .hud-level { font-size: 13px; font-weight: 700; color: var(--muted); }
+    #hud button { pointer-events: all; }
+    .hud-score-wrap { display: flex; flex-direction: column; }
+    .hud-score { font-size: 28px; font-weight: 900; color: var(--gold-dark); line-height: 1; }
+    .hud-level { font-size: 12px; font-weight: 700; color: var(--soft); letter-spacing: 1px; text-transform: uppercase; }
+    .hud-combo { font-size: 16px; font-weight: 900; color: #fff; background: var(--gold-dark); border-radius: 99px; padding: 5px 14px; display: none; }
+    .hud-combo.show { display: block; animation: comboPop 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes comboPop { from{transform:scale(0.5);}to{transform:scale(1);} }
+    .hud-lives { display: flex; gap: 3px; align-items: center; }
+    .hud-pause { background: rgba(255,255,255,0.8); border: 1.5px solid rgba(26,26,26,0.1); border-radius: 10px; padding: 7px 13px; font-size: 14px; cursor: pointer; font-family: var(--font); font-weight: 700; }
 
-    /* ── CANVAS ── */
-    #gameCanvas { position: fixed; inset: 0; width: 100%; height: 100%; display: none; }
+    /* DISH PROGRESS HUD */
+    #dish-hud { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 5; display: none; background: rgba(255,255,255,0.92); border-radius: 16px; padding: 10px 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); border: 1.5px solid rgba(232,168,62,0.3); }
+    #dish-hud.active { display: flex; align-items: center; gap: 10px; }
+    .dish-hud-label { font-size: 11px; font-weight: 700; color: var(--soft); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+    .dish-hud-name { font-size: 14px; font-weight: 900; color: var(--text); }
+    .dish-slots { display: flex; gap: 6px; }
+    .dish-slot { width: 36px; height: 36px; border-radius: 10px; border: 2px dashed rgba(232,168,62,0.4); background: rgba(232,168,62,0.05); display: flex; align-items: center; justify-content: center; font-size: 22px; transition: all 0.2s; }
+    .dish-slot.filled { border-color: var(--gold); background: var(--gold-light); animation: slotFill 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes slotFill { from{transform:scale(0.5);}to{transform:scale(1);} }
+
+    /* CANVAS */
+    #gameCanvas { position: fixed; inset: 0; width: 100%; height: 100%; display: none; cursor: pointer; }
     #gameCanvas.active { display: block; }
 
-    /* ── POPUPS ── */
-    .popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(10,6,0,0.95); border: 1px solid rgba(232,168,62,0.3); border-radius: 24px; padding: 28px 24px; text-align: center; z-index: 20; max-width: 340px; width: 90%; animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards; display: none; }
-    .popup.show { display: block; }
-    @keyframes popIn { from { opacity:0; transform: translate(-50%,-50%) scale(0.7); } to { opacity:1; transform: translate(-50%,-50%) scale(1); } }
-    .popup-emoji { font-size: 52px; margin-bottom: 12px; }
-    .popup-title { font-size: 22px; font-weight: 900; margin-bottom: 8px; }
-    .popup-sub { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
-    .popup-fact { font-size: 13px; color: var(--cream); background: rgba(232,168,62,0.08); border-radius: 12px; padding: 12px; line-height: 1.6; margin-bottom: 16px; font-style: italic; }
-    .popup-close { background: var(--gold); color: var(--bg); border: none; padding: 12px 28px; border-radius: 99px; font-family: var(--font); font-size: 15px; font-weight: 800; cursor: pointer; transition: background 0.2s; }
-    .popup-close:hover { background: #f0b84a; }
+    /* CATCH FLASH */
+    #catch-flash { position: fixed; top: 38%; left: 50%; transform: translate(-50%,-50%); font-size: 34px; font-weight: 900; pointer-events: none; display: none; z-index: 30; color: var(--gold-dark); white-space: nowrap; }
+    #catch-flash.show { display: block; animation: flashPop 0.75s ease forwards; }
+    @keyframes flashPop { 0%{opacity:1;transform:translate(-50%,-50%) scale(0.5);} 55%{opacity:1;transform:translate(-50%,-100%) scale(1.4);} 100%{opacity:0;transform:translate(-50%,-150%) scale(1.1);} }
 
-    /* ── GOLDEN COQUI ── */
-    .golden-popup { border-color: var(--gold); background: rgba(20,12,0,0.98); }
-    .golden-popup .popup-title { color: var(--gold); font-size: 26px; }
+    /* SPIRIT FLASH */
+    #spirit-flash { position: fixed; inset: 0; pointer-events: none; display: none; z-index: 25; }
+    #spirit-flash.show { display: block; animation: spiritGlow 1s ease forwards; background: radial-gradient(circle at center,rgba(232,168,62,0.6),transparent 70%); }
+    @keyframes spiritGlow { 0%{opacity:0;}25%{opacity:1;}100%{opacity:0;} }
 
-    /* ── GAME OVER ── */
-    #screen-gameover { background: rgba(10,6,0,0.97); }
-    #screen-gameover h2 { font-size: 32px; font-weight: 900; margin-bottom: 8px; }
-    .go-score { font-size: 56px; font-weight: 900; color: var(--gold); line-height: 1; margin-bottom: 4px; }
-    .go-best { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
-    .go-countries { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; max-width: 320px; }
-    .go-country { background: rgba(232,168,62,0.1); border: 1px solid rgba(232,168,62,0.2); border-radius: 8px; padding: 6px 10px; font-size: 13px; font-weight: 700; }
+    /* DISH COMPLETE */
+    #dish-complete { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 50; display: none; text-align: center; }
+    #dish-complete.show { display: block; animation: dishPop 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes dishPop { from{transform:translate(-50%,-50%) scale(0.3);}to{transform:translate(-50%,-50%) scale(1);} }
+    .dish-complete-inner { background: #fff; border-radius: 28px; padding: 28px 32px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); border: 3px solid var(--gold); max-width: 320px; }
+    .dish-complete-emoji { font-size: 72px; margin-bottom: 8px; animation: dishSpin 0.8s ease; }
+    @keyframes dishSpin { from{transform:rotate(-20deg) scale(0.5);}to{transform:rotate(0) scale(1);} }
+    .dish-complete-title { font-size: 24px; font-weight: 900; color: var(--text); margin-bottom: 6px; }
+    .dish-complete-country { font-size: 16px; font-weight: 800; color: var(--gold-dark); margin-bottom: 10px; }
+    .dish-complete-fact { font-size: 13px; color: var(--soft); line-height: 1.6; background: var(--gold-light); border-radius: 12px; padding: 12px; margin-bottom: 16px; font-style: italic; }
+    .dish-complete-pts { font-size: 28px; font-weight: 900; color: var(--gold-dark); margin-bottom: 14px; }
+
+    /* UNLOCK TOAST */
+    #unlock-toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%) translateY(-140px); z-index: 40; background: #fff; border-radius: 18px; padding: 12px 18px; display: flex; align-items: center; gap: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); border: 2px solid var(--gold); min-width: 260px; max-width: 340px; transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1); pointer-events: none; }
+    #unlock-toast.show { transform: translateX(-50%) translateY(0); }
+    #ut-flag { font-size: 38px; flex-shrink: 0; }
+    #ut-title { font-size: 15px; font-weight: 900; color: var(--text); margin-bottom: 2px; }
+    #ut-fact { font-size: 12px; color: var(--soft); line-height: 1.4; }
+
+    /* GOLDEN POPUP */
+    .g-popup-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 60; align-items: center; justify-content: center; padding: 20px; }
+    .g-popup-bg.open { display: flex; }
+    .g-popup { background: linear-gradient(135deg,#fff8ed,#ffe9a0); border: 3px solid var(--gold); border-radius: 28px; padding: 32px 24px; text-align: center; max-width: 340px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.2); animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes popIn { from{transform:scale(0.6);opacity:0;}to{transform:scale(1);opacity:1;} }
+    .g-popup-emoji { font-size: 64px; margin-bottom: 10px; }
+    .g-popup-title { font-size: 26px; font-weight: 900; color: var(--gold-dark); margin-bottom: 8px; }
+    .g-popup-sub { font-size: 15px; color: var(--soft); margin-bottom: 16px; line-height: 1.6; }
+    .g-popup-reward { background: #fff; border-radius: 14px; padding: 14px; font-size: 17px; font-weight: 900; color: var(--text); margin-bottom: 20px; border: 2px solid var(--gold); }
+    .spirit-popup-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 60; align-items: center; justify-content: center; padding: 20px; }
+    .spirit-popup-bg.open { display: flex; }
+    .spirit-pts-big { font-size: 48px; font-weight: 900; color: var(--gold-dark); margin: 8px 0; }
+
+    /* GAME OVER */
+    #screen-gameover { background: linear-gradient(180deg,#fff8ed,#ffefc8); }
+    #screen-gameover h2 { font-size: 36px; font-weight: 900; margin-bottom: 6px; }
+    .go-score { font-size: 80px; font-weight: 900; color: var(--gold-dark); line-height: 1; margin-bottom: 4px; }
+    .go-best { font-size: 16px; color: var(--soft); margin-bottom: 16px; font-weight: 600; }
+    .go-dishes { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 18px; max-width: 320px; }
+    .go-dish { background: var(--gold-light); border: 2px solid var(--gold); border-radius: 12px; padding: 8px 12px; font-size: 14px; font-weight: 800; color: var(--gold-dark); }
     .go-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 280px; }
-    .btn-secondary { background: rgba(242,236,224,0.08); color: var(--cream); border: 1px solid var(--faint); padding: 14px 28px; border-radius: 99px; font-family: var(--font); font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
-    .btn-secondary:hover { background: rgba(242,236,224,0.14); }
 
-    /* ── LEADERBOARD ── */
-    #screen-leaderboard { background: rgba(10,6,0,0.98); overflow-y: auto; justify-content: flex-start; padding-top: 60px; }
+    /* DISCOVERY MAP */
+    #screen-map { background: linear-gradient(180deg,#e8f4f8,#d4eaf5); overflow-y: auto; justify-content: flex-start; padding-top: 50px; }
+    #screen-map h2 { font-size: 26px; font-weight: 900; margin-bottom: 4px; }
+    .map-sub { font-size: 14px; color: var(--soft); margin-bottom: 24px; font-weight: 600; }
+    .country-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; width: 100%; max-width: 400px; margin-bottom: 20px; }
+    .country-card { border-radius: 18px; padding: 16px; text-align: center; border: 2px solid; transition: transform 0.15s; }
+    .country-card.discovered { background: #fff; border-color: var(--gold); box-shadow: 0 4px 16px rgba(232,168,62,0.2); }
+    .country-card.undiscovered { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); filter: grayscale(1); opacity: 0.45; }
+    .country-card-flag { font-size: 36px; margin-bottom: 6px; }
+    .country-card-name { font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+    .country-card-dish { font-size: 24px; margin-bottom: 2px; }
+    .country-card-status { font-size: 11px; font-weight: 700; color: var(--gold-dark); }
+    .country-card.undiscovered .country-card-status { color: var(--soft); }
+
+    /* LEADERBOARD */
+    #screen-leaderboard { background: linear-gradient(180deg,#fff8ed,#ffefc8); overflow-y: auto; justify-content: flex-start; padding-top: 50px; }
     #screen-leaderboard h2 { font-size: 26px; font-weight: 900; margin-bottom: 4px; }
-    .lb-week { font-size: 12px; color: var(--gold); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
-    .lb-list { width: 100%; max-width: 400px; margin-bottom: 20px; }
-    .lb-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--faint); }
+    .lb-week { font-size: 12px; color: var(--gold-dark); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+    .lb-prize { background: var(--gold-light); border: 2px solid var(--gold); border-radius: 14px; padding: 14px 18px; margin-bottom: 16px; max-width: 380px; width: 100%; }
+    .lb-prize-label { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 4px; }
+    .lb-prize-text { font-size: 18px; font-weight: 900; color: var(--text); }
+    .lb-list { width: 100%; max-width: 380px; margin-bottom: 20px; background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+    .lb-row { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid rgba(0,0,0,0.06); }
     .lb-row:last-child { border-bottom: none; }
-    .lb-rank { font-size: 18px; font-weight: 900; width: 32px; flex-shrink: 0; color: var(--muted); }
-    .lb-rank.gold { color: var(--gold); }
-    .lb-rank.silver { color: #c0c0c0; }
-    .lb-rank.bronze { color: #cd7f32; }
-    .lb-name { flex: 1; font-size: 15px; font-weight: 700; text-align: left; }
-    .lb-you { color: var(--gold); }
-    .lb-score { font-size: 16px; font-weight: 900; color: var(--cream); }
-    .lb-type { font-size: 11px; color: var(--muted); }
-    .lb-empty { font-size: 14px; color: var(--muted); padding: 32px; }
-    .lb-reward { background: rgba(232,168,62,0.08); border: 1px solid rgba(232,168,62,0.2); border-radius: 14px; padding: 14px 18px; margin-bottom: 16px; max-width: 400px; width: 100%; }
-    .lb-reward-label { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
-    .lb-reward-text { font-size: 16px; font-weight: 800; color: var(--cream); }
+    .lb-rank { font-size: 20px; font-weight: 900; width: 36px; flex-shrink: 0; }
+    .lb-name { flex: 1; font-size: 15px; font-weight: 700; color: var(--text); text-align: left; }
+    .lb-you { color: var(--gold-dark); }
+    .lb-score { font-size: 16px; font-weight: 900; color: var(--gold-dark); }
+    .lb-empty { font-size: 15px; color: var(--soft); padding: 32px; text-align: center; }
+
+    /* TAP HINT */
+    #tap-hint { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); font-size: 16px; font-weight: 900; color: var(--gold-dark); background: rgba(255,255,255,0.9); padding: 10px 22px; border-radius: 99px; border: 2px solid var(--gold); pointer-events: none; display: none; box-shadow: 0 4px 16px rgba(232,168,62,0.3); }
+    #tap-hint.active { display: block; animation: hintFade 4s ease forwards; }
+    @keyframes hintFade { 0%,50%{opacity:1;}100%{opacity:0;} }
   </style>
 </head>
 <body>
 
 <!-- LOADING -->
 <div class="screen" id="screen-loading">
+  <div class="loading-frog">🐸</div>
   <div class="spinner"></div>
-  <div style="font-size:14px;color:var(--muted);">Loading Wepa Explorer...</div>
+  <div style="font-size:15px;color:var(--soft);font-weight:600;">Loading Wepa Explorer...</div>
 </div>
 
-<!-- NOT AUTHORIZED -->
+<!-- AUTH -->
 <div class="screen hidden" id="screen-auth">
-  <div class="emoji">🐸</div>
+  <div class="big-emoji">🐸</div>
   <h2>Passport Required</h2>
-  <p>Wepa Explorer is exclusive to Wepa passport holders. Tap your NFC card or scan the QR code to get your passport first.</p>
-  <a href="https://streetfoodfusion.de" class="btn-gold">Get My Passport →</a>
+  <p>Wepa Explorer is exclusive to Wepa passport holders. Visit us to get yours!</p>
+  <a href="https://streetfoodfusion.de" class="btn-primary">Get My Passport →</a>
 </div>
 
 <!-- START -->
 <div class="screen hidden" id="screen-start">
-  <div class="mascot">🐸</div>
-  <h1>Wepa <span>Explorer</span></h1>
-  <div class="passport-badge" id="passport-badge">🎫 Loading...</div>
-  <div class="best-score">Your best: <span id="best-score-display">0</span> pts</div>
-  <div class="featured-badge" id="featured-badge">
-    ⭐ This week: <strong id="featured-country-name">Puerto Rico</strong> — <strong id="featured-multiplier">3x</strong> points!
+  <div class="start-frog">🐸</div>
+  <h1>Wepa <em>Explorer</em></h1>
+  <div class="passport-pill" id="passport-badge">🎫 Loading...</div>
+  <div class="best-row">Best: <strong id="best-display">0</strong> pts</div>
+  <div class="spirit-strip hidden" id="spirit-strip">
+    <div class="spirit-strip-title" id="spirit-strip-title">👑 Your Spirit is waiting!</div>
+    <div class="spirit-strip-timer" id="spirit-timer">⏳ --:--</div>
   </div>
-  <button class="btn-gold start-btn" onclick="startGame()">🌍 Play Now</button>
-  <p class="how-to"><strong>Tap</strong> to jump · <strong>Collect</strong> ingredients · <strong>Discover</strong> the world</p>
-  <button class="btn-secondary" style="margin-top:16px;padding:10px 24px;border-radius:99px;" onclick="showLeaderboard()">🏆 Leaderboard</button>
+  <div class="featured-strip">⭐ This week: <strong id="featured-name">Puerto Rico 🇵🇷</strong> — <strong id="featured-mult">3x</strong> points!</div>
+  <button class="btn-primary start-btn" onclick="startGame()">🌍 Play Now</button>
+  <p class="how-play"><strong>Tap</strong> to catch food · <strong>Build</strong> the dish · <strong>Discover</strong> the world</p>
+  <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;justify-content:center;">
+    <button class="btn-outline" onclick="showLeaderboard()">🏆 Leaderboard</button>
+    <button class="map-btn" onclick="showMap()">🗺️ My Discoveries</button>
+  </div>
 </div>
 
 <!-- HUD -->
 <div id="hud">
-  <div>
+  <div class="hud-score-wrap">
     <div class="hud-score" id="hud-score">0</div>
     <div class="hud-level" id="hud-level">Level 1</div>
   </div>
-  <div class="hud-combo" id="hud-combo"></div>
-  <button onclick="pauseGame()" style="background:rgba(242,236,224,0.1);border:1px solid var(--faint);color:var(--cream);padding:8px 14px;border-radius:8px;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;">⏸</button>
+  <div class="hud-combo" id="hud-combo">2x COMBO!</div>
+  <div class="hud-lives" id="hud-lives"></div>
+  <button class="hud-pause" onclick="pauseGame()">⏸</button>
+</div>
+
+<!-- DISH PROGRESS HUD -->
+<div id="dish-hud">
+  <div>
+    <div class="dish-hud-label">Building:</div>
+    <div class="dish-hud-name" id="dish-hud-name">Mofongo</div>
+  </div>
+  <div class="dish-slots" id="dish-slots"></div>
 </div>
 
 <!-- CANVAS -->
 <canvas id="gameCanvas"></canvas>
 
-<!-- COUNTRY UNLOCK POPUP -->
-<div class="popup" id="popup-unlock">
-  <div class="popup-emoji" id="pu-flag">🇵🇷</div>
-  <div class="popup-title" id="pu-name">Puerto Rico Unlocked!</div>
-  <div class="popup-sub" id="pu-sub">🥇 New country discovered!</div>
-  <div class="popup-fact" id="pu-fact">Fun fact here</div>
-  <button class="popup-close" onclick="closeUnlockPopup()">Keep Exploring →</button>
+<!-- OVERLAYS -->
+<div id="catch-flash"></div>
+<div id="spirit-flash"></div>
+<div id="tap-hint">👆 Tap to catch!</div>
+
+<!-- UNLOCK TOAST -->
+<div id="unlock-toast">
+  <div id="ut-flag">🇵🇷</div>
+  <div><div id="ut-title">First catch!</div><div id="ut-fact">Fact here</div></div>
 </div>
 
-<!-- GOLDEN COQUI POPUP -->
-<div class="popup golden-popup" id="popup-golden">
-  <div class="popup-emoji">✨🐸✨</div>
-  <div class="popup-title">Golden Coquí!</div>
-  <div class="popup-sub">You caught the legendary Golden Coquí! You've earned this week's special reward.</div>
-  <div class="popup-fact" id="golden-reward-text">Free Dessert 🍮</div>
-  <button class="popup-close" onclick="closeGoldenPopup()">Claim Reward →</button>
+<!-- DISH COMPLETE -->
+<div id="dish-complete">
+  <div class="dish-complete-inner">
+    <div class="dish-complete-emoji" id="dc-emoji">🍚</div>
+    <div class="dish-complete-title" id="dc-title">Mofongo Complete!</div>
+    <div class="dish-complete-country" id="dc-country">🇵🇷 Puerto Rico Mastered!</div>
+    <div class="dish-complete-fact" id="dc-fact">Fun fact here</div>
+    <div class="dish-complete-pts" id="dc-pts">+500 pts!</div>
+    <button class="btn-primary" style="width:100%;padding:16px;" onclick="closeDishComplete()">Keep Exploring! 🌍</button>
+  </div>
+</div>
+
+<!-- GOLDEN POPUP -->
+<div class="g-popup-bg" id="golden-popup-bg">
+  <div class="g-popup">
+    <div class="g-popup-emoji">✨🐸✨</div>
+    <div class="g-popup-title">Golden Coquí!</div>
+    <div class="g-popup-sub">You caught the legendary Golden Coquí! Claim your reward at Wepa!</div>
+    <div class="g-popup-reward" id="golden-reward-text">Free surprise 🎁</div>
+    <button class="btn-primary" style="width:100%;padding:16px;" onclick="closeGoldenPopup()">Amazing! →</button>
+  </div>
+</div>
+
+<!-- SPIRIT POPUP -->
+<div class="spirit-popup-bg" id="spirit-popup-bg">
+  <div class="g-popup" style="background:linear-gradient(135deg,#fff8ed,#ffe9a0);">
+    <div class="g-popup-emoji" id="spirit-popup-emoji">👑✨</div>
+    <div class="g-popup-title">Your Spirit Appeared!</div>
+    <div class="spirit-pts-big" id="spirit-pts">+200 pts</div>
+    <div class="g-popup-sub" id="spirit-msg">Your spirit appeared because you visited Wepa today!</div>
+    <div class="g-popup-reward" id="spirit-fact-text" style="font-size:14px;font-weight:600;"></div>
+    <button class="btn-primary" style="width:100%;padding:16px;" onclick="closeSpiritPopup()">Incredible! →</button>
+  </div>
 </div>
 
 <!-- GAME OVER -->
 <div class="screen hidden" id="screen-gameover">
-  <div style="font-size:48px;margin-bottom:8px;">🐸</div>
+  <div style="font-size:56px;margin-bottom:4px;">🐸</div>
   <h2>Game Over!</h2>
   <div class="go-score" id="go-score">0</div>
-  <div class="go-best" id="go-best">New best!</div>
-  <div class="go-countries" id="go-countries"></div>
+  <div class="go-best" id="go-best">Great run!</div>
+  <div class="go-dishes" id="go-dishes"></div>
   <div class="go-btns">
-    <button class="btn-gold" style="padding:16px;" onclick="startGame()">🔄 Play Again</button>
-    <button class="btn-secondary" onclick="showLeaderboard()">🏆 Leaderboard</button>
-    <button class="btn-secondary" onclick="showStart()">← Back</button>
+    <button class="btn-primary" style="padding:18px;" onclick="startGame()">🔄 Play Again</button>
+    <button class="btn-outline" style="margin-top:4px;" onclick="showLeaderboard()">🏆 Leaderboard</button>
+    <button class="btn-outline" style="margin-top:4px;" onclick="showStart()">← Back</button>
   </div>
+</div>
+
+<!-- DISCOVERY MAP -->
+<div class="screen hidden" id="screen-map">
+  <h2>🗺️ Discovery Map</h2>
+  <div class="map-sub" id="map-sub">0 / 10 countries discovered</div>
+  <div class="country-grid" id="country-grid"></div>
+  <button class="btn-outline" onclick="showStart()">← Back</button>
 </div>
 
 <!-- LEADERBOARD -->
 <div class="screen hidden" id="screen-leaderboard">
   <h2>🏆 Leaderboard</h2>
   <div class="lb-week" id="lb-week">This Week</div>
-  <div class="lb-reward" id="lb-reward-box">
-    <div class="lb-reward-label">This Week's Prize</div>
-    <div class="lb-reward-text" id="lb-reward-text">Loading...</div>
-  </div>
-  <div class="lb-list" id="lb-list">
-    <div class="lb-empty">Loading scores...</div>
-  </div>
-  <button class="btn-secondary" onclick="hideLeaderboard()">← Back</button>
+  <div class="lb-prize"><div class="lb-prize-label">This Week's Prize</div><div class="lb-prize-text" id="lb-prize">Loading...</div></div>
+  <div class="lb-list" id="lb-list"><div class="lb-empty">Loading scores...</div></div>
+  <button class="btn-outline" onclick="showStart()">← Back</button>
 </div>
 
 <script>
-const SB_URL = 'https://dgkcmyyafzhbtzdvtvji.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRna2NteXlhZnpoYnR6ZHZ0dmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1OTEzMjcsImV4cCI6MjA5MDE2NzMyN30.itt1fnbd8gcPKKDmTmdsaoi2e5yzXoNwDnzR8jD3q9M';
+const SB_URL='https://dgkcmyyafzhbtzdvtvji.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRna2NteXlhZnpoYnR6ZHZ0dmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1OTEzMjcsImV4cCI6MjA5MDE2NzMyN30.itt1fnbd8gcPKKDmTmdsaoi2e5yzXoNwDnzR8jD3q9M';
 
-// ── COUNTRIES DATA ──
-const COUNTRIES = {
-  PR: { name: 'Puerto Rico', flag: '🇵🇷', ingredient: '🫔', ingredientName: 'Empanada',
-    facts: ['The coquí frog is Puerto Rico\'s national symbol — its song fills the island every night.','Puerto Rico has over 270 beaches along its 311-mile coastline.','Mofongo, made from fried plantains, is one of Puerto Rico\'s most beloved dishes with roots in West Africa.','Puerto Rico is home to the only tropical rainforest in the US National Forest system — El Yunque.'] },
-  DE: { name: 'Germany', flag: '🇩🇪', ingredient: '🥨', ingredientName: 'Pretzel',
-    facts: ['Germany has over 1,500 different types of beer and more than 1,300 breweries.','The pretzel has been a German symbol since the 12th century — monks gave them to children as rewards.','Germany invented the Christmas tree tradition, now celebrated worldwide.','There are over 300 different types of bread baked in Germany — more than any other country.'] },
-  MA: { name: 'Morocco', flag: '🇲🇦', ingredient: '🫕', ingredientName: 'Tagine',
-    facts: ['Morocco is the only African country with coastlines on both the Atlantic Ocean and the Mediterranean Sea.','Mint tea in Morocco is a symbol of hospitality — refusing it is considered impolite.','The city of Fes has the world\'s oldest university, founded in 859 AD.','Moroccan tagine gets its name from the conical clay pot it\'s cooked in — the shape traps steam and keeps food moist.'] },
-  TR: { name: 'Turkey', flag: '🇹🇷', ingredient: '🥙', ingredientName: 'Döner',
-    facts: ['Turkey is the world\'s largest producer of hazelnuts, supplying 70% of global demand.','Istanbul is the only city in the world that spans two continents — Europe and Asia.','Turkish coffee was the world\'s first coffee shop culture, dating back to 1475 in Istanbul.','The döner kebab was invented in Turkey in the 1800s and later became Germany\'s favourite street food.'] },
-  IN: { name: 'India', flag: '🇮🇳', ingredient: '🍛', ingredientName: 'Curry',
-    facts: ['India is the birthplace of chess, yoga, and the number zero.','India has the world\'s largest vegetarian population — about 400 million people.','Chai tea is consumed by over a billion people in India daily — it\'s the national drink.','The spice trade with India was so valuable it changed the entire course of world history and exploration.'] },
-  JP: { name: 'Japan', flag: '🇯🇵', ingredient: '🍜', ingredientName: 'Ramen',
-    facts: ['Japan has over 100 different regional ramen styles — each city has its own unique recipe.','The Japanese concept of "Ikigai" means finding purpose in life through passion, mission, and contribution.','Japan has more vending machines per capita than any other country — one for every 23 people.','Sushi was originally street food in Tokyo — it was fast food before fast food existed.'] },
-  TH: { name: 'Thailand', flag: '🇹🇭', ingredient: '🥭', ingredientName: 'Mango',
-    facts: ['Thailand is the world\'s largest exporter of rice, feeding much of the planet.','Pad Thai was invented in the 1930s as part of a national campaign to promote Thai identity.','Thailand has over 40,000 Buddhist temples — religion is deeply woven into daily life and food culture.','The mango sticky rice dessert is considered Thailand\'s most iconic dish internationally.'] },
-  CO: { name: 'Colombia', flag: '🇨🇴', ingredient: '🌶️', ingredientName: 'Ají',
-    facts: ['Colombia is the only country in South America with coastlines on both the Pacific Ocean and the Caribbean Sea.','Colombia produces about 12% of the world\'s coffee and is famous for its mild, smooth beans.','The arepas of Colombia and Venezuela are among the oldest foods in the Americas, dating back 3,000 years.','Colombia has more species of birds than any other country in the world — over 1,900 species.'] },
-  BR: { name: 'Brazil', flag: '🇧🇷', ingredient: '🍍', ingredientName: 'Pineapple',
-    facts: ['Brazil is home to 60% of the Amazon rainforest — the world\'s largest tropical forest.','Feijoada, a black bean and pork stew, is Brazil\'s national dish with roots in Portuguese and African cuisine.','Brazil produces about a third of the world\'s coffee — it\'s been the top producer for over 150 years.','Carnival in Brazil is the world\'s largest festival, with over 2 million people on the streets of Rio daily.'] },
-  MX: { name: 'Mexico', flag: '🇲🇽', ingredient: '🌮', ingredientName: 'Taco',
-    facts: ['Mexico is the birthplace of chocolate — the Aztecs used cacao beans as currency.','Mexican cuisine is one of only two in the world recognized by UNESCO as an Intangible Cultural Heritage.','The avocado originated in Mexico over 10,000 years ago — the name comes from the Nahuatl word "ahuacatl".','Mexico has 35 UNESCO World Heritage Sites — more than any other country in the Americas.'] },
+// ── WORLD DATA ──
+const WORLD = {
+  PR: {
+    name:'Puerto Rico', flag:'🇵🇷',
+    dish:'Mofongo', dishEmoji:'🍚',
+    ingredients:['🌿','🧄','🥩','🫒'], // plantain, garlic, pork, olive oil
+    ingredientNames:['Plantain','Garlic','Pork','Olive Oil'],
+    color:'#ff6b6b', bgLight:'#ffe8e8',
+    facts:[
+      'The coquí frog is Puerto Rico\'s national symbol — its song fills the island every night.',
+      'Mofongo is made from fried green plantains mashed with garlic, pork crackling and olive oil.',
+      'Puerto Rico is home to the only tropical rainforest in the US National Forest system — El Yunque.',
+      'The word "hurricane" comes from Huracán, the Taíno god of storms native to Puerto Rico.'
+    ],
+    // Environment: Caribbean sunset, palm trees, colonial buildings
+    sky:['#ff9a56','#ffb347','#ffd700'],
+    ground:'#8B4513',
+    obstacles:['🌴','🏄','🌊','🦀'],
+    bgElements:['🌴','🏖️','🌺','🦜','🏠']
+  },
+  DE: {
+    name:'Germany', flag:'🇩🇪',
+    dish:'Pretzel Platter', dishEmoji:'🥨',
+    ingredients:['🥨','🧀','🥓','🍺'],
+    ingredientNames:['Pretzel','Cheese','Speck','Beer'],
+    color:'#4ecdc4', bgLight:'#e0f7f5',
+    facts:[
+      'The pretzel has been a German symbol since the 12th century — monks gave them to children as rewards.',
+      'Germany has over 1,500 types of beer and more than 1,300 breweries.',
+      'There are over 300 different types of bread baked in Germany — more than any other country.',
+      'The döner kebab was brought to Berlin by Turkish workers and became Germany\'s favourite street food.'
+    ],
+    sky:['#87ceeb','#b0d9f0','#daeeff'],
+    ground:'#4a7c59',
+    obstacles:['🚗','🏰','🌲','⛪'],
+    bgElements:['🏰','⛪','🌲','🌉','🚂']
+  },
+  MA: {
+    name:'Morocco', flag:'🇲🇦',
+    dish:'Tagine', dishEmoji:'🫕',
+    ingredients:['🍗','🫒','🍊','🌿'],
+    ingredientNames:['Chicken','Olives','Preserved Lemon','Herbs'],
+    color:'#e8965a', bgLight:'#fde8d8',
+    facts:[
+      'Mint tea in Morocco is a symbol of hospitality — refusing it is considered impolite.',
+      'The city of Fes has the world\'s oldest university, founded in 859 AD.',
+      'Moroccan tagine gets its name from the conical clay pot it\'s cooked in — traps steam perfectly.',
+      'Morocco is the only African country with coastlines on both the Atlantic and Mediterranean.'
+    ],
+    sky:['#f4a261','#e76f51','#f9c74f'],
+    ground:'#c8a96e',
+    obstacles:['🐪','🕌','🪔','🏺'],
+    bgElements:['🕌','🌙','⭐','🏺','🪔']
+  },
+  TR: {
+    name:'Turkey', flag:'🇹🇷',
+    dish:'Döner', dishEmoji:'🥙',
+    ingredients:['🥩','🫓','🍅','🧅'],
+    ingredientNames:['Lamb','Flatbread','Tomato','Onion'],
+    color:'#e63946', bgLight:'#fde8ea',
+    facts:[
+      'Istanbul is the only city in the world that spans two continents — Europe and Asia.',
+      'Turkish coffee culture dates back to 1475 — the world\'s first coffee shops opened in Istanbul.',
+      'Turkey is the world\'s largest producer of hazelnuts, supplying 70% of global demand.',
+      'The tulip originated in Turkey and was exported to the Netherlands in the 1500s.'
+    ],
+    sky:['#e63946','#f4a261','#ffd166'],
+    ground:'#8b7355',
+    obstacles:['🏛️','🚢','🌷','⚓'],
+    bgElements:['🕌','🌉','🌷','⚓','🏛️']
+  },
+  IN: {
+    name:'India', flag:'🇮🇳',
+    dish:'Curry', dishEmoji:'🍛',
+    ingredients:['🍗','🌶️','🧅','🌿'],
+    ingredientNames:['Chicken','Chili','Onion','Spices'],
+    color:'#f4a261', bgLight:'#fef3e8',
+    facts:[
+      'India is the birthplace of chess, yoga, and the number zero.',
+      'India has the world\'s largest vegetarian population — about 400 million people.',
+      'Chai tea is consumed by over a billion people in India daily.',
+      'The spice trade with India was so valuable it changed the entire course of world exploration.'
+    ],
+    sky:['#ff9933','#ffffff','#138808'],
+    ground:'#8b6914',
+    obstacles:['🐘','🕌','🌺','🎪'],
+    bgElements:['🏯','🐘','🌺','🎪','⭐']
+  },
+  JP: {
+    name:'Japan', flag:'🇯🇵',
+    dish:'Ramen', dishEmoji:'🍜',
+    ingredients:['🍜','🥚','🍖','🌿'],
+    ingredientNames:['Noodles','Egg','Chashu','Nori'],
+    color:'#ff6b9d', bgLight:'#fde8f0',
+    facts:[
+      'Japan has over 100 different regional ramen styles — each city has its own unique recipe.',
+      'Japan has more vending machines per capita than any other country — one for every 23 people.',
+      'Sushi was originally street food in Tokyo — it was fast food before fast food existed.',
+      'The Japanese concept of "Ikigai" means finding joy and purpose through what you love doing.'
+    ],
+    sky:['#87ceeb','#ffb7c5','#fff0f5'],
+    ground:'#4a7c59',
+    obstacles:['🏮','⛩️','🌸','🚄'],
+    bgElements:['⛩️','🌸','🏯','🗻','🌙']
+  },
+  TH: {
+    name:'Thailand', flag:'🇹🇭',
+    dish:'Pad Thai', dishEmoji:'🍝',
+    ingredients:['🍝','🥜','🫑','🍋'],
+    ingredientNames:['Rice Noodles','Peanuts','Bean Sprouts','Lime'],
+    color:'#6c5ce7', bgLight:'#ede8ff',
+    facts:[
+      'Thailand is the world\'s largest exporter of rice, feeding much of the planet.',
+      'Pad Thai was invented in the 1930s as part of a national campaign to promote Thai identity.',
+      'Thailand has over 40,000 Buddhist temples — religion is woven into every aspect of daily life.',
+      'Mango sticky rice is considered Thailand\'s most iconic dessert internationally.'
+    ],
+    sky:['#fdcb6e','#e17055','#6c5ce7'],
+    ground:'#2d9e6b',
+    obstacles:['🐘','🛺','🌺','⛵'],
+    bgElements:['🏯','🌺','🐘','⛵','🌙']
+  },
+  CO: {
+    name:'Colombia', flag:'🇨🇴',
+    dish:'Arepa', dishEmoji:'🫓',
+    ingredients:['🌽','🧀','🥚','🧈'],
+    ingredientNames:['Corn','Cheese','Egg','Butter'],
+    color:'#fdcb6e', bgLight:'#fff8e1',
+    facts:[
+      'Colombia produces about 12% of the world\'s coffee — among the best quality beans on Earth.',
+      'Arepas are among the oldest foods in the Americas, dating back over 3,000 years.',
+      'Colombia has more species of birds than any other country — over 1,900 species.',
+      'Colombia is the only South American country with coastlines on both the Pacific and Caribbean.'
+    ],
+    sky:['#ffd32a','#0652dd','#ea2027'],
+    ground:'#2d9e6b',
+    obstacles:['☕','🦜','💐','🚂'],
+    bgElements:['🌺','☕','🦜','🏔️','🌿']
+  },
+  BR: {
+    name:'Brazil', flag:'🇧🇷',
+    dish:'Feijoada', dishEmoji:'🍲',
+    ingredients:['🫘','🥩','🌿','🍚'],
+    ingredientNames:['Black Beans','Pork','Herbs','Rice'],
+    color:'#00b894', bgLight:'#e0f7ef',
+    facts:[
+      'Brazil is home to 60% of the Amazon rainforest — the lungs of the planet.',
+      'Feijoada is Brazil\'s national dish — a rich black bean and pork stew with African roots.',
+      'Carnival in Rio de Janeiro draws over 2 million people onto the streets every day.',
+      'Brazil has been the world\'s top coffee producer for over 150 years.'
+    ],
+    sky:['#00b894','#fdcb6e','#ff7675'],
+    ground:'#2d9e6b',
+    obstacles:['🦜','⚽','🌺','💃'],
+    bgElements:['🌴','🦜','⚽','💃','🌺']
+  },
+  MX: {
+    name:'Mexico', flag:'🇲🇽',
+    dish:'Tacos', dishEmoji:'🌮',
+    ingredients:['🌮','🥑','🍅','🌿'],
+    ingredientNames:['Tortilla','Avocado','Salsa','Cilantro'],
+    color:'#e17055', bgLight:'#fdeae6',
+    facts:[
+      'Mexico is the birthplace of chocolate — the Aztecs used cacao beans as currency.',
+      'Mexican cuisine is one of only two in the world recognized by UNESCO as Cultural Heritage.',
+      'The avocado originated in Mexico over 10,000 years ago.',
+      'Mexico has 35 UNESCO World Heritage Sites — more than any other country in the Americas.'
+    ],
+    sky:['#e17055','#fdcb6e','#6c5ce7'],
+    ground:'#c8a96e',
+    obstacles:['🌵','🎭','💀','🦅'],
+    bgElements:['🏛️','🌵','🎭','🦅','🌺']
+  }
 };
 
-const COUNTRY_CODES = Object.keys(COUNTRIES);
-const OBSTACLES = ['☁️', '🧳', '🚧', '🛢️'];
+const COUNTRY_CODES = Object.keys(WORLD);
+const SPIRIT_FACTS = {
+  senior:'Your loyalty makes Wepa what it is. Every visit brings more warmth to our table. Thank you. 👑',
+  kids:'You are a true Wepa Explorer! The world is yours to discover, one dish at a time. 🌍',
+  pet:'Every paw print at Wepa tells a story. Your companion is part of our family forever. 🐾'
+};
 
-// ── GAME STATE ──
-let passportId = null;
-let passportData = null;
-let gameSettings = { featured_country: 'PR', featured_multiplier: 3, explorer_reward: 'Secret Badge 🏅' };
-let bestScore = 0;
-let currentScore = 0;
-let gameRunning = false;
-let gamePaused = false;
-let animFrame = null;
-let sessionCountries = [];
-let discoveredCountries = [];
-let combo = 0;
-let comboTimer = null;
-let goldenCoquiShown = false;
+// ── STATE ──
+let passportId=null, passportData=null;
+let gameSettings={featured_country:'PR',featured_multiplier:3,explorer_reward:'Secret reward 🎁'};
+let bestScore=0, currentScore=0;
+let gameRunning=false, gamePaused=false, animFrame=null;
+let sessionDishes=[], discoveredCountries=[];
+let combo=0, comboTimer=null;
+let goldenShown=false, spiritActive=false, spiritCaught=false;
+let spiritExpiry=null, spiritTimerInterval=null;
+let currentCountry=null, currentDish=[];
+let dishCompleteShowing=false;
+let envOffset=0;
 
-// ── CANVAS SETUP ──
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-let W, H;
+// ── CANVAS ──
+const canvas=document.getElementById('gameCanvas');
+const ctx=canvas.getContext('2d');
+let W,H;
+function resizeCanvas(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+window.addEventListener('resize',resizeCanvas); resizeCanvas();
 
-function resizeCanvas() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
-
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
+// ── LANES ──
+function laneY(i){ return H*[0.28,0.50,0.70][i]; }
 
 // ── GAME OBJECTS ──
-let wepa, ingredients, obstacles, particles, ground;
-let speed, frameCount, level;
+let wepa,items,particles,bgObjects;
+let speed,frameCount,level;
 
-function initGame() {
-  speed = 4;
-  frameCount = 0;
-  level = 1;
-  currentScore = 0;
-  combo = 0;
-  sessionCountries = [];
-  goldenCoquiShown = false;
-  ingredients = [];
-  obstacles = [];
-  particles = [];
-  ground = H * 0.75;
-
-  wepa = {
-    x: W * 0.15,
-    y: ground - 60,
-    vy: 0,
-    size: 52,
-    jumping: false,
-    dead: false,
-    frameAnim: 0,
+function initGame(){
+  speed=3; frameCount=0; level=1;
+  currentScore=0; combo=0;
+  sessionDishes=[]; goldenShown=false; spiritCaught=false;
+  items=[]; particles=[]; bgObjects=[];
+  currentCountry=null; currentDish=[];
+  dishCompleteShowing=false; envOffset=0;
+  wepa={
+    x:W*0.16, targetLane:1, currentLane:1, laneT:1,
+    size:58, catching:false, catchT:0, missed:0,
+    expression:'happy', // happy, catching, missed, celebrate
+    expressionT:0
   };
+  pickNewCountry();
+  renderDishHUD();
+  updateLivesHUD();
 }
 
-// ── PHYSICS ──
-const GRAVITY = 0.55;
-const JUMP_FORCE = -13;
+function pickNewCountry(){
+  // Pick a country not yet done this session, prefer undiscovered
+  var undone = COUNTRY_CODES.filter(function(c){ return !sessionDishes.includes(c); });
+  if(undone.length===0) undone=COUNTRY_CODES.slice();
+  var undiscovered = undone.filter(function(c){ return !discoveredCountries.includes(c); });
+  var pool = undiscovered.length>0 ? undiscovered : undone;
+  currentCountry = pool[Math.floor(Math.random()*pool.length)];
+  currentDish = [];
+  renderDishHUD();
+  // Show toast for new country
+  var c=WORLD[currentCountry];
+  showToast(c.flag, '🌍 Now in '+c.name+'!', 'Collect '+c.ingredientNames.join(', ')+' to make '+c.dish);
+}
 
-function jump() {
-  if (!gameRunning || gamePaused || wepa.dead) return;
-  if (!wepa.jumping) {
-    wepa.vy = JUMP_FORCE;
-    wepa.jumping = true;
+// ── DISH HUD ──
+function renderDishHUD(){
+  if(!currentCountry) return;
+  var c=WORLD[currentCountry];
+  document.getElementById('dish-hud-name').textContent=c.dish;
+  var slots=document.getElementById('dish-slots');
+  slots.innerHTML='';
+  for(var i=0;i<c.ingredients.length;i++){
+    var div=document.createElement('div');
+    div.className='dish-slot'+(i<currentDish.length?' filled':'');
+    div.textContent=i<currentDish.length?c.ingredients[i]:'';
+    slots.appendChild(div);
   }
 }
 
-canvas.addEventListener('click', jump);
-canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); }, { passive: false });
-document.addEventListener('keydown', (e) => { if (e.code === 'Space') { e.preventDefault(); jump(); } });
+function updateLivesHUD(){
+  var el=document.getElementById('hud-lives');
+  el.innerHTML='';
+  for(var i=0;i<5;i++){
+    var span=document.createElement('span');
+    span.style.fontSize='18px';
+    span.style.opacity=i<(wepa?wepa.missed:0)?'0.2':'1';
+    span.textContent='❤️';
+    el.appendChild(span);
+  }
+}
+
+// ── CLOSEST ITEM ──
+function getClosestItem(){
+  var zone=W*0.38; var closest=null; var closestD=Infinity;
+  items.forEach(function(item){
+    if(item.caught||item.missed) return;
+    var d=item.x-wepa.x;
+    if(d>0&&d<zone&&d<closestD){ closest=item; closestD=d; }
+  });
+  return closest;
+}
+
+// ── TAP ──
+function onTap(){
+  if(!gameRunning||gamePaused||dishCompleteShowing) return;
+  var target=getClosestItem();
+  if(!target) return;
+  wepa.targetLane=target.lane; wepa.catching=true; wepa.catchT=1;
+  wepa.expression='catching'; wepa.expressionT=20;
+  target.caught=true;
+  if(target.isSpirit){ spiritCaught=true; showSpiritPopup(); }
+  else if(target.isGolden){ goldenShown=true; collectItem(target); showGoldenPopup(); }
+  else { collectItem(target); }
+}
+canvas.addEventListener('click',onTap);
+canvas.addEventListener('touchstart',function(e){e.preventDefault();onTap();},{passive:false});
+document.addEventListener('keydown',function(e){if(e.code==='Space'){e.preventDefault();onTap();}});
 
 // ── SPAWN ──
-function spawnIngredient() {
-  const sessionPool = COUNTRY_CODES.filter(c => !sessionCountries.includes(c));
-  const pool = sessionPool.length > 0 ? sessionPool : COUNTRY_CODES;
-  const countryCode = pool[Math.floor(Math.random() * pool.length)];
-  const country = COUNTRIES[countryCode];
-  const isGolden = !goldenCoquiShown && Math.random() < 0.002;
-
-  ingredients.push({
-    x: W + 40,
-    y: ground - 40 - Math.random() * 80,
-    code: countryCode,
-    emoji: isGolden ? '✨' : country.ingredient,
-    isGolden,
-    size: isGolden ? 44 : 36,
-    collected: false,
-  });
+function spawnItem(){
+  var isSpirit=spiritActive&&!spiritCaught&&Math.random()<0.07;
+  var isGolden=!isSpirit&&!goldenShown&&Math.random()<0.002;
+  var emoji,code,size,color;
+  if(isSpirit){
+    var te={senior:'👑',kids:'🧒',pet:'🐾'};
+    emoji=(te[passportData?.passport_type]||'🐸')+'✨'; size=52; color='#ffe066';
+  } else if(isGolden){
+    emoji='✨🐸✨'; size=52; color='#ffd700';
+  } else {
+    // Always spawn ingredients for current country
+    var c=WORLD[currentCountry];
+    var nextIdx=currentDish.length%c.ingredients.length;
+    emoji=c.ingredients[nextIdx]; size=56; color=c.color;
+    code=currentCountry;
+  }
+  var lane=Math.floor(Math.random()*3);
+  items.push({x:W+70,lane:lane,y:laneY(lane),emoji:emoji,code:code,size:size,color:color,isSpirit:isSpirit,isGolden:isGolden,caught:false,missed:false,wobble:Math.random()*Math.PI*2});
 }
 
-function spawnObstacle() {
-  const h = 40 + Math.random() * 30;
-  obstacles.push({
-    x: W + 40,
-    y: ground - h,
-    w: 30 + Math.random() * 20,
-    h,
-    emoji: OBSTACLES[Math.floor(Math.random() * OBSTACLES.length)],
-  });
-}
+// ── COLLECT ──
+function collectItem(item){
+  var isFeatured=item.code&&item.code===gameSettings.featured_country;
+  var mult=isFeatured?gameSettings.featured_multiplier:1;
+  var pts=30*mult*Math.max(1,combo);
+  currentScore+=pts; combo++;
+  clearTimeout(comboTimer);
+  comboTimer=setTimeout(function(){combo=0;document.getElementById('hud-combo').classList.remove('show');},2200);
+  spawnParticles(item.x,item.y,item.color,12);
+  showCatchFlash('+'+(Math.floor(pts))+(isFeatured?' ⭐':'')+(combo>1?' x'+combo:''));
+  if(combo>1){ var hc=document.getElementById('hud-combo'); hc.textContent=combo+'x COMBO!'; hc.classList.remove('show'); void hc.offsetWidth; hc.classList.add('show'); }
+  wepa.expression='happy'; wepa.expressionT=15;
 
-// ── COLLISION ──
-function circleRect(cx, cy, cr, rx, ry, rw, rh) {
-  const nearX = Math.max(rx, Math.min(cx, rx + rw));
-  const nearY = Math.max(ry, Math.min(cy, ry + rh));
-  const dx = cx - nearX, dy = cy - nearY;
-  return dx * dx + dy * dy < cr * cr;
-}
-
-// ── PARTICLES ──
-function spawnParticles(x, y, color, count) {
-  for (let i = 0; i < count; i++) {
-    particles.push({
-      x, y,
-      vx: (Math.random() - 0.5) * 6,
-      vy: (Math.random() - 0.5) * 6 - 2,
-      life: 1, color,
-      size: 4 + Math.random() * 6,
-    });
+  // Add to dish
+  if(item.code){
+    currentDish.push(item.code);
+    renderDishHUD();
+    var c=WORLD[currentCountry];
+    if(currentDish.length>=c.ingredients.length){
+      completeDish();
+    }
+    // First catch of this country — toast
+    if(currentDish.length===1&&!discoveredCountries.includes(item.code)){
+      showToast(c.flag,c.flag+' '+c.name,c.facts[Math.floor(Math.random()*c.facts.length)]);
+    }
   }
 }
 
-// ── DRAW ──
-function drawBackground() {
-  // Sky gradient
-  const grad = ctx.createLinearGradient(0, 0, 0, H);
-  grad.addColorStop(0, '#0a0600');
-  grad.addColorStop(0.7, '#120b00');
-  grad.addColorStop(1, '#1a0f00');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, W, H);
+function completeDish(){
+  if(dishCompleteShowing) return;
+  dishCompleteShowing=true;
+  gamePaused=true;
+  var c=WORLD[currentCountry];
+  var isNew=!discoveredCountries.includes(currentCountry);
+  if(isNew){ discoveredCountries.push(currentCountry); sessionDishes.push(currentCountry); }
+  var bonus=isNew?500:200;
+  currentScore+=bonus;
+  // Big celebration particles
+  for(var i=0;i<5;i++) setTimeout(function(){ spawnParticles(W/2,H/2,c.color,16); },i*120);
+  document.getElementById('dc-emoji').textContent=c.dishEmoji;
+  document.getElementById('dc-title').textContent=c.dish+' Complete!';
+  document.getElementById('dc-country').textContent=c.flag+' '+(isNew?c.name+' Mastered!':'Great cook!');
+  document.getElementById('dc-fact').textContent=c.facts[Math.floor(Math.random()*c.facts.length)];
+  document.getElementById('dc-pts').textContent='+'+(bonus)+' pts'+(isNew?' 🎉 NEW!':'');
+  var dc=document.getElementById('dish-complete');
+  dc.classList.add('show');
+  wepa.expression='celebrate'; wepa.expressionT=120;
+}
 
-  // Stars
-  ctx.fillStyle = 'rgba(242,236,224,0.4)';
-  for (let i = 0; i < 40; i++) {
-    const sx = ((i * 137.5 + frameCount * 0.1) % W);
-    const sy = (i * 73) % (ground * 0.7);
-    const ss = 1 + (i % 3) * 0.5;
-    ctx.beginPath();
-    ctx.arc(sx, sy, ss, 0, Math.PI * 2);
-    ctx.fill();
+function closeDishComplete(){
+  document.getElementById('dish-complete').classList.remove('show');
+  dishCompleteShowing=false;
+  gamePaused=false;
+  currentDish=[];
+  pickNewCountry();
+  animFrame=requestAnimationFrame(gameLoop);
+}
+
+// ── DRAW ENVIRONMENT ──
+function drawEnvironment(){
+  if(!currentCountry) return;
+  var c=WORLD[currentCountry];
+  envOffset=(envOffset+speed*0.4)%(W+200);
+
+  // Sky gradient
+  var grad=ctx.createLinearGradient(0,0,0,H*0.78);
+  grad.addColorStop(0,c.sky[0]);
+  grad.addColorStop(0.5,c.sky[1]);
+  grad.addColorStop(1,c.sky[2]||c.sky[1]);
+  ctx.fillStyle=grad;
+  ctx.fillRect(0,0,W,H*0.78);
+
+  // BG architecture elements
+  var bgEl=c.bgElements||['🏠','🌲','⭐'];
+  for(var i=0;i<8;i++){
+    var ex=((i*180+W-envOffset*0.3)%(W+200))-40;
+    var ey=H*0.35+Math.sin(i*1.7)*40;
+    ctx.save();
+    ctx.globalAlpha=0.35;
+    ctx.font='48px serif';
+    ctx.textAlign='center';
+    ctx.textBaseline='bottom';
+    ctx.fillText(bgEl[i%bgEl.length],ex,ey);
+    ctx.restore();
+  }
+
+  // Lane visual tracks
+  for(var l=0;l<3;l++){
+    var ly=laneY(l);
+    ctx.save();
+    ctx.strokeStyle='rgba(255,255,255,0.22)';
+    ctx.lineWidth=2;
+    ctx.setLineDash([18,22]);
+    ctx.beginPath(); ctx.moveTo(0,ly); ctx.lineTo(W,ly); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
   }
 
   // Ground
-  ctx.fillStyle = '#1a0f00';
-  ctx.fillRect(0, ground, W, H - ground);
+  var gGrad=ctx.createLinearGradient(0,H*0.78,0,H);
+  gGrad.addColorStop(0,c.ground||'#8B4513');
+  gGrad.addColorStop(1,'rgba(0,0,0,0.6)');
+  ctx.fillStyle=gGrad;
+  ctx.fillRect(0,H*0.78,W,H*0.22);
 
-  // Ground line
-  const lineGrad = ctx.createLinearGradient(0, ground, W, ground);
-  lineGrad.addColorStop(0, 'transparent');
-  lineGrad.addColorStop(0.5, 'rgba(232,168,62,0.4)');
-  lineGrad.addColorStop(1, 'transparent');
-  ctx.strokeStyle = lineGrad;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(0, ground);
-  ctx.lineTo(W, ground);
-  ctx.stroke();
+  // Ground highlight
+  ctx.strokeStyle='rgba(255,255,255,0.4)';
+  ctx.lineWidth=3; ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(0,H*0.78); ctx.lineTo(W,H*0.78); ctx.stroke();
 
-  // Scrolling ground dots
-  ctx.fillStyle = 'rgba(232,168,62,0.15)';
-  for (let i = 0; i < 20; i++) {
-    const dx = ((i * 80 - frameCount * speed * 0.5) % W + W) % W;
-    ctx.beginPath();
-    ctx.arc(dx, ground + 12, 3, 0, Math.PI * 2);
-    ctx.fill();
+  // Ground texture dots
+  ctx.fillStyle='rgba(255,255,255,0.15)';
+  for(var j=0;j<18;j++){
+    var dx=((j*90-envOffset*speed*0.5)%W+W)%W;
+    ctx.beginPath(); ctx.arc(dx,H*0.78+14,4,0,Math.PI*2); ctx.fill();
+  }
+
+  // Scrolling obstacles in background
+  var obs=c.obstacles||['🌴'];
+  for(var o=0;o<4;o++){
+    var ox=((o*320+W*1.5-envOffset)%(W+400))-80;
+    ctx.save();
+    ctx.globalAlpha=0.7;
+    ctx.font='40px serif';
+    ctx.textAlign='center';
+    ctx.textBaseline='bottom';
+    ctx.fillText(obs[o%obs.length],ox,H*0.78);
+    ctx.restore();
   }
 }
 
-function drawWepa() {
-  const w = wepa;
-  ctx.save();
-  if (w.dead) ctx.globalAlpha = 0.5;
+// ── DRAW WEPA ──
+function drawWepa(){
+  // Lane transition
+  if(wepa.currentLane!==wepa.targetLane){
+    wepa.laneT=Math.min(1,(wepa.laneT||0)+0.14);
+    if(wepa.laneT>=1){ wepa.currentLane=wepa.targetLane; wepa.laneT=1; }
+  } else { wepa.laneT=1; }
+  var fromY=laneY(wepa.currentLane), toY=laneY(wepa.targetLane);
+  var ease=wepa.laneT*wepa.laneT*(3-2*wepa.laneT);
+  var wy=fromY+(toY-fromY)*ease;
+
+  // Bob
+  var bob=Math.sin(frameCount*0.09)*5;
+  if(wepa.expression==='celebrate') bob=Math.sin(frameCount*0.25)*12;
+
+  // Catching stretch
+  var sx=1,sy=1;
+  if(wepa.catching){ wepa.catchT-=0.07; if(wepa.catchT<=0){wepa.catching=false;} sx=1+wepa.catchT*0.5; sy=1-wepa.catchT*0.3; }
+
+  // Expression override
+  if(wepa.expressionT>0) wepa.expressionT--;
 
   // Shadow
-  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.save();
+  ctx.fillStyle='rgba(0,0,0,0.15)';
   ctx.beginPath();
-  ctx.ellipse(w.x, ground + 6, w.size * 0.5, 6, 0, 0, Math.PI * 2);
+  ctx.ellipse(wepa.x,wy+wepa.size*0.55,wepa.size*0.45*sx,8*sy,0,0,Math.PI*2);
   ctx.fill();
 
-  // Body glow when jumping
-  if (w.jumping) {
-    ctx.shadowColor = 'rgba(232,168,62,0.4)';
-    ctx.shadowBlur = 20;
-  }
-
-  ctx.font = `${w.size}px serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-
-  // Squish/stretch
-  const scaleY = w.jumping ? 1.2 : 0.95;
-  const scaleX = w.jumping ? 0.85 : 1.05;
-  ctx.translate(w.x, w.y + w.size / 2);
-  ctx.scale(scaleX, scaleY);
-  ctx.fillText('🐸', 0, 0);
-  ctx.restore();
-}
-
-function drawIngredients() {
-  ingredients.forEach(ing => {
-    if (ing.collected) return;
-    ctx.save();
-    if (ing.isGolden) {
-      ctx.shadowColor = 'rgba(255,215,0,0.8)';
-      ctx.shadowBlur = 20;
-      const pulse = 1 + Math.sin(frameCount * 0.1) * 0.1;
-      ctx.scale(pulse, pulse);
-    }
-    ctx.font = `${ing.size}px serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(ing.emoji, ing.x, ing.y);
-    ctx.restore();
-  });
-}
-
-function drawObstacles() {
-  obstacles.forEach(obs => {
-    ctx.font = '36px serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'bottom';
-    ctx.fillText(obs.emoji, obs.x + obs.w / 2, obs.y + obs.h);
-  });
-}
-
-function drawParticles() {
-  particles.forEach(p => {
-    ctx.save();
-    ctx.globalAlpha = p.life;
-    ctx.fillStyle = p.color;
+  // Glow ring when catching
+  if(wepa.catching||wepa.expression==='celebrate'){
+    ctx.strokeStyle='rgba(232,168,62,0.6)';
+    ctx.lineWidth=3;
     ctx.beginPath();
-    ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.arc(wepa.x,wy+bob,wepa.size*0.65,0,Math.PI*2);
+    ctx.stroke();
+  }
+
+  // Main frog emoji
+  ctx.font=wepa.size+'px serif';
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  ctx.translate(wepa.x,wy+bob);
+  ctx.scale(sx,sy);
+  ctx.fillText('🐸',0,0);
+  ctx.restore();
+
+  // Expression emoji overlay
+  if(wepa.expression==='catching'&&wepa.expressionT>0){
+    ctx.save(); ctx.font='22px serif'; ctx.textAlign='center';
+    ctx.fillText('😋',wepa.x+30,wy+bob-30); ctx.restore();
+  } else if(wepa.expression==='celebrate'&&wepa.expressionT>0){
+    ctx.save(); ctx.font='24px serif'; ctx.textAlign='center';
+    var stars=['⭐','✨','🎉'];
+    ctx.fillText(stars[Math.floor(frameCount/8)%3],wepa.x+35,wy+bob-35); ctx.restore();
+  }
+
+  // Target ring on closest item's lane
+  var nearest=getClosestItem();
+  if(nearest&&!dishCompleteShowing){
+    var ringY=laneY(nearest.lane);
+    ctx.save();
+    ctx.strokeStyle='rgba(232,168,62,'+(0.4+Math.sin(frameCount*0.18)*0.25)+')';
+    ctx.lineWidth=2.5;
+    ctx.setLineDash([7,7]);
+    ctx.beginPath(); ctx.arc(wepa.x,ringY,32,0,Math.PI*2); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  }
+}
+
+// ── DRAW ITEMS ──
+function drawItems(){
+  items.forEach(function(item){
+    if(item.caught||item.missed) return;
+    var wobble=Math.sin(frameCount*0.07+item.wobble)*5;
+    var iy=item.y+wobble;
+    ctx.save();
+
+    if(item.isSpirit){
+      ctx.shadowColor='rgba(232,168,62,0.95)';
+      ctx.shadowBlur=30+Math.sin(frameCount*0.12)*10;
+      var ps=1+Math.sin(frameCount*0.1)*0.1;
+      ctx.translate(item.x,iy); ctx.scale(ps,ps);
+      // Gold bubble
+      ctx.fillStyle='rgba(255,240,150,0.9)';
+      ctx.beginPath(); ctx.arc(0,0,item.size*0.7,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle='#e8a83e'; ctx.lineWidth=3; ctx.stroke();
+      ctx.font=item.size*0.85+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(item.emoji,0,0);
+      ctx.font='bold 12px '+getComputedStyle(document.body).fontFamily;
+      ctx.fillStyle='#c97600'; ctx.fillText('✨ YOUR SPIRIT ✨',0,item.size*0.85);
+    } else if(item.isGolden){
+      ctx.shadowColor='rgba(255,215,0,0.9)'; ctx.shadowBlur=28;
+      var gs=1+Math.sin(frameCount*0.09)*0.12;
+      ctx.translate(item.x,iy); ctx.scale(gs,gs);
+      ctx.fillStyle='rgba(255,250,180,0.95)';
+      ctx.beginPath(); ctx.arc(0,0,item.size*0.7,0,Math.PI*2); ctx.fill();
+      ctx.font=item.size+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(item.emoji,0,0);
+    } else {
+      // Colored country bubble
+      ctx.translate(item.x,iy);
+      // Bubble
+      ctx.fillStyle=item.color;
+      ctx.globalAlpha=0.88;
+      ctx.beginPath(); ctx.arc(0,0,item.size*0.72,0,Math.PI*2); ctx.fill();
+      // White inner ring
+      ctx.globalAlpha=1;
+      ctx.strokeStyle='rgba(255,255,255,0.75)'; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.arc(0,0,item.size*0.72,0,Math.PI*2); ctx.stroke();
+      // Emoji
+      ctx.font=item.size*0.88+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(item.emoji,0,0);
+      // Country flag below
+      if(item.code){
+        var cn=WORLD[item.code];
+        ctx.font='bold 13px '+getComputedStyle(document.body).fontFamily;
+        ctx.fillStyle='rgba(26,26,26,0.75)';
+        ctx.fillText(cn.flag+' '+cn.name,0,item.size*0.92);
+      }
+    }
     ctx.restore();
   });
 }
 
-function drawScore() {
-  // Score
-  ctx.fillStyle = 'rgba(242,236,224,0.9)';
-  ctx.font = `bold ${Math.min(28, W * 0.06)}px ${getComputedStyle(document.body).fontFamily}`;
-  ctx.textAlign = 'left';
-  ctx.fillText(Math.floor(currentScore), 20, 50);
-
-  // Combo
-  if (combo > 1) {
-    ctx.fillStyle = 'rgba(232,168,62,0.9)';
-    ctx.font = `bold ${Math.min(20, W * 0.045)}px ${getComputedStyle(document.body).fontFamily}`;
-    ctx.textAlign = 'center';
-    ctx.fillText(`${combo}x COMBO!`, W / 2, 50);
+// ── PARTICLES ──
+function spawnParticles(x,y,color,n){
+  for(var i=0;i<n;i++){
+    particles.push({x:x,y:y,vx:(Math.random()-0.5)*9,vy:(Math.random()-0.5)*9-3,life:1,color:color,size:4+Math.random()*7});
   }
+}
+function drawParticles(){
+  particles.forEach(function(p){
+    ctx.save(); ctx.globalAlpha=p.life*0.85; ctx.fillStyle=p.color;
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.size*p.life,0,Math.PI*2); ctx.fill(); ctx.restore();
+  });
 }
 
 // ── GAME LOOP ──
-function gameLoop() {
-  if (!gameRunning || gamePaused) return;
+function gameLoop(){
+  if(!gameRunning||gamePaused) return;
   frameCount++;
 
-  // Update speed / level
-  speed = 4 + Math.floor(frameCount / 300) * 0.5;
-  level = Math.min(4, 1 + Math.floor(frameCount / 300));
-  document.getElementById('hud-level').textContent = `Level ${level}`;
+  speed=3+Math.floor(frameCount/500)*0.3;
+  level=Math.min(6,1+Math.floor(frameCount/500));
+  document.getElementById('hud-level').textContent='Level '+level;
+  document.getElementById('hud-score').textContent=Math.floor(currentScore);
 
-  // Spawn
-  if (frameCount % Math.max(60, 100 - level * 10) === 0) spawnIngredient();
-  if (frameCount % Math.max(80, 130 - level * 8) === 0) spawnObstacle();
+  var spawnRate=Math.max(45,80-level*6);
+  if(frameCount%spawnRate===0) spawnItem();
 
-  // Update Wepa
-  wepa.vy += GRAVITY;
-  wepa.y += wepa.vy;
-  if (wepa.y >= ground - wepa.size) {
-    wepa.y = ground - wepa.size;
-    wepa.vy = 0;
-    wepa.jumping = false;
-  }
+  currentScore+=speed*0.035;
+  envOffset+=speed*0.4;
 
-  // Update ingredients
-  ingredients.forEach(ing => { ing.x -= speed; });
-  ingredients = ingredients.filter(ing => ing.x > -60);
+  // Move items
+  items.forEach(function(item){ item.x-=speed; });
 
-  // Update obstacles
-  obstacles.forEach(obs => { obs.x -= speed; });
-  obstacles = obstacles.filter(obs => obs.x > -60);
-
-  // Update particles
-  particles.forEach(p => {
-    p.x += p.vx; p.y += p.vy;
-    p.vy += 0.1; p.life -= 0.04;
-  });
-  particles = particles.filter(p => p.life > 0);
-
-  // Score
-  currentScore += speed * 0.05;
-  document.getElementById('hud-score').textContent = Math.floor(currentScore);
-
-  // Collisions — ingredients
-  ingredients.forEach(ing => {
-    if (ing.collected) return;
-    const cr = wepa.size * 0.45;
-    const cx = wepa.x, cy = wepa.y + wepa.size / 2;
-    const ir = ing.size * 0.5;
-    const dx = cx - ing.x, dy = cy - ing.y;
-    if (dx * dx + dy * dy < (cr + ir) * (cr + ir)) {
-      ing.collected = true;
-      if (ing.isGolden) {
-        goldenCoquiShown = true;
-        showGoldenPopup();
-      } else {
-        collectIngredient(ing);
+  // Miss check
+  items.forEach(function(item){
+    if(!item.caught&&!item.missed&&item.x<wepa.x-50){
+      item.missed=true;
+      if(!item.isSpirit&&!item.isGolden){
+        wepa.missed++;
+        wepa.expression='missed'; wepa.expressionT=18;
+        spawnParticles(wepa.x,laneY(1),'#ff6b6b',6);
+        combo=0; document.getElementById('hud-combo').classList.remove('show');
+        updateLivesHUD();
+        if(wepa.missed>=5){ endGame(); return; }
       }
     }
   });
 
-  // Collisions — obstacles
-  for (const obs of obstacles) {
-    if (circleRect(wepa.x, wepa.y + wepa.size / 2, wepa.size * 0.4, obs.x, obs.y, obs.w, obs.h)) {
-      spawnParticles(wepa.x, wepa.y, '#e8a83e', 12);
-      endGame();
-      return;
-    }
-  }
+  items=items.filter(function(i){return i.x>-100;});
+  particles.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=0.15;p.life-=0.03;});
+  particles=particles.filter(function(p){return p.life>0;});
 
-  // Draw
-  drawBackground();
-  drawIngredients();
-  drawObstacles();
+  drawEnvironment();
+  drawItems();
   drawWepa();
   drawParticles();
 
-  animFrame = requestAnimationFrame(gameLoop);
+  animFrame=requestAnimationFrame(gameLoop);
 }
 
-function collectIngredient(ing) {
-  const country = COUNTRIES[ing.code];
-  const isFeatured = ing.code === gameSettings.featured_country;
-  const multiplier = isFeatured ? gameSettings.featured_multiplier : 1;
-  const points = 50 * multiplier * Math.max(1, combo);
-  currentScore += points;
-  combo++;
-  clearTimeout(comboTimer);
-  comboTimer = setTimeout(() => { combo = 0; }, 2000);
-  spawnParticles(ing.x, ing.y, '#e8a83e', 8);
+// ── TOAST ──
+var toastTimer=null;
+function showToast(flag,title,fact){
+  document.getElementById('ut-flag').textContent=flag;
+  document.getElementById('ut-title').textContent=title;
+  document.getElementById('ut-fact').textContent=fact;
+  var t=document.getElementById('unlock-toast');
+  t.classList.remove('show'); void t.offsetWidth; t.classList.add('show');
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){t.classList.remove('show');},4500);
+}
 
-  // Country unlock
-  if (!sessionCountries.includes(ing.code)) {
-    sessionCountries.push(ing.code);
-    if (!discoveredCountries.includes(ing.code)) {
-      discoveredCountries.push(ing.code);
-      showUnlockPopup(ing.code);
-    }
+// ── CATCH FLASH ──
+function showCatchFlash(txt){
+  var el=document.getElementById('catch-flash');
+  el.textContent=txt; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
+  setTimeout(function(){el.classList.remove('show');},750);
+}
+
+// ── POPUPS ──
+function showGoldenPopup(){
+  gamePaused=true;
+  document.getElementById('golden-reward-text').textContent=gameSettings.explorer_reward;
+  document.getElementById('golden-popup-bg').classList.add('open');
+}
+function closeGoldenPopup(){
+  document.getElementById('golden-popup-bg').classList.remove('open');
+  gamePaused=false; animFrame=requestAnimationFrame(gameLoop);
+}
+function showSpiritPopup(){
+  gamePaused=true;
+  var type=passportData?.passport_type||'senior';
+  var te={senior:'👑',kids:'🧒',pet:'🐾'};
+  var pts=200; currentScore+=pts;
+  spawnParticles(W/2,H/2,'#e8a83e',24);
+  var sf=document.getElementById('spirit-flash');
+  sf.classList.remove('show'); void sf.offsetWidth; sf.classList.add('show');
+  document.getElementById('spirit-popup-emoji').textContent=(te[type]||'🐸')+'✨';
+  document.getElementById('spirit-pts').textContent='+'+pts+' pts';
+  document.getElementById('spirit-msg').textContent='Your spirit appeared because you visited Wepa today!';
+  document.getElementById('spirit-fact-text').textContent='💛 '+(SPIRIT_FACTS[type]||SPIRIT_FACTS.senior);
+  document.getElementById('spirit-popup-bg').classList.add('open');
+}
+function closeSpiritPopup(){
+  document.getElementById('spirit-popup-bg').classList.remove('open');
+  gamePaused=false; animFrame=requestAnimationFrame(gameLoop);
+}
+
+// ── SPIRIT TIMER ──
+function startSpiritTimer(){
+  if(spiritTimerInterval) clearInterval(spiritTimerInterval);
+  function upd(){
+    var diff=spiritExpiry-new Date();
+    if(diff<=0){ clearInterval(spiritTimerInterval); document.getElementById('spirit-strip').classList.add('hidden'); spiritActive=false; return; }
+    var h=Math.floor(diff/3600000), m=Math.floor((diff%3600000)/60000), s=Math.floor((diff%60000)/1000);
+    document.getElementById('spirit-timer').textContent='⏳ '+h+'h '+(m<10?'0':'')+m+'m '+(s<10?'0':'')+s+'s';
   }
+  upd(); spiritTimerInterval=setInterval(upd,1000);
 }
 
-// ── POPUPS ── 
-function showUnlockPopup(code) {
-  gamePaused = true;
-  const country = COUNTRIES[code];
-  const fact = country.facts[Math.floor(Math.random() * country.facts.length)];
-  document.getElementById('pu-flag').textContent = country.flag;
-  document.getElementById('pu-name').textContent = country.name + ' Unlocked!';
-  document.getElementById('pu-sub').textContent = `You discovered ${country.ingredientName}!`;
-  document.getElementById('pu-fact').textContent = '🌍 ' + fact;
-  document.getElementById('popup-unlock').classList.add('show');
-}
-
-function closeUnlockPopup() {
-  document.getElementById('popup-unlock').classList.remove('show');
-  gamePaused = false;
-  animFrame = requestAnimationFrame(gameLoop);
-}
-
-function showGoldenPopup() {
-  gamePaused = true;
-  document.getElementById('golden-reward-text').textContent = gameSettings.explorer_reward;
-  document.getElementById('popup-golden').classList.add('show');
-}
-
-function closeGoldenPopup() {
-  document.getElementById('popup-golden').classList.remove('show');
-  gamePaused = false;
-  animFrame = requestAnimationFrame(gameLoop);
-}
-
-// ── START / END ──
-function startGame() {
+// ── GAME FLOW ──
+function startGame(){
   showScreen(null);
   document.getElementById('hud').classList.add('active');
+  document.getElementById('dish-hud').classList.add('active');
   document.getElementById('gameCanvas').classList.add('active');
-  initGame();
-  gameRunning = true;
-  gamePaused = false;
-  animFrame = requestAnimationFrame(gameLoop);
+  initGame(); gameRunning=true; gamePaused=false;
+  animFrame=requestAnimationFrame(gameLoop);
+  var hint=document.getElementById('tap-hint');
+  hint.classList.remove('active'); void hint.offsetWidth; hint.classList.add('active');
 }
 
-function pauseGame() {
-  if (!gameRunning) return;
-  gamePaused = !gamePaused;
-  if (!gamePaused) animFrame = requestAnimationFrame(gameLoop);
+function pauseGame(){
+  if(!gameRunning) return;
+  gamePaused=!gamePaused;
+  if(!gamePaused) animFrame=requestAnimationFrame(gameLoop);
 }
 
-async function endGame() {
-  gameRunning = false;
-  cancelAnimationFrame(animFrame);
+async function endGame(){
+  gameRunning=false; cancelAnimationFrame(animFrame);
   document.getElementById('hud').classList.remove('active');
+  document.getElementById('dish-hud').classList.remove('active');
   document.getElementById('gameCanvas').classList.remove('active');
+  document.getElementById('dish-complete').classList.remove('show');
 
-  const score = Math.floor(currentScore);
-  const isNewBest = score > bestScore;
-  if (isNewBest) bestScore = score;
+  var score=Math.floor(currentScore);
+  var isNewBest=score>bestScore; if(isNewBest) bestScore=score;
 
-  // Save score
   try {
-    await fetch(`${SB_URL}/rest/v1/wepa_scores`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', apikey: SB_KEY, Prefer: 'return=minimal' },
-      body: JSON.stringify({
-        passport_id: passportId,
-        passport_type: passportData?.passport_type || 'senior',
-        score,
-        countries_unlocked: sessionCountries
-      })
+    await fetch(SB_URL+'/rest/v1/wepa_scores',{
+      method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Prefer:'return=minimal'},
+      body:JSON.stringify({passport_id:passportId,passport_type:passportData?.passport_type||'senior',score:score,countries_unlocked:sessionDishes})
     });
-    // Save discoveries
-    for (const code of sessionCountries) {
-      await fetch(`${SB_URL}/rest/v1/wepa_discoveries`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', apikey: SB_KEY, Prefer: 'return=minimal' },
-        body: JSON.stringify({ passport_id: passportId, country_code: code })
-      }).catch(() => {});
-    }
-  } catch(e) { console.error('Save error', e); }
+    sessionDishes.forEach(function(c){
+      fetch(SB_URL+'/rest/v1/wepa_discoveries',{
+        method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Prefer:'return=minimal'},
+        body:JSON.stringify({passport_id:passportId,country_code:c})
+      }).catch(function(){});
+    });
+  } catch(e){}
 
-  // Show game over
-  document.getElementById('go-score').textContent = score;
-  document.getElementById('go-best').textContent = isNewBest ? '🎉 New personal best!' : `Best: ${bestScore} pts`;
-  document.getElementById('best-score-display').textContent = bestScore;
+  document.getElementById('go-score').textContent=score;
+  document.getElementById('go-best').textContent=isNewBest?'🎉 New personal best!':'Best: '+bestScore+' pts';
+  document.getElementById('best-display').textContent=bestScore;
 
-  const countriesEl = document.getElementById('go-countries');
-  countriesEl.innerHTML = sessionCountries.map(c =>
-    `<div class="go-country">${COUNTRIES[c].flag} ${COUNTRIES[c].name}</div>`
-  ).join('') || '<div style="color:var(--muted);font-size:13px;">No countries collected this run</div>';
+  var dishesEl=document.getElementById('go-dishes');
+  dishesEl.innerHTML=sessionDishes.map(function(c){
+    return '<div class="go-dish">'+WORLD[c].flag+' '+WORLD[c].dish+'</div>';
+  }).join('')||'<div style="color:var(--soft);font-size:14px;">Keep playing to cook more dishes!</div>';
 
   showScreen('screen-gameover');
 }
 
-// ── LEADERBOARD ──
-async function showLeaderboard() {
-  showScreen('screen-leaderboard');
-  document.getElementById('lb-reward-text').textContent = gameSettings.explorer_reward;
-
-  // Get start of current week (Monday)
-  const now = new Date();
-  const day = now.getDay();
-  const diff = (day === 0 ? -6 : 1 - day);
-  const monday = new Date(now);
-  monday.setDate(now.getDate() + diff);
-  monday.setHours(0, 0, 0, 0);
-
-  document.getElementById('lb-week').textContent =
-    `Week of ${monday.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`;
-
-  try {
-    const res = await fetch(
-      `${SB_URL}/rest/v1/wepa_scores?played_at=gte.${monday.toISOString()}&order=score.desc&limit=10&select=score,passport_id,passport_type,wepa_passports(name)`,
-      { headers: { apikey: SB_KEY } }
-    );
-    const rows = await res.json();
-    const el = document.getElementById('lb-list');
-    if (!rows || rows.length === 0) {
-      el.innerHTML = '<div class="lb-empty">No scores yet this week. Be the first! 🌍</div>';
-      return;
-    }
-    const rankClass = ['gold', 'silver', 'bronze'];
-    el.innerHTML = rows.map((r, i) => {
-      const name = r.wepa_passports?.name || 'Wepa Explorer';
-      const shortId = r.passport_id?.slice(-4) || '????';
-      const isYou = r.passport_id === passportId;
-      const typeEmoji = { senior: '👑', kids: '🧒', pet: '🐾' }[r.passport_type] || '🐸';
-      return `<div class="lb-row">
-        <div class="lb-rank ${rankClass[i] || ''}">${i < 3 ? ['🥇','🥈','🥉'][i] : i + 1}</div>
-        <div>
-          <div class="lb-name ${isYou ? 'lb-you' : ''}">${name}${isYou ? ' (You)' : ''}</div>
-          <div class="lb-type">${typeEmoji} · WEPA-${shortId}</div>
-        </div>
-        <div class="lb-score">${r.score}</div>
-      </div>`;
-    }).join('');
-  } catch(e) {
-    document.getElementById('lb-list').innerHTML = '<div class="lb-empty">Could not load scores.</div>';
-  }
+// ── DISCOVERY MAP ──
+function showMap(){
+  var grid=document.getElementById('country-grid');
+  grid.innerHTML='';
+  COUNTRY_CODES.forEach(function(code){
+    var c=WORLD[code];
+    var isDisc=discoveredCountries.includes(code);
+    var div=document.createElement('div');
+    div.className='country-card '+(isDisc?'discovered':'undiscovered');
+    div.innerHTML='<div class="country-card-flag">'+c.flag+'</div>'
+      +'<div class="country-card-dish">'+c.dishEmoji+'</div>'
+      +'<div class="country-card-name">'+c.name+'</div>'
+      +'<div class="country-card-status">'+(isDisc?'✅ '+c.dish+' Mastered':'🔒 Undiscovered')+'</div>';
+    grid.appendChild(div);
+  });
+  document.getElementById('map-sub').textContent=discoveredCountries.length+' / '+COUNTRY_CODES.length+' countries discovered';
+  showScreen('screen-map');
 }
 
-function hideLeaderboard() {
-  showScreen('screen-start');
+// ── LEADERBOARD ──
+async function showLeaderboard(){
+  showScreen('screen-leaderboard');
+  document.getElementById('lb-prize').textContent=gameSettings.explorer_reward;
+  var now=new Date(), day=now.getDay();
+  var diff=(day===0?-6:1-day);
+  var monday=new Date(now); monday.setDate(now.getDate()+diff); monday.setHours(0,0,0,0);
+  document.getElementById('lb-week').textContent='Week of '+monday.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  try {
+    var res=await fetch(SB_URL+'/rest/v1/wepa_scores?played_at=gte.'+monday.toISOString()+'&order=score.desc&limit=10&select=score,passport_id,passport_type,wepa_passports(name)',{headers:{apikey:SB_KEY}});
+    var rows=await res.json();
+    var el=document.getElementById('lb-list');
+    if(!rows||rows.length===0){el.innerHTML='<div class="lb-empty">No scores yet this week.<br>Be the first! 🌍</div>';return;}
+    el.innerHTML=rows.map(function(r,i){
+      var name=r.wepa_passports?.name||'Explorer';
+      var isYou=r.passport_id===passportId;
+      var te={senior:'👑',kids:'🧒',pet:'🐾'};
+      var rank=['🥇','🥈','🥉'][i]||(i+1);
+      return '<div class="lb-row"><div class="lb-rank">'+rank+'</div><div class="lb-name '+(isYou?'lb-you':'')+'">'+name+(isYou?' (You)':'')+'<br><small style="opacity:0.5;font-size:11px;">'+(te[r.passport_type]||'🐸')+'</small></div><div class="lb-score">'+r.score+'</div></div>';
+    }).join('');
+  } catch(e){document.getElementById('lb-list').innerHTML='<div class="lb-empty">Could not load scores.</div>';}
 }
 
 // ── SCREENS ──
-function showScreen(id) {
-  ['screen-loading','screen-auth','screen-start','screen-gameover','screen-leaderboard']
-    .forEach(s => document.getElementById(s).classList.add('hidden'));
-  if (id) document.getElementById(id).classList.remove('hidden');
+function showScreen(id){
+  ['screen-loading','screen-auth','screen-start','screen-gameover','screen-map','screen-leaderboard'].forEach(function(s){
+    document.getElementById(s).classList.add('hidden');
+  });
+  if(id) document.getElementById(id).classList.remove('hidden');
 }
-
-function showStart() {
-  showScreen('screen-start');
-}
+function showStart(){showScreen('screen-start');}
 
 // ── INIT ──
-async function init() {
+async function init(){
   showScreen('screen-loading');
-
-  // Get passport ID from URL
-  const params = new URLSearchParams(window.location.search);
-  passportId = params.get('passport');
-
-  if (!passportId) {
-    showScreen('screen-auth');
-    return;
-  }
-
+  var params=new URLSearchParams(window.location.search);
+  passportId=params.get('passport');
+  if(!passportId){showScreen('screen-auth');return;}
   try {
-    // Load passport
-    const pRes = await fetch(`${SB_URL}/rest/v1/wepa_passports?id=eq.${passportId}&select=*`, { headers: { apikey: SB_KEY } });
-    const passports = await pRes.json();
-    if (!passports || passports.length === 0) { showScreen('screen-auth'); return; }
-    passportData = passports[0];
+    var pRes=await fetch(SB_URL+'/rest/v1/wepa_passports?id=eq.'+passportId+'&select=*',{headers:{apikey:SB_KEY}});
+    var passports=await pRes.json();
+    if(!passports||passports.length===0){showScreen('screen-auth');return;}
+    passportData=passports[0];
 
-    // Load settings
-    const sRes = await fetch(`${SB_URL}/rest/v1/wepa_settings?select=*`, { headers: { apikey: SB_KEY } });
-    const settings = await sRes.json();
-    if (Array.isArray(settings)) {
-      settings.forEach(s => {
-        if (s.key === 'explorer_featured_country') gameSettings.featured_country = s.value;
-        if (s.key === 'explorer_featured_multiplier') gameSettings.featured_multiplier = parseInt(s.value) || 3;
-        if (s.key === 'explorer_reward') gameSettings.explorer_reward = s.value;
-      });
+    // Spirit check
+    if(passportData.last_stamp_at){
+      var st=new Date(passportData.last_stamp_at);
+      var exp=new Date(st.getTime()+8*3600000);
+      if(new Date()<exp){
+        spiritActive=true; spiritExpiry=exp;
+        var te={senior:'👑',kids:'🧒',pet:'🐾'};
+        document.getElementById('spirit-strip').classList.remove('hidden');
+        document.getElementById('spirit-strip-title').textContent=(te[passportData.passport_type]||'🐸')+' Your Spirit is waiting in the game!';
+        startSpiritTimer();
+      }
     }
 
-    // Load best score
-    const bRes = await fetch(`${SB_URL}/rest/v1/wepa_scores?passport_id=eq.${passportId}&order=score.desc&limit=1`, { headers: { apikey: SB_KEY } });
-    const best = await bRes.json();
-    if (best && best.length > 0) bestScore = best[0].score;
+    // Settings
+    var sRes=await fetch(SB_URL+'/rest/v1/wepa_settings?select=*',{headers:{apikey:SB_KEY}});
+    var settings=await sRes.json();
+    if(Array.isArray(settings)) settings.forEach(function(s){
+      if(s.key==='explorer_featured_country') gameSettings.featured_country=s.value;
+      if(s.key==='explorer_featured_multiplier') gameSettings.featured_multiplier=parseInt(s.value)||3;
+      if(s.key==='explorer_reward') gameSettings.explorer_reward=s.value;
+    });
 
-    // Load discoveries
-    const dRes = await fetch(`${SB_URL}/rest/v1/wepa_discoveries?passport_id=eq.${passportId}`, { headers: { apikey: SB_KEY } });
-    const disc = await dRes.json();
-    if (Array.isArray(disc)) discoveredCountries = disc.map(d => d.country_code);
+    // Best score
+    var bRes=await fetch(SB_URL+'/rest/v1/wepa_scores?passport_id=eq.'+passportId+'&order=score.desc&limit=1',{headers:{apikey:SB_KEY}});
+    var best=await bRes.json();
+    if(best&&best.length>0) bestScore=best[0].score;
 
-    // Update UI
-    const typeEmoji = { senior: '👑', kids: '🧒', pet: '🐾' }[passportData.passport_type] || '🐸';
-    document.getElementById('passport-badge').textContent = `${typeEmoji} ${passportData.name || 'Explorer'} · ${passportId}`;
-    document.getElementById('best-score-display').textContent = bestScore;
-    const fc = COUNTRIES[gameSettings.featured_country];
-    if (fc) {
-      document.getElementById('featured-country-name').textContent = `${fc.flag} ${fc.name}`;
-      document.getElementById('featured-multiplier').textContent = gameSettings.featured_multiplier + 'x';
+    // Discoveries
+    var dRes=await fetch(SB_URL+'/rest/v1/wepa_discoveries?passport_id=eq.'+passportId,{headers:{apikey:SB_KEY}});
+    var disc=await dRes.json();
+    if(Array.isArray(disc)) discoveredCountries=disc.map(function(d){return d.country_code;});
+
+    var te={senior:'👑',kids:'🧒',pet:'🐾'};
+    document.getElementById('passport-badge').textContent=(te[passportData.passport_type]||'🐸')+' '+(passportData.name||'Explorer')+' · '+passportId;
+    document.getElementById('best-display').textContent=bestScore;
+    var fc=WORLD[gameSettings.featured_country];
+    if(fc){
+      document.getElementById('featured-name').textContent=fc.flag+' '+fc.name;
+      document.getElementById('featured-mult').textContent=gameSettings.featured_multiplier+'x';
     }
-
     showScreen('screen-start');
-  } catch(e) {
-    console.error('Init error', e);
-    showScreen('screen-auth');
-  }
+  } catch(e){ console.error(e); showScreen('screen-auth'); }
 }
 
 init();
