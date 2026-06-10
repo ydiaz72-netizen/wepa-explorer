@@ -1102,9 +1102,10 @@ function triggerBossPhase(){
   document.getElementById('boss-hud-name').textContent=bd.name;
   updateBossHUD();
   document.getElementById('score-gate-hud').classList.remove('active');
-  // Hide dish HUD during boss
   document.getElementById('dish-hud').classList.remove('active');
   showToast('⚔️',t('bossBattle')+'!',bd.name+' — '+t('collect')+' '+bd.weaponName+'!');
+  // Spawn weapon immediately
+  setTimeout(function(){ if(bossActive) spawnBossWeapon(); },2500);
 }
 
 function updateBossHUD(){
@@ -1533,10 +1534,8 @@ function drawBoss(){
 
   ctx.restore();
 
-  // Spawn weapon when boss is half health
-  if(boss.hp<=Math.ceil(boss.maxHp/2)&&!bossWeaponSpawned){
-    spawnBossWeapon();
-  }
+  // Re-spawn weapon after each hit
+  setTimeout(function(){ if(bossActive&&boss&&boss.hp>0) spawnBossWeapon(); },2500);
 }
 
 function getClosestEnemy(){
