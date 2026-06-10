@@ -896,46 +896,51 @@ const SPIRIT_FACTS={senior:'Your loyalty makes Wepa what it is. Thank you. 👑'
 
 // ── LEVEL CONFIG ──
 const LEVELS = [
-  { num:1, name:'Puerto Rico', worldKey:'PR', scoreGate:1200,
-    badChance:0.10, speed:3.0, spawnRate:75,
+  { num:1, name:'Puerto Rico', worldKey:'PR', scoreGate:3500,
+    bossWarnAt:0.80, badChance:0.10, speed:3.0, spawnRate:75,
     countries:['PR'],
     boss:{ name:'El Hambriento', emoji:'🧌', hp:3,
+      taunt:'"I see you coming, little frog! You\'ll NEVER catch me! Ha ha ha! 🧌"',
       quote:'"Ha! All this mofongo is MINE! You cannot stop me, little frog!"',
       weapon:'🟤', weaponName:'Mofongo Bomb', weaponDesc:'Rolls down the lane like a bowling ball!',
       boast:'"Ay ay ay! That plantain hit me hard! But I will return STRONGER! 💪"',
       color:'#8B4513' }
   },
-  { num:2, name:'Germany', worldKey:'DE', scoreGate:2500,
-    badChance:0.22, speed:3.5, spawnRate:65,
+  { num:2, name:'Germany', worldKey:'DE', scoreGate:8000,
+    bossWarnAt:0.80, badChance:0.22, speed:3.5, spawnRate:65,
     countries:['PR','DE'],
     boss:{ name:'Der Fresser', emoji:'👹', hp:3,
+      taunt:'"Ich sehe dich! You think pretzels can stop me?! NEIN! 👹"',
       quote:'"Ich esse ALLES! Your pretzels are no match for my hunger!"',
       weapon:'🥨', weaponName:'Pretzel Boomerang', weaponDesc:'Spins and comes back if you miss — 2nd chance!',
       boast:'"Mein Gott! A pretzel hit me! Impossible! I shall return with MORE appetite! 💪"',
       color:'#4ecdc4' }
   },
-  { num:3, name:'Morocco', worldKey:'MA', scoreGate:4000,
-    badChance:0.30, speed:4.0, spawnRate:55,
+  { num:3, name:'Morocco', worldKey:'MA', scoreGate:15000,
+    bossWarnAt:0.80, badChance:0.30, speed:4.0, spawnRate:55,
     countries:['PR','DE','MA'],
     boss:{ name:'The Sand Thief', emoji:'🌀', hp:4,
+      taunt:'"You will never find me in these sands... I am everywhere and nowhere! 🌀"',
       quote:'"I hide in the sands! You will NEVER find all my stolen tagines!"',
       weapon:'🫖', weaponName:'Mint Tea Splash', weaponDesc:'Hot tea area effect — slows the boss for 3 seconds!',
       boast:'"The mint tea! My one weakness! I retreat to the dunes... for NOW! 💪"',
       color:'#e8965a' }
   },
-  { num:4, name:'Japan', worldKey:'JP', scoreGate:6000,
-    badChance:0.38, speed:4.6, spawnRate:48,
+  { num:4, name:'Japan', worldKey:'JP', scoreGate:25000,
+    bossWarnAt:0.80, badChance:0.38, speed:4.6, spawnRate:48,
     countries:['PR','DE','MA','JP'],
     boss:{ name:'Oni the Snatcher', emoji:'👺', hp:4,
+      taunt:'"RAHHH! You dare approach?! I\'ll steal every last noodle before you get here! 👺"',
       quote:'"RAHHH! I move between lanes faster than your bullets! All ramen is MINE!"',
       weapon:'🍱', weaponName:'Bento Explosion', weaponDesc:'Explodes into ingredients — hits ALL lanes at once!',
       boast:'"NANI?! A bento explosion! You are worthy, little frog! But the final world awaits... 💪"',
       color:'#ff6b9d' }
   },
-  { num:5, name:'All Worlds', worldKey:'MX', scoreGate:9000,
-    badChance:0.45, speed:5.2, spawnRate:40,
+  { num:5, name:'All Worlds', worldKey:'MX', scoreGate:40000,
+    bossWarnAt:0.80, badChance:0.45, speed:5.2, spawnRate:40,
     countries:['PR','DE','MA','JP','MX'],
     boss:{ name:'The Great Glutton', emoji:'😈', hp:5,
+      taunt:'"I have been WATCHING you this whole time. You think you can beat ME?! I AM ALL BOSSES! 😈"',
       quote:'"I am ALL the bosses combined! Every dish in every world belongs to ME!!!"',
       weapon:'🌮', weaponName:'Flying Taco', weaponDesc:'Falls apart mid-air — toppings shower ALL lanes!',
       boast:'"IMPOSSIBLE!! A flying taco defeated me?! Fine... I will eat somewhere else... FOR NOW! You are the TRUE Wepa Explorer!! 👑💪"',
@@ -970,6 +975,7 @@ let bossActive=false, bossPhase=false;
 let boss=null;
 let bossWeaponSpawned=false, bossWeaponCollected=false;
 let levelFrameCount=0, levelScoreAtStart=0;
+let bossTauntShown=false;
 
 // ── STATE ──
 let fireMode='tap'; // 'tap' or 'auto'
@@ -1012,6 +1018,7 @@ function initGame(){
   dishCompleteShowing=false; envOffset=0;
   bossActive=false; bossPhase=false; boss=null;
   bossWeaponSpawned=false; bossWeaponCollected=false;
+  bossTauntShown=false;
   activePowerup=null; powerupSpawnTimer=0;
   if(powerupTimer) clearTimeout(powerupTimer);
   document.getElementById('powerup-hud').classList.remove('active');
@@ -1110,15 +1117,34 @@ function updateScoreGateHUD(){
   var pct=Math.min(100,Math.round((currentScore/levelConfig.scoreGate)*100));
   var remaining=Math.max(0,levelConfig.scoreGate-Math.floor(currentScore));
   document.getElementById('sg-fill').style.width=pct+'%';
-  document.getElementById('sg-text').textContent=remaining>0?remaining+' '+t('ptsToAdvance'):t('bossIncoming');
+  // Turn red when boss is close
+  document.getElementById('sg-fill').style.background=pct>=80?'#e74c3c':'';
+  if(remaining>0){
+    document.getElementById('sg-text').textContent=remaining+' '+t('ptsToAdvance')+' ('+pct+'%)';
+    document.getElementById('sg-text').style.color=pct>=80?'#e74c3c':'';
+  } else {
+    document.getElementById('sg-text').textContent=t('bossIncoming');
+    document.getElementById('sg-text').style.color='#e74c3c';
+  }
 }
 
 function checkLevelComplete(){
   if(bossPhase||bossActive) return;
-  if(currentScore>=levelConfig.scoreGate){
-    // Trigger boss phase
-    triggerBossPhase();
+  var pct=currentScore/levelConfig.scoreGate;
+
+  // Boss taunt at 80%
+  if(!bossTauntShown&&pct>=levelConfig.bossWarnAt){
+    bossTauntShown=true;
+    var bd=levelConfig.boss;
+    showToast('⚠️',bd.name+' spotted!',bd.taunt);
+    // Flash warning
+    var hf=document.getElementById('hit-flash');
+    hf.classList.remove('show'); void hf.offsetWidth; hf.classList.add('show');
+    soundHeartLost();
   }
+
+  // Boss arrives at 100%
+  if(pct>=1) triggerBossPhase();
 }
 
 function triggerBossPhase(){
@@ -2000,9 +2026,17 @@ function showLevelComplete(){
   } else {
     document.getElementById('lc-gate').textContent=t('goalNeed')+' '+levelConfig.scoreGate+' '+t('pts')+' — '+t('goalFailed')+' '+score;
     document.getElementById('lc-gate').className='lc-gate fail';
-    document.getElementById('lc-tip').textContent=t('keepShooting');
+    // Specific tips per level
+    var tips=[
+      'Tip: Build dish combos — completing a dish gives +500 pts! Catch power-ups 🥥 for rapid fire.',
+      'Tip: Keep your combo alive! The gold bar above your score drains fast. Don\'t stop shooting!',
+      'Tip: Grab the 🪔 Lantern power-up — it slows enemies so you can build massive combos.',
+      'Tip: Use ☕ Coffee power-up for 3x score. Stay in one lane and pick off items fast.',
+      'Tip: Magnet 🧉 + Coffee ☕ combo = maximum points. Prioritize power-ups over food.'
+    ];
+    document.getElementById('lc-tip').textContent=tips[(currentLevelNum-1)%tips.length];
     document.getElementById('lc-btn').textContent=t('tryAgain');
-    document.getElementById('lc-btn').onclick=function(){ currentScore=Math.floor(score*0.5); startGame(); };
+    document.getElementById('lc-btn').onclick=function(){ currentScore=Math.floor(score*0.30); startGame(); };
   }
   showScreen('screen-levelcomplete');
   soundLevelUp();
