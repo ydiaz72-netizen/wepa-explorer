@@ -658,13 +658,20 @@ function updateLivesHUD(){
 
 // ── CLOSEST ITEM ──
 function getClosestItem(){
-  var zone=W*0.38; var closest=null; var closestD=Infinity;
+  var zone=W*0.48; // wider catch zone = more reaction time
+  var closest=null; var closestD=Infinity;
+  var closestGood=null; var closestGoodD=Infinity;
+
   items.forEach(function(item){
     if(item.caught||item.missed) return;
     var d=item.x-wepa.x;
-    if(d>0&&d<zone&&d<closestD){ closest=item; closestD=d; }
+    if(d>0&&d<zone){
+      if(!item.isBad&&d<closestGoodD){ closestGood=item; closestGoodD=d; }
+      if(d<closestD){ closest=item; closestD=d; }
+    }
   });
-  return closest;
+  // Always prefer good items — only return bad if no good item in zone
+  return closestGood || (closest&&closest.isBad?null:closest);
 }
 
 // ── TAP ──
@@ -724,7 +731,7 @@ function spawnItem(){
     emoji=c.ingredients[nextIdx]; size=56; color=c.color; code=currentCountry;
   }
   var lane=Math.floor(Math.random()*3);
-  items.push({x:W+70,lane:lane,y:laneY(lane),emoji:emoji,code:code,size:size,color:color,isSpirit:isSpirit,isGolden:isGolden,isBad:isBad,caught:false,missed:false,wobble:Math.random()*Math.PI*2});
+  items.push({x:W+70,lane:lane,y:laneY(lane),emoji:emoji,code:code,size:size,color:color,isSpirit:isSpirit,isGolden:isGolden,isBad:isBad,caught:false,missed:false,wobble:Math.random()*Math.PI*2,speedMult:isBad?0.75:1});
 }
 
 // ── COLLECT ──
@@ -1055,7 +1062,7 @@ function gameLoop(){
   envOffset+=speed*0.4;
 
   // Move items
-  items.forEach(function(item){ item.x-=speed; });
+  items.forEach(function(item){ item.x-=speed*(item.speedMult||1); });
 
   // Miss check — missing good items just resets combo, no heart loss
   items.forEach(function(item){
