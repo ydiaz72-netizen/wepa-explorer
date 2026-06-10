@@ -13,55 +13,44 @@
       --font: 'Plus Jakarta Sans', sans-serif;
     }
     html, body { height: 100%; background: #fff8ed; font-family: var(--font); color: var(--text); overflow: hidden; -webkit-font-smoothing: antialiased; touch-action: none; user-select: none; }
-
-    /* ── SCREENS ── */
     .screen { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; z-index: 10; }
     .screen.hidden { display: none; }
-
-    /* LOADING */
     #screen-loading { background: #fff8ed; }
     .spinner { width: 48px; height: 48px; border: 4px solid var(--gold); border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 20px; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-frog { font-size: 56px; margin-bottom: 16px; animation: loadBounce 0.8s ease-in-out infinite alternate; }
-    @keyframes loadBounce { from { transform: translateY(0); } to { transform: translateY(-16px); } }
-
-    /* AUTH */
+    @keyframes loadBounce { from{transform:translateY(0);}to{transform:translateY(-16px);} }
     #screen-auth { background: linear-gradient(180deg,#fff8ed,#ffefc8); }
-    #screen-auth .big-emoji { font-size: 80px; margin-bottom: 16px; }
     #screen-auth h2 { font-size: 28px; font-weight: 900; margin-bottom: 12px; }
     #screen-auth p { font-size: 16px; color: var(--soft); line-height: 1.7; max-width: 300px; margin: 0 auto 28px; }
-
-    /* BUTTONS */
-    .btn-primary { background: linear-gradient(135deg,var(--gold),#f5c842); color: #3d2000; border: none; padding: 18px 40px; border-radius: 18px; font-family: var(--font); font-size: 18px; font-weight: 900; cursor: pointer; text-decoration: none; display: inline-block; box-shadow: 0 6px 20px rgba(232,168,62,0.45), 0 2px 0 rgba(0,0,0,0.1); transition: transform 0.15s; letter-spacing: 0.2px; }
+    .btn-primary { background: linear-gradient(135deg,var(--gold),#f5c842); color: #3d2000; border: none; padding: 18px 40px; border-radius: 18px; font-family: var(--font); font-size: 18px; font-weight: 900; cursor: pointer; text-decoration: none; display: inline-block; box-shadow: 0 6px 20px rgba(232,168,62,0.45); transition: transform 0.15s; }
     .btn-primary:active { transform: scale(0.96) translateY(2px); }
     .btn-outline { background: transparent; color: var(--gold-dark); border: 2px solid var(--gold); padding: 14px 28px; border-radius: 14px; font-family: var(--font); font-size: 15px; font-weight: 800; cursor: pointer; transition: background 0.15s; }
     .btn-outline:hover { background: var(--gold-light); }
-
-    /* START SCREEN */
     #screen-start { background: linear-gradient(180deg,#fff8ed 0%,#ffefc8 60%,#ffd87a 100%); }
     .start-frog { font-size: 88px; margin-bottom: 4px; animation: startBounce 2s ease-in-out infinite; filter: drop-shadow(0 12px 20px rgba(232,168,62,0.4)); }
-    @keyframes startBounce { 0%,100%{transform:translateY(0) rotate(-5deg);} 50%{transform:translateY(-18px) rotate(5deg);} }
+    @keyframes startBounce { 0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-18px) rotate(5deg);} }
     #screen-start h1 { font-size: clamp(28px,7vw,48px); font-weight: 900; color: var(--text); letter-spacing:-1px; margin-bottom: 4px; }
     #screen-start h1 em { font-style: normal; color: var(--gold-dark); }
     .passport-pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(201,118,0,0.1); border: 2px solid rgba(201,118,0,0.25); border-radius: 99px; padding: 8px 18px; font-size: 14px; font-weight: 800; color: var(--gold-dark); margin: 12px 0 6px; }
     .best-row { font-size: 15px; color: var(--soft); margin-bottom: 10px; font-weight: 600; }
     .best-row strong { color: var(--gold-dark); font-size: 20px; }
-
-    /* SPIRIT BANNER */
     .spirit-strip { background: linear-gradient(135deg,#ffe066,#ffb800); border-radius: 16px; padding: 12px 18px; margin-bottom: 12px; max-width: 320px; width: 100%; box-shadow: 0 4px 20px rgba(232,168,62,0.4); animation: stripPulse 1.8s ease-in-out infinite; }
-    @keyframes stripPulse { 0%,100%{box-shadow:0 4px 20px rgba(232,168,62,0.4);} 50%{box-shadow:0 4px 36px rgba(232,168,62,0.7);} }
+    @keyframes stripPulse { 0%,100%{box-shadow:0 4px 20px rgba(232,168,62,0.4);}50%{box-shadow:0 4px 36px rgba(232,168,62,0.7);} }
     .spirit-strip-title { font-size: 15px; font-weight: 900; color: #3d2000; }
     .spirit-strip-timer { font-size: 22px; font-weight: 900; color: #3d2000; }
-
     .featured-strip { background: rgba(201,118,0,0.08); border: 1.5px solid rgba(201,118,0,0.2); border-radius: 12px; padding: 10px 16px; margin-bottom: 14px; font-size: 14px; color: var(--soft); max-width: 320px; width: 100%; font-weight: 600; }
     .featured-strip strong { color: var(--gold-dark); font-weight: 900; }
-
     .start-btn { font-size: 22px; padding: 22px 0; width: 100%; max-width: 320px; border-radius: 20px; margin-bottom: 12px; }
     .how-play { font-size: 14px; color: var(--soft); font-weight: 600; }
     .how-play strong { color: var(--text); }
 
-    /* DISCOVERY MAP BTN */
-    .map-btn { display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 2px solid rgba(26,26,26,0.1); border-radius: 12px; padding: 12px 20px; font-size: 14px; font-weight: 800; color: var(--text); cursor: pointer; margin-top: 10px; }
+    /* FIRE MODE TOGGLE */
+    .fire-mode-row { display: flex; align-items: center; gap: 12px; background: #fff; border: 2px solid rgba(26,26,26,0.1); border-radius: 14px; padding: 12px 16px; max-width: 320px; width: 100%; margin-bottom: 12px; }
+    .fire-mode-label { font-size: 14px; font-weight: 800; color: var(--text); flex: 1; text-align: left; }
+    .fire-toggle { display: flex; background: rgba(26,26,26,0.06); border-radius: 10px; padding: 3px; gap: 3px; }
+    .fire-toggle-btn { padding: 6px 14px; border-radius: 8px; font-family: var(--font); font-size: 13px; font-weight: 800; border: none; cursor: pointer; color: var(--soft); background: transparent; transition: all 0.15s; }
+    .fire-toggle-btn.active { background: var(--gold); color: #3d2000; box-shadow: 0 2px 8px rgba(232,168,62,0.4); }
 
     /* HUD */
     #hud { position: fixed; top: 0; left: 0; right: 0; z-index: 5; padding: 12px 18px 8px; display: none; align-items: center; justify-content: space-between; background: linear-gradient(to bottom,rgba(255,248,237,0.96),transparent); pointer-events: none; }
@@ -76,7 +65,11 @@
     .hud-lives { display: flex; gap: 3px; align-items: center; }
     .hud-pause { background: rgba(255,255,255,0.8); border: 1.5px solid rgba(26,26,26,0.1); border-radius: 10px; padding: 7px 13px; font-size: 14px; cursor: pointer; font-family: var(--font); font-weight: 700; }
 
-    /* DISH PROGRESS HUD */
+    /* FIRE INDICATOR */
+    #fire-indicator { position: fixed; left: 16px; z-index: 5; display: none; background: rgba(255,255,255,0.9); border: 2px solid var(--gold); border-radius: 12px; padding: 6px 12px; font-size: 13px; font-weight: 800; color: var(--gold-dark); pointer-events: none; }
+    #fire-indicator.active { display: block; }
+
+    /* DISH HUD */
     #dish-hud { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 5; display: none; background: rgba(255,255,255,0.92); border-radius: 16px; padding: 10px 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); border: 1.5px solid rgba(232,168,62,0.3); }
     #dish-hud.active { display: flex; align-items: center; gap: 10px; }
     .dish-hud-label { font-size: 11px; font-weight: 700; color: var(--soft); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
@@ -86,21 +79,27 @@
     .dish-slot.filled { border-color: var(--gold); background: var(--gold-light); animation: slotFill 0.4s cubic-bezier(0.34,1.56,0.64,1); }
     @keyframes slotFill { from{transform:scale(0.5);}to{transform:scale(1);} }
 
-    /* CANVAS */
     #gameCanvas { position: fixed; inset: 0; width: 100%; height: 100%; display: none; cursor: pointer; }
     #gameCanvas.active { display: block; }
 
     /* CATCH FLASH */
-    #catch-flash { position: fixed; top: 38%; left: 50%; transform: translate(-50%,-50%); font-size: 34px; font-weight: 900; pointer-events: none; display: none; z-index: 30; color: var(--gold-dark); white-space: nowrap; }
+    #catch-flash { position: fixed; top: 35%; left: 50%; transform: translate(-50%,-50%); font-size: 34px; font-weight: 900; pointer-events: none; display: none; z-index: 30; color: var(--gold-dark); white-space: nowrap; }
     #catch-flash.show { display: block; animation: flashPop 0.75s ease forwards; }
-    @keyframes flashPop { 0%{opacity:1;transform:translate(-50%,-50%) scale(0.5);} 55%{opacity:1;transform:translate(-50%,-100%) scale(1.4);} 100%{opacity:0;transform:translate(-50%,-150%) scale(1.1);} }
+    @keyframes flashPop { 0%{opacity:1;transform:translate(-50%,-50%) scale(0.5);}55%{opacity:1;transform:translate(-50%,-100%) scale(1.4);}100%{opacity:0;transform:translate(-50%,-150%) scale(1.1);} }
 
-    /* SPIRIT FLASH */
     #spirit-flash { position: fixed; inset: 0; pointer-events: none; display: none; z-index: 25; }
     #spirit-flash.show { display: block; animation: spiritGlow 1s ease forwards; background: radial-gradient(circle at center,rgba(232,168,62,0.6),transparent 70%); }
     @keyframes spiritGlow { 0%{opacity:0;}25%{opacity:1;}100%{opacity:0;} }
 
-    /* DISH COMPLETE BANNER — slides in from top, no pause */
+    #hit-flash { position: fixed; inset: 0; pointer-events: none; z-index: 70; display: none; background: rgba(231,76,60,0.45); }
+    #hit-flash.show { display: block; animation: hitFlash 0.5s ease forwards; }
+    @keyframes hitFlash { 0%{opacity:1;}100%{opacity:0;} }
+
+    #heart-lost { position: fixed; top: 60px; left: 50%; transform: translateX(-50%); font-size: 40px; pointer-events: none; display: none; z-index: 35; }
+    #heart-lost.show { display: block; animation: heartLost 0.8s ease forwards; }
+    @keyframes heartLost { 0%{opacity:1;transform:translateX(-50%) scale(1.5);}100%{opacity:0;transform:translateX(-50%) translateY(-60px) scale(0.5);} }
+
+    /* DISH COMPLETE BANNER */
     #dish-banner { position: fixed; top: -140px; left: 50%; transform: translateX(-50%); z-index: 50; width: 90%; max-width: 420px; background: #fff; border-radius: 20px; border: 3px solid var(--gold); box-shadow: 0 8px 32px rgba(0,0,0,0.18); padding: 16px 20px; display: flex; align-items: center; gap: 14px; transition: top 0.5s cubic-bezier(0.34,1.56,0.64,1); pointer-events: none; }
     #dish-banner.show { top: 70px; }
     #dish-banner-emoji { font-size: 48px; flex-shrink: 0; animation: dishSpin 0.6s ease; }
@@ -109,7 +108,6 @@
     #dish-banner-title { font-size: 17px; font-weight: 900; color: var(--text); margin-bottom: 2px; }
     #dish-banner-country { font-size: 13px; font-weight: 800; color: var(--gold-dark); margin-bottom: 3px; }
     #dish-banner-pts { font-size: 22px; font-weight: 900; color: var(--gold-dark); }
-    #dish-banner-new { display: inline-block; background: #2d7a4f; color: #fff; font-size: 10px; font-weight: 900; padding: 2px 8px; border-radius: 99px; letter-spacing: 1px; text-transform: uppercase; margin-left: 6px; vertical-align: middle; }
 
     /* UNLOCK TOAST */
     #unlock-toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%) translateY(-140px); z-index: 40; background: #fff; border-radius: 18px; padding: 12px 18px; display: flex; align-items: center; gap: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); border: 2px solid var(--gold); min-width: 260px; max-width: 340px; transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1); pointer-events: none; }
@@ -118,7 +116,7 @@
     #ut-title { font-size: 15px; font-weight: 900; color: var(--text); margin-bottom: 2px; }
     #ut-fact { font-size: 12px; color: var(--soft); line-height: 1.4; }
 
-    /* GOLDEN POPUP */
+    /* POPUPS */
     .g-popup-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 60; align-items: center; justify-content: center; padding: 20px; }
     .g-popup-bg.open { display: flex; }
     .g-popup { background: linear-gradient(135deg,#fff8ed,#ffe9a0); border: 3px solid var(--gold); border-radius: 28px; padding: 32px 24px; text-align: center; max-width: 340px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.2); animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
@@ -127,9 +125,33 @@
     .g-popup-title { font-size: 26px; font-weight: 900; color: var(--gold-dark); margin-bottom: 8px; }
     .g-popup-sub { font-size: 15px; color: var(--soft); margin-bottom: 16px; line-height: 1.6; }
     .g-popup-reward { background: #fff; border-radius: 14px; padding: 14px; font-size: 17px; font-weight: 900; color: var(--text); margin-bottom: 20px; border: 2px solid var(--gold); }
-    .spirit-popup-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 60; align-items: center; justify-content: center; padding: 20px; }
-    .spirit-popup-bg.open { display: flex; }
     .spirit-pts-big { font-size: 48px; font-weight: 900; color: var(--gold-dark); margin: 8px 0; }
+
+    /* TUTORIAL */
+    #tutorial-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 80; display: none; align-items: center; justify-content: center; flex-direction: column; padding: 24px; text-align: center; }
+    #tutorial-overlay.show { display: flex; }
+    .tut-title { font-size: 26px; font-weight: 900; color: #fff; margin-bottom: 6px; }
+    .tut-sub { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 20px; font-weight: 600; }
+    .tut-cards { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; justify-content: center; }
+    .tut-card { background: #fff; border-radius: 18px; padding: 16px 18px; width: 130px; text-align: center; }
+    .tut-card-emoji { font-size: 40px; margin-bottom: 6px; }
+    .tut-card-label { font-size: 13px; font-weight: 900; margin-bottom: 3px; }
+    .tut-card-sub { font-size: 11px; color: var(--soft); font-weight: 600; }
+    .tut-card.good { border: 3px solid #2d7a4f; }
+    .tut-card.good .tut-card-label { color: #2d7a4f; }
+    .tut-card.bad { border: 3px solid #e74c3c; }
+    .tut-card.bad .tut-card-label { color: #e74c3c; }
+    .tut-card.move { border: 3px solid var(--gold-dark); }
+    .tut-card.move .tut-card-label { color: var(--gold-dark); }
+
+    /* PAUSE MENU */
+    #pause-menu { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 90; align-items: center; justify-content: center; }
+    #pause-menu.open { display: flex; }
+    .pause-inner { background: #fff; border-radius: 28px; padding: 32px 24px; text-align: center; max-width: 320px; width: 90%; }
+    .pause-title { font-size: 24px; font-weight: 900; margin-bottom: 20px; }
+    .pause-fire-row { display: flex; align-items: center; justify-content: space-between; background: rgba(26,26,26,0.04); border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; }
+    .pause-fire-label { font-size: 15px; font-weight: 800; color: var(--text); }
+    .pause-btns { display: flex; flex-direction: column; gap: 10px; }
 
     /* GAME OVER */
     #screen-gameover { background: linear-gradient(180deg,#fff8ed,#ffefc8); }
@@ -140,12 +162,12 @@
     .go-dish { background: var(--gold-light); border: 2px solid var(--gold); border-radius: 12px; padding: 8px 12px; font-size: 14px; font-weight: 800; color: var(--gold-dark); }
     .go-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 280px; }
 
-    /* DISCOVERY MAP */
+    /* MAP */
     #screen-map { background: linear-gradient(180deg,#e8f4f8,#d4eaf5); overflow-y: auto; justify-content: flex-start; padding-top: 50px; }
     #screen-map h2 { font-size: 26px; font-weight: 900; margin-bottom: 4px; }
     .map-sub { font-size: 14px; color: var(--soft); margin-bottom: 24px; font-weight: 600; }
     .country-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; width: 100%; max-width: 400px; margin-bottom: 20px; }
-    .country-card { border-radius: 18px; padding: 16px; text-align: center; border: 2px solid; transition: transform 0.15s; }
+    .country-card { border-radius: 18px; padding: 16px; text-align: center; border: 2px solid; }
     .country-card.discovered { background: #fff; border-color: var(--gold); box-shadow: 0 4px 16px rgba(232,168,62,0.2); }
     .country-card.undiscovered { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); filter: grayscale(1); opacity: 0.45; }
     .country-card-flag { font-size: 36px; margin-bottom: 6px; }
@@ -170,52 +192,41 @@
     .lb-score { font-size: 16px; font-weight: 900; color: var(--gold-dark); }
     .lb-empty { font-size: 15px; color: var(--soft); padding: 32px; text-align: center; }
 
-    /* TUTORIAL OVERLAY */
-    #tutorial-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.82); z-index: 80; display: none; align-items: center; justify-content: center; flex-direction: column; padding: 24px; text-align: center; }
-    #tutorial-overlay.show { display: flex; }
-    .tut-title { font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 24px; }
-    .tut-cards { display: flex; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; justify-content: center; }
-    .tut-card { background: #fff; border-radius: 20px; padding: 20px 24px; width: 140px; text-align: center; }
-    .tut-card-emoji { font-size: 48px; margin-bottom: 8px; }
-    .tut-card-label { font-size: 14px; font-weight: 900; margin-bottom: 4px; }
-    .tut-card-sub { font-size: 12px; color: var(--soft); font-weight: 600; }
-    .tut-card.good { border: 3px solid #2d7a4f; }
-    .tut-card.good .tut-card-label { color: #2d7a4f; }
-    .tut-card.bad  { border: 3px solid #e74c3c; }
-    .tut-card.bad  .tut-card-label { color: #e74c3c; }
-
-    /* HIT FLASH */
-    #hit-flash { position: fixed; inset: 0; pointer-events: none; z-index: 70; display: none; background: rgba(231,76,60,0.45); }
-    #hit-flash.show { display: block; animation: hitFlash 0.5s ease forwards; }
-    @keyframes hitFlash { 0%{opacity:1;} 100%{opacity:0;} }
-
-    /* HEART LOST */
-    #heart-lost { position: fixed; top: 60px; left: 50%; transform: translateX(-50%); font-size: 40px; pointer-events: none; display: none; z-index: 35; }
-    #heart-lost.show { display: block; animation: heartLost 0.8s ease forwards; }
-    @keyframes heartLost { 0%{opacity:1;transform:translateX(-50%) scale(1.5);} 100%{opacity:0;transform:translateX(-50%) translateY(-60px) scale(0.5);} }
-    #tap-hint { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); font-size: 16px; font-weight: 900; color: var(--gold-dark); background: rgba(255,255,255,0.9); padding: 10px 22px; border-radius: 99px; border: 2px solid var(--gold); pointer-events: none; display: none; box-shadow: 0 4px 16px rgba(232,168,62,0.3); }
-    #tap-hint.active { display: block; animation: hintFade 4s ease forwards; }
+    /* COUNTRY FACT MODAL */
+    #country-modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 90; align-items: flex-end; justify-content: center; padding-bottom: 0; }
+    #country-modal-bg.open { display: flex; }
+    #country-modal { background: #fff; border-radius: 28px 28px 0 0; padding: 28px 24px 40px; width: 100%; max-width: 480px; animation: slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1); text-align: center; }
+    @keyframes slideUp { from{transform:translateY(100%);}to{transform:translateY(0);} }
+    .cm-handle { width: 40px; height: 4px; background: rgba(26,26,26,0.15); border-radius: 99px; margin: 0 auto 20px; }
+    .cm-flag { font-size: 56px; margin-bottom: 8px; }
+    .cm-dish-emoji { font-size: 48px; margin-bottom: 6px; }
+    .cm-name { font-size: 22px; font-weight: 900; color: var(--text); margin-bottom: 4px; }
+    .cm-dish { font-size: 15px; font-weight: 800; color: var(--gold-dark); margin-bottom: 16px; }
+    .cm-fact { font-size: 15px; color: var(--soft); line-height: 1.7; background: var(--gold-light); border-radius: 16px; padding: 16px; margin-bottom: 16px; font-style: italic; }
+    .cm-locked { font-size: 15px; color: var(--soft); margin-bottom: 16px; font-weight: 600; }
+    .cm-facts-nav { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; }
+    .cm-nav-btn { background: rgba(26,26,26,0.06); border: none; border-radius: 10px; padding: 8px 16px; font-size: 14px; font-weight: 800; cursor: pointer; color: var(--text); }
+    .cm-nav-btn:hover { background: rgba(26,26,26,0.12); }
+    .cm-fact-count { font-size: 13px; color: var(--soft); font-weight: 600; } left: 50%; transform: translateX(-50%); font-size: 16px; font-weight: 900; color: var(--gold-dark); background: rgba(255,255,255,0.9); padding: 10px 22px; border-radius: 99px; border: 2px solid var(--gold); pointer-events: none; display: none; box-shadow: 0 4px 16px rgba(232,168,62,0.3); }
+    #tap-hint.active { display: block; animation: hintFade 5s ease forwards; }
     @keyframes hintFade { 0%,50%{opacity:1;}100%{opacity:0;} }
   </style>
 </head>
 <body>
 
-<!-- LOADING -->
 <div class="screen" id="screen-loading">
   <div class="loading-frog">🐸</div>
   <div class="spinner"></div>
   <div style="font-size:15px;color:var(--soft);font-weight:600;">Loading Wepa Explorer...</div>
 </div>
 
-<!-- AUTH -->
 <div class="screen hidden" id="screen-auth">
-  <div class="big-emoji">🐸</div>
+  <div style="font-size:80px;margin-bottom:16px;">🐸</div>
   <h2>Passport Required</h2>
   <p>Wepa Explorer is exclusive to Wepa passport holders. Visit us to get yours!</p>
   <a href="https://streetfoodfusion.de" class="btn-primary">Get My Passport →</a>
 </div>
 
-<!-- START -->
 <div class="screen hidden" id="screen-start">
   <div class="start-frog">🐸</div>
   <h1>Wepa <em>Explorer</em></h1>
@@ -225,12 +236,22 @@
     <div class="spirit-strip-title" id="spirit-strip-title">👑 Your Spirit is waiting!</div>
     <div class="spirit-strip-timer" id="spirit-timer">⏳ --:--</div>
   </div>
-  <div class="featured-strip">⭐ This week: <strong id="featured-name">Puerto Rico 🇵🇷</strong> — <strong id="featured-mult">3x</strong> points!</div>
+  <div class="featured-strip">⭐ This week: <strong id="featured-name">Puerto Rico 🇵🇷</strong> — <strong id="featured-mult">3x</strong> pts!</div>
+
+  <!-- FIRE MODE TOGGLE -->
+  <div class="fire-mode-row">
+    <div class="fire-mode-label">🔫 Fire mode</div>
+    <div class="fire-toggle">
+      <button class="fire-toggle-btn active" id="btn-tap" onclick="setFireMode('tap')">👆 Tap</button>
+      <button class="fire-toggle-btn" id="btn-auto" onclick="setFireMode('auto')">⚡ Auto</button>
+    </div>
+  </div>
+
   <button class="btn-primary start-btn" onclick="startGame()">🌍 Play Now</button>
-  <p class="how-play"><strong>Tap</strong> to catch food · <strong>Build</strong> the dish · <strong>Discover</strong> the world</p>
+  <p class="how-play"><strong>Tap</strong> to shoot · <strong>Swipe</strong> to dodge · <strong>Build</strong> the dish</p>
   <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;justify-content:center;">
     <button class="btn-outline" onclick="showLeaderboard()">🏆 Leaderboard</button>
-    <button class="map-btn" onclick="showMap()">🗺️ My Discoveries</button>
+    <button class="btn-outline" onclick="showMap()">🗺️ Discoveries</button>
   </div>
 </div>
 
@@ -240,12 +261,14 @@
     <div class="hud-score" id="hud-score">0</div>
     <div class="hud-level" id="hud-level">Level 1</div>
   </div>
-  <div class="hud-combo" id="hud-combo">2x COMBO!</div>
+  <div class="hud-combo" id="hud-combo">2x!</div>
   <div class="hud-lives" id="hud-lives"></div>
-  <button class="hud-pause" onclick="pauseGame()">⏸</button>
+  <button class="hud-pause" onclick="openPause()">⏸</button>
 </div>
 
-<!-- DISH PROGRESS HUD -->
+<div id="fire-indicator">🔫 TAP TO SHOOT</div>
+
+<!-- DISH HUD -->
 <div id="dish-hud">
   <div>
     <div class="dish-hud-label">Building:</div>
@@ -254,50 +277,28 @@
   <div class="dish-slots" id="dish-slots"></div>
 </div>
 
-<!-- TUTORIAL -->
-<div id="tutorial-overlay">
-  <div class="tut-title">How to Play 🐸</div>
-  <div class="tut-cards">
-    <div class="tut-card good">
-      <div class="tut-card-emoji">👆</div>
-      <div class="tut-card-label">TAP</div>
-      <div class="tut-card-sub">Catch food = points!</div>
-    </div>
-    <div class="tut-card bad">
-      <div class="tut-card-emoji">👆👇</div>
-      <div class="tut-card-label">SWIPE UP/DOWN</div>
-      <div class="tut-card-sub">Dodge 💀 danger items!</div>
-    </div>
-  </div>
-  <button class="btn-primary" style="font-size:20px;padding:20px 48px;" onclick="closeTutorial()">Let's Cook! 🍳</button>
-</div>
-
-<!-- HIT FLASH -->
-<div id="hit-flash"></div>
-<div id="heart-lost">💔</div>
-
-<!-- CANVAS -->
 <canvas id="gameCanvas"></canvas>
 
-<!-- OVERLAYS -->
 <div id="catch-flash"></div>
 <div id="spirit-flash"></div>
-<div id="tap-hint">👆 Tap to catch!</div>
+<div id="hit-flash"></div>
+<div id="heart-lost">💔</div>
+<div id="tap-hint" id="tap-hint">👆 Tap to shoot!</div>
+
+<!-- DISH BANNER -->
+<div id="dish-banner">
+  <div id="dish-banner-emoji">🍚</div>
+  <div id="dish-banner-content">
+    <div id="dish-banner-title">Complete!</div>
+    <div id="dish-banner-country">🇵🇷 Puerto Rico</div>
+    <div id="dish-banner-pts">+500 pts</div>
+  </div>
+</div>
 
 <!-- UNLOCK TOAST -->
 <div id="unlock-toast">
   <div id="ut-flag">🇵🇷</div>
-  <div><div id="ut-title">First catch!</div><div id="ut-fact">Fact here</div></div>
-</div>
-
-<!-- DISH COMPLETE BANNER — slides in, game keeps running -->
-<div id="dish-banner">
-  <div id="dish-banner-emoji">🍚</div>
-  <div id="dish-banner-content">
-    <div id="dish-banner-title">Mofongo Complete!</div>
-    <div id="dish-banner-country">🇵🇷 Puerto Rico Mastered! <span id="dish-banner-new">NEW</span></div>
-    <div id="dish-banner-pts">+500 pts</div>
-  </div>
+  <div><div id="ut-title">Now in Puerto Rico!</div><div id="ut-fact">Fact here</div></div>
 </div>
 
 <!-- GOLDEN POPUP -->
@@ -305,21 +306,63 @@
   <div class="g-popup">
     <div class="g-popup-emoji">✨🐸✨</div>
     <div class="g-popup-title">Golden Coquí!</div>
-    <div class="g-popup-sub">You caught the legendary Golden Coquí! Claim your reward at Wepa!</div>
+    <div class="g-popup-sub">You shot the legendary Golden Coquí! Claim your reward at Wepa!</div>
     <div class="g-popup-reward" id="golden-reward-text">Free surprise 🎁</div>
     <button class="btn-primary" style="width:100%;padding:16px;" onclick="closeGoldenPopup()">Amazing! →</button>
   </div>
 </div>
 
 <!-- SPIRIT POPUP -->
-<div class="spirit-popup-bg" id="spirit-popup-bg">
+<div class="g-popup-bg" id="spirit-popup-bg">
   <div class="g-popup" style="background:linear-gradient(135deg,#fff8ed,#ffe9a0);">
     <div class="g-popup-emoji" id="spirit-popup-emoji">👑✨</div>
-    <div class="g-popup-title">Your Spirit Appeared!</div>
+    <div class="g-popup-title">Spirit Hit!</div>
     <div class="spirit-pts-big" id="spirit-pts">+200 pts</div>
     <div class="g-popup-sub" id="spirit-msg">Your spirit appeared because you visited Wepa today!</div>
     <div class="g-popup-reward" id="spirit-fact-text" style="font-size:14px;font-weight:600;"></div>
-    <button class="btn-primary" style="width:100%;padding:16px;" onclick="closeSpiritPopup()">Incredible! →</button>
+    <button class="btn-primary" style="width:100%;padding:16px;" onclick="closeSpiritPopup()">Keep Shooting! →</button>
+  </div>
+</div>
+
+<!-- TUTORIAL -->
+<div id="tutorial-overlay">
+  <div class="tut-title">How to Play 🔫</div>
+  <div class="tut-sub">Wepa is a food shooter!</div>
+  <div class="tut-cards">
+    <div class="tut-card good">
+      <div class="tut-card-emoji">👆</div>
+      <div class="tut-card-label">TAP to shoot</div>
+      <div class="tut-card-sub">Hit food = points + dish fills!</div>
+    </div>
+    <div class="tut-card move">
+      <div class="tut-card-emoji">☝️👇</div>
+      <div class="tut-card-label">SWIPE to aim</div>
+      <div class="tut-card-sub">Move between lanes!</div>
+    </div>
+    <div class="tut-card bad">
+      <div class="tut-card-emoji">💀</div>
+      <div class="tut-card-label">DODGE skulls</div>
+      <div class="tut-card-sub">Hit them = lose a heart!</div>
+    </div>
+  </div>
+  <button class="btn-primary" style="font-size:18px;padding:18px 40px;" onclick="closeTutorial()">Let's Cook! 🍳</button>
+</div>
+
+<!-- PAUSE MENU -->
+<div id="pause-menu">
+  <div class="pause-inner">
+    <div class="pause-title">⏸ Paused</div>
+    <div class="pause-fire-row">
+      <div class="pause-fire-label">🔫 Fire mode</div>
+      <div class="fire-toggle">
+        <button class="fire-toggle-btn" id="pause-btn-tap" onclick="setFireMode('tap')">👆 Tap</button>
+        <button class="fire-toggle-btn" id="pause-btn-auto" onclick="setFireMode('auto')">⚡ Auto</button>
+      </div>
+    </div>
+    <div class="pause-btns">
+      <button class="btn-primary" style="padding:16px;" onclick="resumeGame()">▶️ Resume</button>
+      <button class="btn-outline" style="margin-top:4px;" onclick="endGame()">🚪 Quit</button>
+    </div>
   </div>
 </div>
 
@@ -337,7 +380,7 @@
   </div>
 </div>
 
-<!-- DISCOVERY MAP -->
+<!-- MAP -->
 <div class="screen hidden" id="screen-map">
   <h2>🗺️ Discovery Map</h2>
   <div class="map-sub" id="map-sub">0 / 10 countries discovered</div>
@@ -350,282 +393,212 @@
   <h2>🏆 Leaderboard</h2>
   <div class="lb-week" id="lb-week">This Week</div>
   <div class="lb-prize"><div class="lb-prize-label">This Week's Prize</div><div class="lb-prize-text" id="lb-prize">Loading...</div></div>
-  <div class="lb-list" id="lb-list"><div class="lb-empty">Loading scores...</div></div>
+  <div class="lb-list" id="lb-list"><div class="lb-empty">Loading...</div></div>
   <button class="btn-outline" onclick="showStart()">← Back</button>
 </div>
+
+<!-- COUNTRY FACT MODAL -->
+<div id="country-modal-bg" onclick="closeCountryModal(event)">
+  <div id="country-modal">
+    <div class="cm-handle"></div>
+    <div class="cm-flag" id="cm-flag">🇵🇷</div>
+    <div class="cm-name" id="cm-name">Puerto Rico</div>
+    <div class="cm-dish" id="cm-dish">🍚 Mofongo</div>
+    <div class="cm-fact" id="cm-fact" style="display:none;"></div>
+    <div class="cm-locked" id="cm-locked" style="display:none;">🔒 Play Wepa Explorer to discover this country!</div>
+    <div class="cm-facts-nav" id="cm-facts-nav" style="display:none;">
+      <button class="cm-nav-btn" onclick="navFact(-1)">← Prev</button>
+      <span class="cm-fact-count" id="cm-fact-count">1 / 4</span>
+      <button class="cm-nav-btn" onclick="navFact(1)">Next →</button>
+    </div>
+    <button class="btn-outline" onclick="closeCountryModal()">Close</button>
+  </div>
+</div>
+
+<script>
+var modalCountry=null, modalFactIdx=0;
+function openCountryModal(code){
+  var c=WORLD[code];
+  var isDisc=discoveredCountries.includes(code);
+  modalCountry=code; modalFactIdx=0;
+  document.getElementById('cm-flag').textContent=c.flag;
+  document.getElementById('cm-name').textContent=c.name;
+  document.getElementById('cm-dish').textContent=c.dishEmoji+' '+c.dish;
+  if(isDisc){
+    document.getElementById('cm-fact').style.display='block';
+    document.getElementById('cm-fact').textContent=c.facts[0];
+    document.getElementById('cm-locked').style.display='none';
+    document.getElementById('cm-facts-nav').style.display=c.facts.length>1?'flex':'none';
+    document.getElementById('cm-fact-count').textContent='1 / '+c.facts.length;
+  } else {
+    document.getElementById('cm-fact').style.display='none';
+    document.getElementById('cm-locked').style.display='block';
+    document.getElementById('cm-facts-nav').style.display='none';
+  }
+  document.getElementById('country-modal-bg').classList.add('open');
+}
+function navFact(dir){
+  if(!modalCountry) return;
+  var c=WORLD[modalCountry];
+  modalFactIdx=(modalFactIdx+dir+c.facts.length)%c.facts.length;
+  document.getElementById('cm-fact').textContent=c.facts[modalFactIdx];
+  document.getElementById('cm-fact-count').textContent=(modalFactIdx+1)+' / '+c.facts.length;
+}
+function closeCountryModal(e){
+  if(e&&e.target!==document.getElementById('country-modal-bg')) return;
+  document.getElementById('country-modal-bg').classList.remove('open');
+}
+</script>
 
 <script>
 const SB_URL='https://dgkcmyyafzhbtzdvtvji.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRna2NteXlhZnpoYnR6ZHZ0dmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1OTEzMjcsImV4cCI6MjA5MDE2NzMyN30.itt1fnbd8gcPKKDmTmdsaoi2e5yzXoNwDnzR8jD3q9M';
 
-// ── SOUND ENGINE (Web Audio API — no files needed) ──
-var audioCtx = null;
-function getAudio(){
-  if(!audioCtx){ try{ audioCtx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
-  return audioCtx;
-}
-function playTone(freq, type, duration, vol, startFreq){
+// ── SOUND ──
+var audioCtx=null;
+function getAudio(){ if(!audioCtx){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}} return audioCtx; }
+function playTone(freq,type,dur,vol,startFreq){
   var ac=getAudio(); if(!ac) return;
-  try {
-    var osc=ac.createOscillator();
-    var gain=ac.createGain();
-    osc.connect(gain); gain.connect(ac.destination);
-    osc.type=type||'sine';
-    if(startFreq){ osc.frequency.setValueAtTime(startFreq,ac.currentTime); osc.frequency.exponentialRampToValueAtTime(freq,ac.currentTime+duration*0.5); }
-    else { osc.frequency.setValueAtTime(freq,ac.currentTime); }
-    gain.gain.setValueAtTime(vol||0.3,ac.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+duration);
-    osc.start(ac.currentTime); osc.stop(ac.currentTime+duration);
-  } catch(e){}
+  try{
+    var o=ac.createOscillator(),g=ac.createGain();
+    o.connect(g); g.connect(ac.destination);
+    o.type=type||'sine';
+    if(startFreq){o.frequency.setValueAtTime(startFreq,ac.currentTime);o.frequency.exponentialRampToValueAtTime(freq,ac.currentTime+dur*0.5);}
+    else{o.frequency.setValueAtTime(freq,ac.currentTime);}
+    g.gain.setValueAtTime(vol||0.3,ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+dur);
+    o.start(ac.currentTime); o.stop(ac.currentTime+dur);
+  }catch(e){}
 }
-function soundGoodCatch(){ playTone(880,'sine',0.15,0.25,440); setTimeout(function(){ playTone(1320,'sine',0.12,0.2); },80); }
-function soundBadCatch(){ playTone(150,'sawtooth',0.3,0.35,200); playTone(100,'square',0.25,0.2); }
-function soundDishComplete(){ var notes=[523,659,784,1047]; notes.forEach(function(n,i){ setTimeout(function(){ playTone(n,'sine',0.3,0.3); },i*120); }); }
-function soundLevelUp(){ var notes=[523,784,1047,1319]; notes.forEach(function(n,i){ setTimeout(function(){ playTone(n,'sine',0.2,0.25); },i*80); }); }
-function soundGameOver(){ var notes=[440,330,220,165]; notes.forEach(function(n,i){ setTimeout(function(){ playTone(n,'sawtooth',0.4,0.2); },i*180); }); }
-function soundHeartLost(){ playTone(200,'sawtooth',0.5,0.4,350); }
-const WORLD = {
-  PR: {
-    name:'Puerto Rico', flag:'🇵🇷',
-    dish:'Mofongo', dishEmoji:'🍚',
-    ingredients:['🌿','🧄','🥩','🫒'], // plantain, garlic, pork, olive oil
-    ingredientNames:['Plantain','Garlic','Pork','Olive Oil'],
-    color:'#ff6b6b', bgLight:'#ffe8e8',
-    facts:[
-      'The coquí frog is Puerto Rico\'s national symbol — its song fills the island every night.',
-      'Mofongo is made from fried green plantains mashed with garlic, pork crackling and olive oil.',
-      'Puerto Rico is home to the only tropical rainforest in the US National Forest system — El Yunque.',
-      'The word "hurricane" comes from Huracán, the Taíno god of storms native to Puerto Rico.'
-    ],
-    // Environment: Caribbean sunset, palm trees, colonial buildings
-    sky:['#ff9a56','#ffb347','#ffd700'],
-    ground:'#8B4513',
-    obstacles:['🌴','🏄','🌊','🦀'],
-    bgElements:['🌴','🏖️','🌺','🦜','🏠']
-  },
-  DE: {
-    name:'Germany', flag:'🇩🇪',
-    dish:'Pretzel Platter', dishEmoji:'🥨',
-    ingredients:['🥨','🧀','🥓','🍺'],
-    ingredientNames:['Pretzel','Cheese','Speck','Beer'],
-    color:'#4ecdc4', bgLight:'#e0f7f5',
-    facts:[
-      'The pretzel has been a German symbol since the 12th century — monks gave them to children as rewards.',
-      'Germany has over 1,500 types of beer and more than 1,300 breweries.',
-      'There are over 300 different types of bread baked in Germany — more than any other country.',
-      'The döner kebab was brought to Berlin by Turkish workers and became Germany\'s favourite street food.'
-    ],
-    sky:['#87ceeb','#b0d9f0','#daeeff'],
-    ground:'#4a7c59',
-    obstacles:['🚗','🏰','🌲','⛪'],
-    bgElements:['🏰','⛪','🌲','🌉','🚂']
-  },
-  MA: {
-    name:'Morocco', flag:'🇲🇦',
-    dish:'Tagine', dishEmoji:'🫕',
-    ingredients:['🍗','🫒','🍊','🌿'],
-    ingredientNames:['Chicken','Olives','Preserved Lemon','Herbs'],
-    color:'#e8965a', bgLight:'#fde8d8',
-    facts:[
-      'Mint tea in Morocco is a symbol of hospitality — refusing it is considered impolite.',
-      'The city of Fes has the world\'s oldest university, founded in 859 AD.',
-      'Moroccan tagine gets its name from the conical clay pot it\'s cooked in — traps steam perfectly.',
-      'Morocco is the only African country with coastlines on both the Atlantic and Mediterranean.'
-    ],
-    sky:['#f4a261','#e76f51','#f9c74f'],
-    ground:'#c8a96e',
-    obstacles:['🐪','🕌','🪔','🏺'],
-    bgElements:['🕌','🌙','⭐','🏺','🪔']
-  },
-  TR: {
-    name:'Turkey', flag:'🇹🇷',
-    dish:'Döner', dishEmoji:'🥙',
-    ingredients:['🥩','🫓','🍅','🧅'],
-    ingredientNames:['Lamb','Flatbread','Tomato','Onion'],
-    color:'#e63946', bgLight:'#fde8ea',
-    facts:[
-      'Istanbul is the only city in the world that spans two continents — Europe and Asia.',
-      'Turkish coffee culture dates back to 1475 — the world\'s first coffee shops opened in Istanbul.',
-      'Turkey is the world\'s largest producer of hazelnuts, supplying 70% of global demand.',
-      'The tulip originated in Turkey and was exported to the Netherlands in the 1500s.'
-    ],
-    sky:['#e63946','#f4a261','#ffd166'],
-    ground:'#8b7355',
-    obstacles:['🏛️','🚢','🌷','⚓'],
-    bgElements:['🕌','🌉','🌷','⚓','🏛️']
-  },
-  IN: {
-    name:'India', flag:'🇮🇳',
-    dish:'Curry', dishEmoji:'🍛',
-    ingredients:['🍗','🌶️','🧅','🌿'],
-    ingredientNames:['Chicken','Chili','Onion','Spices'],
-    color:'#f4a261', bgLight:'#fef3e8',
-    facts:[
-      'India is the birthplace of chess, yoga, and the number zero.',
-      'India has the world\'s largest vegetarian population — about 400 million people.',
-      'Chai tea is consumed by over a billion people in India daily.',
-      'The spice trade with India was so valuable it changed the entire course of world exploration.'
-    ],
-    sky:['#ff9933','#ffffff','#138808'],
-    ground:'#8b6914',
-    obstacles:['🐘','🕌','🌺','🎪'],
-    bgElements:['🏯','🐘','🌺','🎪','⭐']
-  },
-  JP: {
-    name:'Japan', flag:'🇯🇵',
-    dish:'Ramen', dishEmoji:'🍜',
-    ingredients:['🍜','🥚','🍖','🌿'],
-    ingredientNames:['Noodles','Egg','Chashu','Nori'],
-    color:'#ff6b9d', bgLight:'#fde8f0',
-    facts:[
-      'Japan has over 100 different regional ramen styles — each city has its own unique recipe.',
-      'Japan has more vending machines per capita than any other country — one for every 23 people.',
-      'Sushi was originally street food in Tokyo — it was fast food before fast food existed.',
-      'The Japanese concept of "Ikigai" means finding joy and purpose through what you love doing.'
-    ],
-    sky:['#87ceeb','#ffb7c5','#fff0f5'],
-    ground:'#4a7c59',
-    obstacles:['🏮','⛩️','🌸','🚄'],
-    bgElements:['⛩️','🌸','🏯','🗻','🌙']
-  },
-  TH: {
-    name:'Thailand', flag:'🇹🇭',
-    dish:'Pad Thai', dishEmoji:'🍝',
-    ingredients:['🍝','🥜','🫑','🍋'],
-    ingredientNames:['Rice Noodles','Peanuts','Bean Sprouts','Lime'],
-    color:'#6c5ce7', bgLight:'#ede8ff',
-    facts:[
-      'Thailand is the world\'s largest exporter of rice, feeding much of the planet.',
-      'Pad Thai was invented in the 1930s as part of a national campaign to promote Thai identity.',
-      'Thailand has over 40,000 Buddhist temples — religion is woven into every aspect of daily life.',
-      'Mango sticky rice is considered Thailand\'s most iconic dessert internationally.'
-    ],
-    sky:['#fdcb6e','#e17055','#6c5ce7'],
-    ground:'#2d9e6b',
-    obstacles:['🐘','🛺','🌺','⛵'],
-    bgElements:['🏯','🌺','🐘','⛵','🌙']
-  },
-  CO: {
-    name:'Colombia', flag:'🇨🇴',
-    dish:'Arepa', dishEmoji:'🫓',
-    ingredients:['🌽','🧀','🥚','🧈'],
-    ingredientNames:['Corn','Cheese','Egg','Butter'],
-    color:'#fdcb6e', bgLight:'#fff8e1',
-    facts:[
-      'Colombia produces about 12% of the world\'s coffee — among the best quality beans on Earth.',
-      'Arepas are among the oldest foods in the Americas, dating back over 3,000 years.',
-      'Colombia has more species of birds than any other country — over 1,900 species.',
-      'Colombia is the only South American country with coastlines on both the Pacific and Caribbean.'
-    ],
-    sky:['#ffd32a','#0652dd','#ea2027'],
-    ground:'#2d9e6b',
-    obstacles:['☕','🦜','💐','🚂'],
-    bgElements:['🌺','☕','🦜','🏔️','🌿']
-  },
-  BR: {
-    name:'Brazil', flag:'🇧🇷',
-    dish:'Feijoada', dishEmoji:'🍲',
-    ingredients:['🫘','🥩','🌿','🍚'],
-    ingredientNames:['Black Beans','Pork','Herbs','Rice'],
-    color:'#00b894', bgLight:'#e0f7ef',
-    facts:[
-      'Brazil is home to 60% of the Amazon rainforest — the lungs of the planet.',
-      'Feijoada is Brazil\'s national dish — a rich black bean and pork stew with African roots.',
-      'Carnival in Rio de Janeiro draws over 2 million people onto the streets every day.',
-      'Brazil has been the world\'s top coffee producer for over 150 years.'
-    ],
-    sky:['#00b894','#fdcb6e','#ff7675'],
-    ground:'#2d9e6b',
-    obstacles:['🦜','⚽','🌺','💃'],
-    bgElements:['🌴','🦜','⚽','💃','🌺']
-  },
-  MX: {
-    name:'Mexico', flag:'🇲🇽',
-    dish:'Tacos', dishEmoji:'🌮',
-    ingredients:['🌮','🥑','🍅','🌿'],
-    ingredientNames:['Tortilla','Avocado','Salsa','Cilantro'],
-    color:'#e17055', bgLight:'#fdeae6',
-    facts:[
-      'Mexico is the birthplace of chocolate — the Aztecs used cacao beans as currency.',
-      'Mexican cuisine is one of only two in the world recognized by UNESCO as Cultural Heritage.',
-      'The avocado originated in Mexico over 10,000 years ago.',
-      'Mexico has 35 UNESCO World Heritage Sites — more than any other country in the Americas.'
-    ],
-    sky:['#e17055','#fdcb6e','#6c5ce7'],
-    ground:'#c8a96e',
-    obstacles:['🌵','🎭','💀','🦅'],
-    bgElements:['🏛️','🌵','🎭','🦅','🌺']
-  }
-};
+function soundShoot(){ playTone(800,'square',0.06,0.12); }
+function soundHit(){ playTone(1046,'sine',0.12,0.22,523); setTimeout(function(){playTone(1318,'sine',0.1,0.18);},70); }
+function soundBadHit(){ playTone(150,'sawtooth',0.3,0.3,250); }
+function soundDish(){ [523,659,784,1047].forEach(function(n,i){setTimeout(function(){playTone(n,'sine',0.25,0.25);},i*100);}); }
+function soundLevelUp(){ [523,784,1047,1319].forEach(function(n,i){setTimeout(function(){playTone(n,'sine',0.18,0.22);},i*70);}); }
+function soundGameOver(){ [440,330,220,165].forEach(function(n,i){setTimeout(function(){playTone(n,'sawtooth',0.35,0.18);},i*160);}); }
+function soundHeartLost(){ playTone(200,'sawtooth',0.45,0.35,350); }
 
-const COUNTRY_CODES = Object.keys(WORLD);
-const SPIRIT_FACTS = {
-  senior:'Your loyalty makes Wepa what it is. Every visit brings more warmth to our table. Thank you. 👑',
-  kids:'You are a true Wepa Explorer! The world is yours to discover, one dish at a time. 🌍',
-  pet:'Every paw print at Wepa tells a story. Your companion is part of our family forever. 🐾'
+// ── WORLD DATA ──
+const WORLD={
+  PR:{name:'Puerto Rico',flag:'🇵🇷',dish:'Mofongo',dishEmoji:'🍚',ingredients:['🌿','🧄','🥩','🫒'],ingredientNames:['Plantain','Garlic','Pork','Olive Oil'],color:'#ff6b6b',facts:['The coquí frog is Puerto Rico\'s national symbol — its song fills the island every night.','Mofongo is made from fried plantains mashed with garlic and pork.','Puerto Rico is home to the only tropical rainforest in the US National Forest system.','The word "hurricane" comes from Huracán, the Taíno god of storms.'],sky:['#ff9a56','#ffb347','#ffd700'],ground:'#8B4513',bgElements:['🌴','🏖️','🌺','🦜','🏠'],obstacles:['🌴','🌊','🦀','🌺']},
+  DE:{name:'Germany',flag:'🇩🇪',dish:'Pretzel Platter',dishEmoji:'🥨',ingredients:['🥨','🧀','🥓','🍺'],ingredientNames:['Pretzel','Cheese','Speck','Beer'],color:'#4ecdc4',facts:['Germany has over 1,500 types of beer and more than 1,300 breweries.','The pretzel has been a German symbol since the 12th century.','There are over 300 types of bread baked in Germany.','The döner kebab became Germany\'s favourite street food.'],sky:['#87ceeb','#b0d9f0','#daeeff'],ground:'#4a7c59',bgElements:['🏰','⛪','🌲','🌉','🚂'],obstacles:['🏰','🌲','⛪','🚗']},
+  MA:{name:'Morocco',flag:'🇲🇦',dish:'Tagine',dishEmoji:'🫕',ingredients:['🍗','🫒','🍊','🌿'],ingredientNames:['Chicken','Olives','Lemon','Herbs'],color:'#e8965a',facts:['Mint tea in Morocco is a symbol of hospitality.','The city of Fes has the world\'s oldest university, founded in 859 AD.','Moroccan tagine gets its name from the conical clay pot.','Morocco has coastlines on both the Atlantic and Mediterranean.'],sky:['#f4a261','#e76f51','#f9c74f'],ground:'#c8a96e',bgElements:['🕌','🌙','⭐','🏺','🪔'],obstacles:['🐪','🕌','🪔','🏺']},
+  TR:{name:'Turkey',flag:'🇹🇷',dish:'Döner',dishEmoji:'🥙',ingredients:['🥩','🫓','🍅','🧅'],ingredientNames:['Lamb','Flatbread','Tomato','Onion'],color:'#e63946',facts:['Istanbul is the only city spanning two continents.','Turkish coffee dates back to 1475 — world\'s first coffee shops.','Turkey is the world\'s largest producer of hazelnuts.','The tulip originated in Turkey.'],sky:['#e63946','#f4a261','#ffd166'],ground:'#8b7355',bgElements:['🕌','🌉','🌷','⚓','🏛️'],obstacles:['🏛️','🚢','🌷','⚓']},
+  IN:{name:'India',flag:'🇮🇳',dish:'Curry',dishEmoji:'🍛',ingredients:['🍗','🌶️','🧅','🌿'],ingredientNames:['Chicken','Chili','Onion','Spices'],color:'#f4a261',facts:['India is the birthplace of chess, yoga, and zero.','India has the world\'s largest vegetarian population.','Chai tea is consumed by over a billion people daily.','The spice trade with India changed world history.'],sky:['#ff9933','#ffcc44','#138808'],ground:'#8b6914',bgElements:['🏯','🐘','🌺','🎪','⭐'],obstacles:['🐘','🕌','🌺','🎪']},
+  JP:{name:'Japan',flag:'🇯🇵',dish:'Ramen',dishEmoji:'🍜',ingredients:['🍜','🥚','🍖','🌿'],ingredientNames:['Noodles','Egg','Chashu','Nori'],color:'#ff6b9d',facts:['Japan has over 100 regional ramen styles.','Japan has more vending machines per capita than any country.','Sushi was originally street food in Tokyo.','Ikigai means finding joy and purpose through what you love.'],sky:['#87ceeb','#ffb7c5','#fff0f5'],ground:'#4a7c59',bgElements:['⛩️','🌸','🏯','🗻','🌙'],obstacles:['🏮','⛩️','🌸','🚄']},
+  TH:{name:'Thailand',flag:'🇹🇭',dish:'Pad Thai',dishEmoji:'🍝',ingredients:['🍝','🥜','🫑','🍋'],ingredientNames:['Noodles','Peanuts','Sprouts','Lime'],color:'#6c5ce7',facts:['Thailand is the world\'s largest rice exporter.','Pad Thai was invented in the 1930s as national identity.','Thailand has over 40,000 Buddhist temples.','Mango sticky rice is Thailand\'s most iconic dessert.'],sky:['#fdcb6e','#e17055','#6c5ce7'],ground:'#2d9e6b',bgElements:['🏯','🌺','🐘','⛵','🌙'],obstacles:['🐘','🛺','🌺','⛵']},
+  CO:{name:'Colombia',flag:'🇨🇴',dish:'Arepa',dishEmoji:'🫓',ingredients:['🌽','🧀','🥚','🧈'],ingredientNames:['Corn','Cheese','Egg','Butter'],color:'#fdcb6e',facts:['Colombia produces 12% of the world\'s coffee.','Arepas date back over 3,000 years.','Colombia has more bird species than any country.','Colombia has coastlines on Pacific and Caribbean.'],sky:['#ffd32a','#fdcb6e','#ea2027'],ground:'#2d9e6b',bgElements:['🌺','☕','🦜','🏔️','🌿'],obstacles:['☕','🦜','💐','🚂']},
+  BR:{name:'Brazil',flag:'🇧🇷',dish:'Feijoada',dishEmoji:'🍲',ingredients:['🫘','🥩','🌿','🍚'],ingredientNames:['Black Beans','Pork','Herbs','Rice'],color:'#00b894',facts:['Brazil is home to 60% of the Amazon rainforest.','Feijoada is Brazil\'s national dish with African roots.','Carnival draws over 2 million people daily.','Brazil is the top coffee producer for 150 years.'],sky:['#00b894','#fdcb6e','#ff7675'],ground:'#2d9e6b',bgElements:['🌴','🦜','⚽','💃','🌺'],obstacles:['🦜','⚽','🌺','💃']},
+  MX:{name:'Mexico',flag:'🇲🇽',dish:'Tacos',dishEmoji:'🌮',ingredients:['🌮','🥑','🍅','🌿'],ingredientNames:['Tortilla','Avocado','Salsa','Cilantro'],color:'#e17055',facts:['Mexico is the birthplace of chocolate.','Mexican cuisine is UNESCO Intangible Cultural Heritage.','The avocado originated in Mexico 10,000 years ago.','Mexico has 35 UNESCO World Heritage Sites.'],sky:['#e17055','#fdcb6e','#6c5ce7'],ground:'#c8a96e',bgElements:['🏛️','🌵','🎭','🦅','🌺'],obstacles:['🌵','🎭','💀','🦅']}
 };
-
-// ── BAD ITEMS ──
-const BAD_ITEMS = ['💀','🦠','⚡','🚫','💣'];
+const COUNTRY_CODES=Object.keys(WORLD);
+const BAD_ITEMS=['💀','🦠','⚡','🚫','💣'];
+const SPIRIT_FACTS={senior:'Your loyalty makes Wepa what it is. Thank you. 👑',kids:'You are a true Wepa Explorer! 🌍',pet:'Every paw print tells a story. 🐾'};
 
 // ── STATE ──
-let tutorialShown = false;
-let passportId=null, passportData=null;
+let fireMode='tap'; // 'tap' or 'auto'
+let tutorialShown=false;
+let passportId=null,passportData=null;
 let gameSettings={featured_country:'PR',featured_multiplier:3,explorer_reward:'Secret reward 🎁'};
-let bestScore=0, currentScore=0;
-let gameRunning=false, gamePaused=false, animFrame=null;
-let sessionDishes=[], discoveredCountries=[];
-let combo=0, comboTimer=null;
-let goldenShown=false, spiritActive=false, spiritCaught=false;
-let spiritExpiry=null, spiritTimerInterval=null;
-let currentCountry=null, currentDish=[];
-let dishCompleteShowing=false;
+let bestScore=0,currentScore=0;
+let gameRunning=false,gamePaused=false,animFrame=null;
+let sessionDishes=[],discoveredCountries=[];
+let combo=0,comboTimer=null;
+let goldenShown=false,spiritActive=false,spiritCaught=false;
+let spiritExpiry=null,spiritTimerInterval=null;
+let currentCountry=null,currentDish=[];
+let dishCompleteShowing=false,dishBannerTimer=null;
 let envOffset=0;
+let autoFireTimer=null;
 
 // ── CANVAS ──
 const canvas=document.getElementById('gameCanvas');
 const ctx=canvas.getContext('2d');
 let W,H;
-function resizeCanvas(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+function resizeCanvas(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
 window.addEventListener('resize',resizeCanvas); resizeCanvas();
 
 // ── LANES ──
-function laneY(i){ return H*[0.28,0.50,0.70][i]; }
+function laneY(i){return H*[0.28,0.50,0.70][i];}
 
 // ── GAME OBJECTS ──
-let wepa,items,particles,bgObjects;
+let wepa,items,bullets,particles;
 let speed,frameCount,level;
 
 function initGame(){
   speed=3; frameCount=0; level=1;
   currentScore=0; combo=0;
   sessionDishes=[]; goldenShown=false; spiritCaught=false;
-  items=[]; particles=[]; bgObjects=[];
+  items=[]; bullets=[]; particles=[];
   currentCountry=null; currentDish=[];
   dishCompleteShowing=false; envOffset=0;
   wepa={
-    x:W*0.16, targetLane:1, currentLane:1, laneT:1,
-    size:58, catching:false, catchT:0, missed:0,
-    expression:'happy', // happy, catching, missed, celebrate
-    expressionT:0
+    x:W*0.12, lane:1, laneT:1, targetLane:1,
+    size:56, expression:'happy', expressionT:0,
+    shaking:0, missed:0
   };
   pickNewCountry();
   renderDishHUD();
   updateLivesHUD();
+  if(fireMode==='auto') startAutoFire();
 }
 
-function pickNewCountry(){
-  // Pick a country not yet done this session, prefer undiscovered
-  var undone = COUNTRY_CODES.filter(function(c){ return !sessionDishes.includes(c); });
-  if(undone.length===0) undone=COUNTRY_CODES.slice();
-  var undiscovered = undone.filter(function(c){ return !discoveredCountries.includes(c); });
-  var pool = undiscovered.length>0 ? undiscovered : undone;
-  currentCountry = pool[Math.floor(Math.random()*pool.length)];
-  currentDish = [];
-  renderDishHUD();
-  // Show toast for new country
+// ── FIRE MODE ──
+function setFireMode(mode){
+  fireMode=mode;
+  document.getElementById('btn-tap').classList.toggle('active',mode==='tap');
+  document.getElementById('btn-auto').classList.toggle('active',mode==='auto');
+  document.getElementById('pause-btn-tap').classList.toggle('active',mode==='tap');
+  document.getElementById('pause-btn-auto').classList.toggle('active',mode==='auto');
+  document.getElementById('fire-indicator').textContent=mode==='tap'?'🔫 TAP TO SHOOT':'🔫 AUTO FIRE';
+  if(gameRunning){
+    if(mode==='auto'){ stopAutoFire(); startAutoFire(); }
+    else stopAutoFire();
+  }
+}
+
+function startAutoFire(){
+  stopAutoFire();
+  autoFireTimer=setInterval(function(){
+    if(gameRunning&&!gamePaused) fireBullet();
+  },700);
+}
+
+function stopAutoFire(){
+  if(autoFireTimer){ clearInterval(autoFireTimer); autoFireTimer=null; }
+}
+
+// ── BULLET ──
+function fireBullet(){
+  if(!gameRunning||gamePaused) return;
+  // Lane-locked: can only fire once Wepa is fully in his lane (not mid-swipe)
+  if(wepa.laneT<0.85) return;
   var c=WORLD[currentCountry];
-  showToast(c.flag, '🌍 Now in '+c.name+'!', 'Collect '+c.ingredientNames.join(', ')+' to make '+c.dish);
+  var bulletEmoji=c.ingredients[currentDish.length%c.ingredients.length];
+  bullets.push({
+    x:wepa.x+wepa.size*0.8,
+    y:laneY(wepa.lane),
+    lane:wepa.lane,
+    emoji:bulletEmoji,
+    speed:12+speed*0.5,
+    size:28,
+    active:true
+  });
+  soundShoot();
+  wepa.expression='shooting'; wepa.expressionT=8;
+}
+
+// ── PICK COUNTRY ──
+function pickNewCountry(){
+  var undone=COUNTRY_CODES.filter(function(c){return !sessionDishes.includes(c);});
+  if(undone.length===0) undone=COUNTRY_CODES.slice();
+  var undiscovered=undone.filter(function(c){return !discoveredCountries.includes(c);});
+  var pool=undiscovered.length>0?undiscovered:undone;
+  currentCountry=pool[Math.floor(Math.random()*pool.length)];
+  currentDish=[];
+  renderDishHUD();
+  var c=WORLD[currentCountry];
+  showToast(c.flag,'🌍 Now in '+c.name+'!','Collect '+c.ingredientNames.join(', ')+' to make '+c.dish);
 }
 
 // ── DISH HUD ──
@@ -633,8 +606,7 @@ function renderDishHUD(){
   if(!currentCountry) return;
   var c=WORLD[currentCountry];
   document.getElementById('dish-hud-name').textContent=c.dish;
-  var slots=document.getElementById('dish-slots');
-  slots.innerHTML='';
+  var slots=document.getElementById('dish-slots'); slots.innerHTML='';
   for(var i=0;i<c.ingredients.length;i++){
     var div=document.createElement('div');
     div.className='dish-slot'+(i<currentDish.length?' filled':'');
@@ -644,25 +616,21 @@ function renderDishHUD(){
 }
 
 function updateLivesHUD(){
-  var el=document.getElementById('hud-lives');
-  el.innerHTML='';
+  var el=document.getElementById('hud-lives'); el.innerHTML='';
   for(var i=0;i<3;i++){
     var span=document.createElement('span');
-    span.style.fontSize='22px';
-    span.style.opacity=i<(wepa?wepa.missed:0)?'0.15':'1';
-    span.style.transition='opacity 0.3s';
-    span.textContent='❤️';
+    span.style.fontSize='22px'; span.style.opacity=i<(wepa?wepa.missed:0)?'0.15':'1';
+    span.style.transition='opacity 0.3s'; span.textContent='❤️';
     el.appendChild(span);
   }
 }
 
-// ── INPUT — swipe to dodge, tap to catch ──
-var touchStartX=0, touchStartY=0, touchStartTime=0;
-var SWIPE_THRESHOLD=30; // min px to count as swipe
+// ── INPUT ──
+var touchStartX=0,touchStartY=0,touchStartTime=0;
+var SWIPE_THRESH=28;
 
 canvas.addEventListener('touchstart',function(e){
-  e.preventDefault();
-  getAudio();
+  e.preventDefault(); getAudio();
   touchStartX=e.touches[0].clientX;
   touchStartY=e.touches[0].clientY;
   touchStartTime=Date.now();
@@ -674,98 +642,40 @@ canvas.addEventListener('touchend',function(e){
   var dx=e.changedTouches[0].clientX-touchStartX;
   var dy=e.changedTouches[0].clientY-touchStartY;
   var dt=Date.now()-touchStartTime;
-  var absDx=Math.abs(dx), absDy=Math.abs(dy);
-
-  if(absDy>SWIPE_THRESHOLD&&absDy>absDx&&dt<400){
-    // SWIPE — dodge
-    if(dy<0) swipeLane(-1); // swipe up → move up a lane
-    else     swipeLane(1);  // swipe down → move down a lane
-  } else if(absDx<20&&absDy<20&&dt<300){
-    // TAP — catch
-    onTap();
+  var absDy=Math.abs(dy),absDx=Math.abs(dx);
+  if(absDy>SWIPE_THRESH&&absDy>absDx&&dt<400){
+    swipeLane(dy<0?-1:1);
+  } else if(absDx<25&&absDy<25&&dt<300){
+    if(fireMode==='tap') fireBullet();
   }
 },{passive:false});
 
-// Mouse/keyboard support
 var mouseStartY=0;
-canvas.addEventListener('mousedown',function(e){ mouseStartY=e.clientY; });
+canvas.addEventListener('mousedown',function(e){mouseStartY=e.clientY;});
 canvas.addEventListener('mouseup',function(e){
   if(!gameRunning||gamePaused) return;
   var dy=e.clientY-mouseStartY;
-  if(Math.abs(dy)>SWIPE_THRESHOLD){ swipeLane(dy>0?1:-1); }
-  else { getAudio(); onTap(); }
+  if(Math.abs(dy)>SWIPE_THRESH){swipeLane(dy>0?1:-1);}
+  else if(fireMode==='tap'){getAudio();fireBullet();}
 });
 document.addEventListener('keydown',function(e){
   if(!gameRunning||gamePaused) return;
-  if(e.code==='Space'||e.code==='ArrowRight'){ e.preventDefault(); getAudio(); onTap(); }
-  if(e.code==='ArrowUp')  { e.preventDefault(); swipeLane(-1); }
-  if(e.code==='ArrowDown'){ e.preventDefault(); swipeLane(1); }
+  if(e.code==='Space'||e.code==='ArrowRight'){e.preventDefault();getAudio();if(fireMode==='tap')fireBullet();}
+  if(e.code==='ArrowUp'){e.preventDefault();swipeLane(-1);}
+  if(e.code==='ArrowDown'){e.preventDefault();swipeLane(1);}
 });
 
 function swipeLane(dir){
-  var newLane=Math.max(0,Math.min(2,wepa.targetLane+dir));
-  if(newLane===wepa.targetLane) return;
-  wepa.targetLane=newLane;
-  wepa.laneT=0; // trigger smooth transition
-  // Small dodge sound
-  playTone(600,'sine',0.08,0.15);
+  var nl=Math.max(0,Math.min(2,wepa.lane+dir));
+  if(nl===wepa.lane) return;
+  wepa.targetLane=nl; wepa.laneT=0;
+  playTone(600,'sine',0.07,0.12);
 }
 
-function takeDamage(){
-  wepa.missed++;
-  wepa.expression='hurt'; wepa.expressionT=30;
-  soundHeartLost();
-  var hf=document.getElementById('hit-flash');
-  hf.classList.remove('show'); void hf.offsetWidth; hf.classList.add('show');
-  var hl=document.getElementById('heart-lost');
-  hl.classList.remove('show'); void hl.offsetWidth; hl.classList.add('show');
-  wepa.shaking=8;
-  combo=0; document.getElementById('hud-combo').classList.remove('show');
-  updateLivesHUD();
-  spawnParticles(wepa.x,laneY(wepa.currentLane),'#e74c3c',10);
-  if(wepa.missed>=3){ setTimeout(endGame,400); }
-}
-
-// ── TAP — catch nearest good item ──
-function onTap(){
-  var target=getClosestGoodItem();
-  if(!target) return;
-  wepa.catching=true; wepa.catchT=1;
-  target.caught=true;
-  if(target.isSpirit){ spiritCaught=true; showSpiritPopup(); soundGoodCatch(); }
-  else if(target.isGolden){ goldenShown=true; collectItem(target); showGoldenPopup(); soundGoodCatch(); }
-  else { collectItem(target); wepa.expression='catching'; wepa.expressionT=20; }
-}
-
-// ── CLOSEST GOOD ITEM (any lane, tap catches across lanes) ──
-function getClosestGoodItem(){
-  var zone=W*0.48;
-  var closest=null; var closestD=Infinity;
-  items.forEach(function(item){
-    if(item.caught||item.missed||item.isBad) return;
-    var d=item.x-wepa.x;
-    if(d>0&&d<zone&&d<closestD){ closest=item; closestD=d; }
-  });
-  return closest;
-}
-
-// ── OLD getClosestItem kept for target ring only ──
-function getClosestItem(){
-  var zone=W*0.48;
-  var closest=null; var closestD=Infinity;
-  items.forEach(function(item){
-    if(item.caught||item.missed||item.isBad) return;
-    var d=item.x-wepa.x;
-    if(d>0&&d<zone&&d<closestD){ closest=item; closestD=d; }
-  });
-  return closest;
-}
-
-// ── SPAWN ──
+// ── SPAWN ENEMY ──
 function spawnItem(){
-  var isSpirit=spiritActive&&!spiritCaught&&Math.random()<0.07;
+  var isSpirit=spiritActive&&!spiritCaught&&Math.random()<0.06;
   var isGolden=!isSpirit&&!goldenShown&&Math.random()<0.002;
-  // Bad items start at level 2, 25% chance per spawn
   var isBad=!isSpirit&&!isGolden&&level>=2&&Math.random()<0.28;
   var emoji,code,size,color;
   if(isSpirit){
@@ -775,43 +685,82 @@ function spawnItem(){
     emoji='✨🐸✨'; size=52; color='#ffd700';
   } else if(isBad){
     emoji=BAD_ITEMS[Math.floor(Math.random()*BAD_ITEMS.length)];
-    size=52; color='#e74c3c'; code=null;
+    size=50; color='#e74c3c';
   } else {
     var c=WORLD[currentCountry];
-    var nextIdx=currentDish.length%c.ingredients.length;
-    emoji=c.ingredients[nextIdx]; size=56; color=c.color; code=currentCountry;
+    emoji=c.ingredients[Math.floor(Math.random()*c.ingredients.length)];
+    size=56; color=c.color; code=currentCountry;
   }
   var lane=Math.floor(Math.random()*3);
-  items.push({x:W+70,lane:lane,y:laneY(lane),emoji:emoji,code:code,size:size,color:color,isSpirit:isSpirit,isGolden:isGolden,isBad:isBad,caught:false,missed:false,wobble:Math.random()*Math.PI*2,speedMult:isBad?0.75:1});
+  items.push({x:W+70,lane:lane,y:laneY(lane),emoji:emoji,code:code,size:size,color:color,
+    isSpirit:isSpirit,isGolden:isGolden,isBad:isBad,
+    hit:false,missed:false,wobble:Math.random()*Math.PI*2,
+    speedMult:isBad?0.8:1});
 }
 
-// ── COLLECT ──
-function collectItem(item){
+// ── BULLET-ITEM COLLISION ──
+function checkCollisions(){
+  bullets.forEach(function(b){
+    if(!b.active) return;
+    items.forEach(function(item){
+      if(item.hit||item.missed) return;
+      if(b.lane!==item.lane) return;
+      var dist=Math.abs(b.x-item.x);
+      if(dist<(b.size*0.5+item.size*0.5)){
+        b.active=false;
+        item.hit=true;
+        if(item.isSpirit){ spiritCaught=true; collectHit(item); showSpiritPopup(); }
+        else if(item.isGolden){ goldenShown=true; collectHit(item); showGoldenPopup(); }
+        else if(item.isBad){ takeDamage(item.x,item.y); }
+        else { collectHit(item); }
+      }
+    });
+  });
+
+  // Auto-hit: bad items that reach Wepa without being shot
+  items.forEach(function(item){
+    if(item.hit||item.missed||!item.isBad) return;
+    if(item.lane===wepa.lane&&item.x<=wepa.x+wepa.size*0.7&&item.x>=wepa.x-20){
+      item.hit=true; takeDamage(wepa.x,laneY(wepa.lane));
+    }
+  });
+}
+
+function collectHit(item){
+  if(!item.code&&!item.isSpirit&&!item.isGolden) return;
   var isFeatured=item.code&&item.code===gameSettings.featured_country;
   var mult=isFeatured?gameSettings.featured_multiplier:1;
-  var pts=30*mult*Math.max(1,combo);
+  var pts=40*mult*Math.max(1,combo);
   currentScore+=pts; combo++;
   clearTimeout(comboTimer);
-  comboTimer=setTimeout(function(){combo=0;document.getElementById('hud-combo').classList.remove('show');},2200);
-  spawnParticles(item.x,item.y,item.color,12);
-  soundGoodCatch();
-  showCatchFlash('+'+(Math.floor(pts))+(isFeatured?' ⭐':'')+(combo>1?' x'+combo:''));
-  if(combo>1){ var hc=document.getElementById('hud-combo'); hc.textContent=combo+'x COMBO!'; hc.classList.remove('show'); void hc.offsetWidth; hc.classList.add('show'); }
-  wepa.expression='happy'; wepa.expressionT=15;
-
-  // Add to dish
+  comboTimer=setTimeout(function(){combo=0;document.getElementById('hud-combo').classList.remove('show');},2000);
+  spawnParticles(item.x,item.y,item.color||'#e8a83e',12);
+  soundHit();
+  showCatchFlash('+'+(Math.floor(pts))+(isFeatured?' ⭐':'')+(combo>1?' x'+combo+'!':''));
+  if(combo>1){var hc=document.getElementById('hud-combo');hc.textContent=combo+'x!';hc.classList.remove('show');void hc.offsetWidth;hc.classList.add('show');}
+  wepa.expression='happy'; wepa.expressionT=12;
   if(item.code){
-    currentDish.push(item.code);
-    renderDishHUD();
+    currentDish.push(item.code); renderDishHUD();
     var c=WORLD[currentCountry];
-    if(currentDish.length>=c.ingredients.length){
-      completeDish();
-    }
-    // First catch of this country — toast
-    if(currentDish.length===1&&!discoveredCountries.includes(item.code)){
+    if(currentDish.length>=c.ingredients.length) completeDish();
+    if(currentDish.length===1&&!discoveredCountries.includes(item.code))
       showToast(c.flag,c.flag+' '+c.name,c.facts[Math.floor(Math.random()*c.facts.length)]);
-    }
   }
+}
+
+function takeDamage(x,y){
+  wepa.missed++;
+  wepa.expression='hurt'; wepa.expressionT=30;
+  soundHeartLost();
+  var hf=document.getElementById('hit-flash');
+  hf.classList.remove('show'); void hf.offsetWidth; hf.classList.add('show');
+  var hl=document.getElementById('heart-lost');
+  hl.classList.remove('show'); void hl.offsetWidth; hl.classList.add('show');
+  wepa.shaking=10; combo=0;
+  document.getElementById('hud-combo').classList.remove('show');
+  updateLivesHUD();
+  spawnParticles(x||wepa.x,y||laneY(wepa.lane),'#e74c3c',12);
+  if(wepa.missed>=3) setTimeout(endGame,500);
 }
 
 function completeDish(){
@@ -819,19 +768,15 @@ function completeDish(){
   dishCompleteShowing=true;
   var c=WORLD[currentCountry];
   var isNew=!discoveredCountries.includes(currentCountry);
-  if(isNew){ discoveredCountries.push(currentCountry); sessionDishes.push(currentCountry); }
+  if(isNew){discoveredCountries.push(currentCountry);sessionDishes.push(currentCountry);}
   var bonus=isNew?500:200;
   currentScore+=bonus;
-
-  // Celebration particles — game keeps running
-  for(var i=0;i<6;i++) setTimeout(function(){ spawnParticles(wepa.x+50,laneY(wepa.currentLane),c.color,10); },i*80);
+  for(var i=0;i<6;i++) setTimeout(function(){spawnParticles(wepa.x+100,laneY(wepa.lane),c.color,10);},i*80);
   wepa.expression='celebrate'; wepa.expressionT=90;
-  soundDishComplete();
-
-  // Slide-in banner — no pause
+  soundDish();
   document.getElementById('dish-banner-emoji').textContent=c.dishEmoji;
   document.getElementById('dish-banner-title').textContent=c.dish+' Complete! 🎉';
-  document.getElementById('dish-banner-country').innerHTML=c.flag+' '+c.name+(isNew?' <span id="dish-banner-new">NEW</span>':'');
+  document.getElementById('dish-banner-country').textContent=c.flag+' '+c.name+(isNew?' ✅ NEW!':'');
   document.getElementById('dish-banner-pts').textContent='+'+bonus+' pts';
   var banner=document.getElementById('dish-banner');
   banner.classList.add('show');
@@ -839,243 +784,202 @@ function completeDish(){
   dishBannerTimer=setTimeout(function(){
     banner.classList.remove('show');
     dishCompleteShowing=false;
-    currentDish=[];
-    pickNewCountry();
+    currentDish=[]; pickNewCountry();
   },3000);
 }
-var dishBannerTimer=null;
 
 // ── DRAW ENVIRONMENT ──
 function drawEnvironment(){
   if(!currentCountry) return;
   var c=WORLD[currentCountry];
-  envOffset=(envOffset+speed*0.4)%(W+200);
-
-  // Sky gradient
   var grad=ctx.createLinearGradient(0,0,0,H*0.78);
-  grad.addColorStop(0,c.sky[0]);
-  grad.addColorStop(0.5,c.sky[1]);
-  grad.addColorStop(1,c.sky[2]||c.sky[1]);
-  ctx.fillStyle=grad;
-  ctx.fillRect(0,0,W,H*0.78);
+  grad.addColorStop(0,c.sky[0]); grad.addColorStop(0.5,c.sky[1]); grad.addColorStop(1,c.sky[2]||c.sky[1]);
+  ctx.fillStyle=grad; ctx.fillRect(0,0,W,H*0.78);
 
-  // BG architecture elements
-  var bgEl=c.bgElements||['🏠','🌲','⭐'];
+  var bgEl=c.bgElements||['🏠'];
   for(var i=0;i<8;i++){
     var ex=((i*180+W-envOffset*0.3)%(W+200))-40;
     var ey=H*0.35+Math.sin(i*1.7)*40;
-    ctx.save();
-    ctx.globalAlpha=0.35;
-    ctx.font='48px serif';
-    ctx.textAlign='center';
-    ctx.textBaseline='bottom';
-    ctx.fillText(bgEl[i%bgEl.length],ex,ey);
-    ctx.restore();
+    ctx.save(); ctx.globalAlpha=0.3; ctx.font='48px serif';
+    ctx.textAlign='center'; ctx.textBaseline='bottom';
+    ctx.fillText(bgEl[i%bgEl.length],ex,ey); ctx.restore();
   }
 
-  // Lane visual tracks
   for(var l=0;l<3;l++){
     var ly=laneY(l);
-    ctx.save();
-    ctx.strokeStyle='rgba(255,255,255,0.22)';
-    ctx.lineWidth=2;
+    ctx.save(); ctx.strokeStyle='rgba(255,255,255,0.2)'; ctx.lineWidth=2;
     ctx.setLineDash([18,22]);
     ctx.beginPath(); ctx.moveTo(0,ly); ctx.lineTo(W,ly); ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.restore();
+    ctx.setLineDash([]); ctx.restore();
   }
 
-  // Ground
   var gGrad=ctx.createLinearGradient(0,H*0.78,0,H);
-  gGrad.addColorStop(0,c.ground||'#8B4513');
-  gGrad.addColorStop(1,'rgba(0,0,0,0.6)');
-  ctx.fillStyle=gGrad;
-  ctx.fillRect(0,H*0.78,W,H*0.22);
-
-  // Ground highlight
-  ctx.strokeStyle='rgba(255,255,255,0.4)';
-  ctx.lineWidth=3; ctx.setLineDash([]);
+  gGrad.addColorStop(0,c.ground||'#8B4513'); gGrad.addColorStop(1,'rgba(0,0,0,0.6)');
+  ctx.fillStyle=gGrad; ctx.fillRect(0,H*0.78,W,H*0.22);
+  ctx.strokeStyle='rgba(255,255,255,0.4)'; ctx.lineWidth=3; ctx.setLineDash([]);
   ctx.beginPath(); ctx.moveTo(0,H*0.78); ctx.lineTo(W,H*0.78); ctx.stroke();
-
-  // Ground texture dots
   ctx.fillStyle='rgba(255,255,255,0.15)';
   for(var j=0;j<18;j++){
     var dx=((j*90-envOffset*speed*0.5)%W+W)%W;
     ctx.beginPath(); ctx.arc(dx,H*0.78+14,4,0,Math.PI*2); ctx.fill();
   }
-
-  // Scrolling obstacles in background
   var obs=c.obstacles||['🌴'];
   for(var o=0;o<4;o++){
     var ox=((o*320+W*1.5-envOffset)%(W+400))-80;
-    ctx.save();
-    ctx.globalAlpha=0.7;
-    ctx.font='40px serif';
-    ctx.textAlign='center';
-    ctx.textBaseline='bottom';
-    ctx.fillText(obs[o%obs.length],ox,H*0.78);
-    ctx.restore();
+    ctx.save(); ctx.globalAlpha=0.6; ctx.font='40px serif';
+    ctx.textAlign='center'; ctx.textBaseline='bottom';
+    ctx.fillText(obs[o%obs.length],ox,H*0.78); ctx.restore();
   }
 }
 
 // ── DRAW WEPA ──
 function drawWepa(){
-  // Lane transition
+  if(wepa.currentLane===undefined) wepa.currentLane=wepa.lane;
   if(wepa.currentLane!==wepa.targetLane){
-    wepa.laneT=Math.min(1,(wepa.laneT||0)+0.14);
-    if(wepa.laneT>=1){ wepa.currentLane=wepa.targetLane; wepa.laneT=1; }
-  } else { wepa.laneT=1; }
-  var fromY=laneY(wepa.currentLane), toY=laneY(wepa.targetLane);
+    wepa.laneT=Math.min(1,(wepa.laneT||0)+0.15);
+    if(wepa.laneT>=1){wepa.currentLane=wepa.targetLane;wepa.lane=wepa.targetLane;wepa.laneT=1;}
+  } else { wepa.currentLane=wepa.lane; wepa.laneT=1; }
+
+  var fromY=laneY(wepa.currentLane),toY=laneY(wepa.targetLane);
   var ease=wepa.laneT*wepa.laneT*(3-2*wepa.laneT);
   var wy=fromY+(toY-fromY)*ease;
-
-  // Bob
-  var bob=Math.sin(frameCount*0.09)*5;
-  if(wepa.expression==='celebrate') bob=Math.sin(frameCount*0.25)*12;
-
-  // Shake on hit
+  var bob=Math.sin(frameCount*0.1)*4;
+  if(wepa.expression==='celebrate') bob=Math.sin(frameCount*0.28)*14;
   var shakeX=0;
-  if(wepa.shaking>0){ shakeX=(Math.random()-0.5)*wepa.shaking*3; wepa.shaking-=1; }
-
-  // Catching stretch
-  var sx=1,sy=1;
-  if(wepa.catching){ wepa.catchT-=0.07; if(wepa.catchT<=0){wepa.catching=false;} sx=1+wepa.catchT*0.5; sy=1-wepa.catchT*0.3; }
-
-  // Expression override
+  if(wepa.shaking>0){shakeX=(Math.random()-0.5)*wepa.shaking*3;wepa.shaking--;}
   if(wepa.expressionT>0) wepa.expressionT--;
 
   // Shadow
   ctx.save();
-  ctx.fillStyle='rgba(0,0,0,0.15)';
-  ctx.beginPath();
-  ctx.ellipse(wepa.x,wy+wepa.size*0.55,wepa.size*0.45*sx,8*sy,0,0,Math.PI*2);
-  ctx.fill();
+  ctx.fillStyle='rgba(0,0,0,0.12)';
+  ctx.beginPath(); ctx.ellipse(wepa.x+shakeX,wy+wepa.size*0.58,wepa.size*0.45,7,0,0,Math.PI*2); ctx.fill();
 
-  // Solid background circle
-  ctx.save();
-  ctx.fillStyle=wepa.expression==='hurt'?'rgba(255,100,100,0.92)':'rgba(255,255,255,0.92)';
-  ctx.beginPath();
-  ctx.arc(wepa.x+shakeX, wy+bob, wepa.size*0.62, 0, Math.PI*2);
-  ctx.fill();
-  ctx.strokeStyle=wepa.expression==='hurt'?'rgba(231,76,60,0.8)':'rgba(232,168,62,0.5)';
-  ctx.lineWidth=2.5;
-  ctx.stroke();
-
-  // Glow ring when catching
-  if(wepa.catching||wepa.expression==='celebrate'){
-    ctx.strokeStyle='rgba(232,168,62,0.8)';
-    ctx.lineWidth=4;
-    ctx.beginPath();
-    ctx.arc(wepa.x,wy+bob,wepa.size*0.75,0,Math.PI*2);
-    ctx.stroke();
+  // White circle bg
+  ctx.fillStyle=wepa.expression==='hurt'?'rgba(255,100,100,0.93)':'rgba(255,255,255,0.93)';
+  ctx.beginPath(); ctx.arc(wepa.x+shakeX,wy+bob,wepa.size*0.62,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle=wepa.expression==='hurt'?'rgba(231,76,60,0.8)':wepa.expression==='celebrate'?'rgba(232,168,62,0.9)':'rgba(232,168,62,0.5)';
+  ctx.lineWidth=wepa.expression==='celebrate'?4:2.5;
+  if(wepa.expression==='celebrate'){
+    ctx.beginPath(); ctx.arc(wepa.x+shakeX,wy+bob,wepa.size*0.75,0,Math.PI*2); ctx.stroke();
   }
+  ctx.beginPath(); ctx.arc(wepa.x+shakeX,wy+bob,wepa.size*0.62,0,Math.PI*2); ctx.stroke();
 
-  // Main frog emoji
-  ctx.font=wepa.size+'px serif';
-  ctx.textAlign='center';
-  ctx.textBaseline='middle';
-  ctx.translate(wepa.x+shakeX,wy+bob);
-  ctx.scale(sx,sy);
-  ctx.fillText('🐸',0,0);
+  // Frog
+  ctx.font=wepa.size+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('🐸',wepa.x+shakeX,wy+bob);
   ctx.restore();
 
-  // Expression emoji overlay
-  if(wepa.expression==='catching'&&wepa.expressionT>0){
-    ctx.save(); ctx.font='22px serif'; ctx.textAlign='center';
-    ctx.fillText('😋',wepa.x+shakeX+32,wy+bob-32); ctx.restore();
+  // Gun barrel indicator
+  ctx.save();
+  ctx.strokeStyle='rgba(232,168,62,0.7)'; ctx.lineWidth=3;
+  ctx.beginPath();
+  ctx.moveTo(wepa.x+wepa.size*0.55,wy+bob);
+  ctx.lineTo(wepa.x+wepa.size*0.9,wy+bob);
+  ctx.stroke();
+  ctx.restore();
+
+  // Expression
+  if(wepa.expression==='shooting'&&wepa.expressionT>0){
+    ctx.save(); ctx.font='20px serif'; ctx.textAlign='left';
+    ctx.fillText('💨',wepa.x+wepa.size*0.9,wy+bob); ctx.restore();
   } else if(wepa.expression==='hurt'&&wepa.expressionT>0){
-    ctx.save(); ctx.font='22px serif'; ctx.textAlign='center';
-    ctx.fillText('😱',wepa.x+shakeX+32,wy+bob-32); ctx.restore();
+    ctx.save(); ctx.font='20px serif'; ctx.textAlign='center';
+    ctx.fillText('😱',wepa.x+shakeX+34,wy+bob-34); ctx.restore();
   } else if(wepa.expression==='celebrate'&&wepa.expressionT>0){
-    ctx.save(); ctx.font='24px serif'; ctx.textAlign='center';
-    var stars=['⭐','✨','🎉'];
-    ctx.fillText(stars[Math.floor(frameCount/8)%3],wepa.x+35,wy+bob-35); ctx.restore();
+    ctx.save(); ctx.font='22px serif'; ctx.textAlign='center';
+    ctx.fillText(['⭐','✨','🎉'][Math.floor(frameCount/8)%3],wepa.x+38,wy+bob-38); ctx.restore();
   }
 
-  // Target ring on closest item's lane
-  var nearest=getClosestItem();
-  if(nearest&&!dishCompleteShowing){
+  // Lane target ring on closest enemy
+  var nearest=getClosestEnemy();
+  if(nearest){
     var ringY=laneY(nearest.lane);
+    var sameL=nearest.lane===wepa.lane;
     ctx.save();
-    ctx.strokeStyle='rgba(232,168,62,'+(0.4+Math.sin(frameCount*0.18)*0.25)+')';
-    ctx.lineWidth=2.5;
-    ctx.setLineDash([7,7]);
-    ctx.beginPath(); ctx.arc(wepa.x,ringY,32,0,Math.PI*2); ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.restore();
+    ctx.strokeStyle=sameL?'rgba(232,168,62,'+(0.5+Math.sin(frameCount*0.2)*0.3)+')':'rgba(200,200,200,0.25)';
+    ctx.lineWidth=2; ctx.setLineDash([6,6]);
+    ctx.beginPath(); ctx.arc(wepa.x,ringY,30,0,Math.PI*2); ctx.stroke();
+    ctx.setLineDash([]); ctx.restore();
   }
+}
+
+function getClosestEnemy(){
+  var zone=W*0.6; var closest=null; var closestD=Infinity;
+  items.forEach(function(item){
+    if(item.hit||item.missed) return;
+    var d=item.x-wepa.x;
+    if(d>0&&d<zone&&d<closestD){closest=item;closestD=d;}
+  });
+  return closest;
+}
+
+// ── DRAW BULLETS ──
+function drawBullets(){
+  bullets.forEach(function(b){
+    if(!b.active) return;
+    ctx.save();
+    ctx.font=b.size+'px serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    // Glow trail
+    ctx.shadowColor='rgba(232,168,62,0.6)'; ctx.shadowBlur=8;
+    ctx.fillText(b.emoji,b.x,b.y);
+    ctx.restore();
+  });
 }
 
 // ── DRAW ITEMS ──
 function drawItems(){
+  var countryColors={PR:'#ff6b6b',DE:'#4ecdc4',MA:'#e8965a',TR:'#e63946',IN:'#f4a261',JP:'#ff6b9d',TH:'#6c5ce7',CO:'#fdcb6e',BR:'#00b894',MX:'#e17055'};
   items.forEach(function(item){
-    if(item.caught||item.missed) return;
-    var wobble=Math.sin(frameCount*0.07+item.wobble)*5;
+    if(item.hit||item.missed) return;
+    var wobble=Math.sin(frameCount*0.07+item.wobble)*4;
     var iy=item.y+wobble;
     ctx.save();
-
     if(item.isSpirit){
-      ctx.shadowColor='rgba(232,168,62,0.95)';
-      ctx.shadowBlur=30+Math.sin(frameCount*0.12)*10;
+      ctx.shadowColor='rgba(232,168,62,0.95)'; ctx.shadowBlur=28+Math.sin(frameCount*0.12)*8;
       var ps=1+Math.sin(frameCount*0.1)*0.1;
       ctx.translate(item.x,iy); ctx.scale(ps,ps);
-      // Gold bubble
       ctx.fillStyle='rgba(255,240,150,0.9)';
       ctx.beginPath(); ctx.arc(0,0,item.size*0.7,0,Math.PI*2); ctx.fill();
       ctx.strokeStyle='#e8a83e'; ctx.lineWidth=3; ctx.stroke();
       ctx.font=item.size*0.85+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
       ctx.fillText(item.emoji,0,0);
-      ctx.font='bold 12px '+getComputedStyle(document.body).fontFamily;
-      ctx.fillStyle='#c97600'; ctx.fillText('✨ YOUR SPIRIT ✨',0,item.size*0.85);
+      ctx.font='bold 11px sans-serif'; ctx.fillStyle='#c97600';
+      ctx.fillText('✨ SPIRIT ✨',0,item.size*0.9);
     } else if(item.isGolden){
-      ctx.shadowColor='rgba(255,215,0,0.9)'; ctx.shadowBlur=28;
-      var gs=1+Math.sin(frameCount*0.09)*0.12;
+      ctx.shadowColor='rgba(255,215,0,0.9)'; ctx.shadowBlur=26;
+      var gs=1+Math.sin(frameCount*0.09)*0.1;
       ctx.translate(item.x,iy); ctx.scale(gs,gs);
       ctx.fillStyle='rgba(255,250,180,0.95)';
       ctx.beginPath(); ctx.arc(0,0,item.size*0.7,0,Math.PI*2); ctx.fill();
       ctx.font=item.size+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
       ctx.fillText(item.emoji,0,0);
     } else if(item.isBad){
-      // Scary red shaking bubble
-      var shake=(Math.random()-0.5)*4;
-      ctx.translate(item.x+shake,iy);
-      var badPulse=1+Math.sin(frameCount*0.2)*0.08;
-      ctx.scale(badPulse,badPulse);
-      // Dark red bubble
-      ctx.fillStyle='#c0392b';
-      ctx.globalAlpha=0.92;
+      // Shaking red bubble
+      var sk=(Math.random()-0.5)*3;
+      var bp=1+Math.sin(frameCount*0.22)*0.08;
+      ctx.translate(item.x+sk,iy); ctx.scale(bp,bp);
+      ctx.fillStyle='#c0392b'; ctx.globalAlpha=0.92;
       ctx.beginPath(); ctx.arc(0,0,item.size*0.72,0,Math.PI*2); ctx.fill();
-      // Danger ring
-      ctx.globalAlpha=1;
-      ctx.strokeStyle='#ff6b6b'; ctx.lineWidth=3;
+      ctx.globalAlpha=1; ctx.strokeStyle='#ff6b6b'; ctx.lineWidth=3;
       ctx.beginPath(); ctx.arc(0,0,item.size*0.72,0,Math.PI*2); ctx.stroke();
-      // Emoji
+      ctx.font=item.size*0.82+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(item.emoji,0,0);
+      ctx.font='bold 11px sans-serif'; ctx.fillStyle='#ffaaaa';
+      ctx.fillText('⚠️ DODGE',0,item.size*0.92);
+    } else {
+      // Good food bubble
+      ctx.translate(item.x,iy);
+      ctx.fillStyle=item.color||'#e8a83e'; ctx.globalAlpha=0.88;
+      ctx.beginPath(); ctx.arc(0,0,item.size*0.72,0,Math.PI*2); ctx.fill();
+      ctx.globalAlpha=1; ctx.strokeStyle='rgba(255,255,255,0.8)'; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.arc(0,0,item.size*0.72,0,Math.PI*2); ctx.stroke();
       ctx.font=item.size*0.85+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
       ctx.fillText(item.emoji,0,0);
-      // AVOID label
-      ctx.font='bold 12px '+getComputedStyle(document.body).fontFamily;
-      ctx.fillStyle='#ff9999';
-      ctx.fillText('⚠️ AVOID',0,item.size*0.92);
-    } else {
-      // Colored country bubble
-      ctx.translate(item.x,iy);
-      // Bubble
-      ctx.fillStyle=item.color;
-      ctx.globalAlpha=0.88;
-      ctx.beginPath(); ctx.arc(0,0,item.size*0.72,0,Math.PI*2); ctx.fill();
-      // White inner ring
-      ctx.globalAlpha=1;
-      ctx.strokeStyle='rgba(255,255,255,0.75)'; ctx.lineWidth=3;
-      ctx.beginPath(); ctx.arc(0,0,item.size*0.72,0,Math.PI*2); ctx.stroke();
-      // Emoji
-      ctx.font=item.size*0.88+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillText(item.emoji,0,0);
-      // Country flag below
       if(item.code){
         var cn=WORLD[item.code];
-        ctx.font='bold 13px '+getComputedStyle(document.body).fontFamily;
-        ctx.fillStyle='rgba(26,26,26,0.75)';
-        ctx.fillText(cn.flag+' '+cn.name,0,item.size*0.92);
+        ctx.font='bold 12px sans-serif'; ctx.fillStyle='rgba(26,26,26,0.7)';
+        ctx.fillText(cn.flag+' '+cn.name,0,item.size*0.9);
       }
     }
     ctx.restore();
@@ -1084,9 +988,7 @@ function drawItems(){
 
 // ── PARTICLES ──
 function spawnParticles(x,y,color,n){
-  for(var i=0;i<n;i++){
-    particles.push({x:x,y:y,vx:(Math.random()-0.5)*9,vy:(Math.random()-0.5)*9-3,life:1,color:color,size:4+Math.random()*7});
-  }
+  for(var i=0;i<n;i++) particles.push({x:x,y:y,vx:(Math.random()-0.5)*9,vy:(Math.random()-0.5)*9-3,life:1,color:color,size:4+Math.random()*7});
 }
 function drawParticles(){
   particles.forEach(function(p){
@@ -1101,80 +1003,83 @@ function gameLoop(){
   frameCount++;
 
   var newLevel=Math.min(6,1+Math.floor(frameCount/500));
-  if(newLevel>level){ level=newLevel; soundLevelUp(); }
-  level=newLevel;
+  if(newLevel>level){level=newLevel;soundLevelUp();}
+  speed=3+Math.floor(frameCount/500)*0.3;
   document.getElementById('hud-level').textContent='Level '+level;
   document.getElementById('hud-score').textContent=Math.floor(currentScore);
 
-  var spawnRate=Math.max(45,80-level*6);
+  var spawnRate=Math.max(50,85-level*7);
   if(frameCount%spawnRate===0) spawnItem();
-
-  currentScore+=speed*0.035;
+  currentScore+=speed*0.03;
   envOffset+=speed*0.4;
 
   // Move items
-  items.forEach(function(item){ item.x-=speed*(item.speedMult||1); });
+  items.forEach(function(item){item.x-=speed*(item.speedMult||1);});
+  // Move bullets
+  bullets.forEach(function(b){if(b.active)b.x+=b.speed;});
+  // Deactivate off-screen bullets
+  bullets.forEach(function(b){if(b.x>W+50)b.active=false;});
 
-  // Auto-hit: bad items that reach Wepa's lane hit automatically
-  items.forEach(function(item){
-    if(item.caught||item.missed||!item.isBad) return;
-    var sameLane=item.lane===wepa.currentLane||item.lane===wepa.targetLane;
-    var atWepa=item.x<=wepa.x+wepa.size*0.7&&item.x>=wepa.x-wepa.size*0.5;
-    if(sameLane&&atWepa){
-      item.caught=true; // remove it
-      takeDamage();
-    }
-  });
+  checkCollisions();
 
-  // Miss check — no penalty during dish banner celebration
+  // Miss — items past Wepa
   items.forEach(function(item){
-    if(!item.caught&&!item.missed&&item.x<wepa.x-50){
+    if(!item.hit&&!item.missed&&item.x<wepa.x-60){
       item.missed=true;
-      if(!item.isSpirit&&!item.isGolden&&!item.isBad&&!dishCompleteShowing){
+      if(!item.isBad&&!item.isSpirit&&!item.isGolden&&!dishCompleteShowing){
         combo=0; document.getElementById('hud-combo').classList.remove('show');
       }
     }
   });
 
   items=items.filter(function(i){return i.x>-100;});
+  bullets=bullets.filter(function(b){return b.active&&b.x<W+60;});
   particles.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=0.15;p.life-=0.03;});
   particles=particles.filter(function(p){return p.life>0;});
 
+  // Danger warning
+  items.forEach(function(item){
+    if(item.hit||item.missed||!item.isBad) return;
+    if(item.lane===wepa.lane&&item.x<W*0.6&&item.x>wepa.x+50){
+      var alpha=0.4+Math.sin(frameCount*0.45)*0.5;
+      ctx.save(); ctx.globalAlpha=alpha; ctx.font='24px serif'; ctx.textAlign='center';
+      ctx.fillText('⚠️',wepa.x,laneY(item.lane)-52); ctx.restore();
+    }
+  });
+
   drawEnvironment();
   drawItems();
+  drawBullets();
   drawWepa();
   drawParticles();
 
-  // Danger warning — flashing ⚠️ above Wepa when bad item in same lane
+  // Danger warning on top
   items.forEach(function(item){
-    if(item.caught||item.missed||!item.isBad) return;
-    if(item.lane===wepa.targetLane&&item.x<W*0.65&&item.x>wepa.x+40){
-      var alpha=0.5+Math.sin(frameCount*0.4)*0.5;
-      ctx.save(); ctx.globalAlpha=alpha; ctx.font='26px serif'; ctx.textAlign='center';
-      ctx.fillText('⚠️',wepa.x,laneY(item.lane)-55); ctx.restore();
+    if(item.hit||item.missed||!item.isBad) return;
+    if(item.lane===wepa.lane&&item.x<W*0.6&&item.x>wepa.x+50){
+      var alpha=0.4+Math.sin(frameCount*0.45)*0.5;
+      ctx.save(); ctx.globalAlpha=alpha; ctx.font='24px serif'; ctx.textAlign='center';
+      ctx.fillText('⚠️',wepa.x,laneY(item.lane)-52); ctx.restore();
     }
   });
 
   animFrame=requestAnimationFrame(gameLoop);
 }
 
-// ── TOAST ──
-var toastTimer=null;
+// ── UI HELPERS ──
+function showCatchFlash(txt){
+  var el=document.getElementById('catch-flash');
+  el.textContent=txt; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
+  setTimeout(function(){el.classList.remove('show');},750);
+}
+
 function showToast(flag,title,fact){
   document.getElementById('ut-flag').textContent=flag;
   document.getElementById('ut-title').textContent=title;
   document.getElementById('ut-fact').textContent=fact;
   var t=document.getElementById('unlock-toast');
   t.classList.remove('show'); void t.offsetWidth; t.classList.add('show');
-  if(toastTimer) clearTimeout(toastTimer);
-  toastTimer=setTimeout(function(){t.classList.remove('show');},4500);
-}
-
-// ── CATCH FLASH ──
-function showCatchFlash(txt){
-  var el=document.getElementById('catch-flash');
-  el.textContent=txt; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
-  setTimeout(function(){el.classList.remove('show');},750);
+  setTimeout(function(){t.classList.remove('show');},4500);
 }
 
 // ── POPUPS ──
@@ -1197,7 +1102,6 @@ function showSpiritPopup(){
   sf.classList.remove('show'); void sf.offsetWidth; sf.classList.add('show');
   document.getElementById('spirit-popup-emoji').textContent=(te[type]||'🐸')+'✨';
   document.getElementById('spirit-pts').textContent='+'+pts+' pts';
-  document.getElementById('spirit-msg').textContent='Your spirit appeared because you visited Wepa today!';
   document.getElementById('spirit-fact-text').textContent='💛 '+(SPIRIT_FACTS[type]||SPIRIT_FACTS.senior);
   document.getElementById('spirit-popup-bg').classList.add('open');
 }
@@ -1206,31 +1110,39 @@ function closeSpiritPopup(){
   gamePaused=false; animFrame=requestAnimationFrame(gameLoop);
 }
 
+// ── TUTORIAL ──
+function showTutorial(){
+  gamePaused=true;
+  document.getElementById('tutorial-overlay').classList.add('show');
+}
+function closeTutorial(){
+  document.getElementById('tutorial-overlay').classList.remove('show');
+  tutorialShown=true; gamePaused=false;
+  animFrame=requestAnimationFrame(gameLoop);
+  var hint=document.getElementById('tap-hint');
+  hint.classList.remove('active'); void hint.offsetWidth; hint.classList.add('active');
+}
+
+// ── PAUSE ──
+function openPause(){
+  gamePaused=true;
+  document.getElementById('pause-menu').classList.add('open');
+}
+function resumeGame(){
+  document.getElementById('pause-menu').classList.remove('open');
+  gamePaused=false; animFrame=requestAnimationFrame(gameLoop);
+}
+
 // ── SPIRIT TIMER ──
 function startSpiritTimer(){
   if(spiritTimerInterval) clearInterval(spiritTimerInterval);
   function upd(){
     var diff=spiritExpiry-new Date();
-    if(diff<=0){ clearInterval(spiritTimerInterval); document.getElementById('spirit-strip').classList.add('hidden'); spiritActive=false; return; }
-    var h=Math.floor(diff/3600000), m=Math.floor((diff%3600000)/60000), s=Math.floor((diff%60000)/1000);
+    if(diff<=0){clearInterval(spiritTimerInterval);document.getElementById('spirit-strip').classList.add('hidden');spiritActive=false;return;}
+    var h=Math.floor(diff/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
     document.getElementById('spirit-timer').textContent='⏳ '+h+'h '+(m<10?'0':'')+m+'m '+(s<10?'0':'')+s+'s';
   }
   upd(); spiritTimerInterval=setInterval(upd,1000);
-}
-
-// ── TUTORIAL ──
-function showTutorial(){
-  document.getElementById('tutorial-overlay').classList.add('show');
-  gamePaused=true;
-}
-function closeTutorial(){
-  document.getElementById('tutorial-overlay').classList.remove('show');
-  tutorialShown=true;
-  gamePaused=false;
-  animFrame=requestAnimationFrame(gameLoop);
-  // Show tap hint after tutorial
-  var hint=document.getElementById('tap-hint');
-  hint.classList.remove('active'); void hint.offsetWidth; hint.classList.add('active');
 }
 
 // ── GAME FLOW ──
@@ -1239,35 +1151,34 @@ function startGame(){
   document.getElementById('hud').classList.add('active');
   document.getElementById('dish-hud').classList.add('active');
   document.getElementById('gameCanvas').classList.add('active');
+  document.getElementById('fire-indicator').classList.add('active');
+  document.getElementById('fire-indicator').textContent=fireMode==='tap'?'🔫 TAP TO SHOOT':'🔫 AUTO FIRE';
+  setTimeout(function(){document.getElementById('fire-indicator').classList.remove('active');},3000);
   initGame(); gameRunning=true; gamePaused=false;
   animFrame=requestAnimationFrame(gameLoop);
-  // Show tutorial on first play
-  if(!tutorialShown){
-    setTimeout(showTutorial,600);
-  } else {
+  if(!tutorialShown){ setTimeout(showTutorial,500); }
+  else {
     var hint=document.getElementById('tap-hint');
     hint.classList.remove('active'); void hint.offsetWidth; hint.classList.add('active');
   }
 }
 
-function pauseGame(){
-  if(!gameRunning) return;
-  gamePaused=!gamePaused;
-  if(!gamePaused) animFrame=requestAnimationFrame(gameLoop);
-}
-
 async function endGame(){
-  gameRunning=false; cancelAnimationFrame(animFrame);
+  gameRunning=false; gamePaused=false;
+  cancelAnimationFrame(animFrame);
+  stopAutoFire();
+  document.getElementById('pause-menu').classList.remove('open');
   document.getElementById('hud').classList.remove('active');
   document.getElementById('dish-hud').classList.remove('active');
   document.getElementById('gameCanvas').classList.remove('active');
+  document.getElementById('fire-indicator').classList.remove('active');
   document.getElementById('dish-banner').classList.remove('show');
 
   var score=Math.floor(currentScore);
   var isNewBest=score>bestScore; if(isNewBest) bestScore=score;
   soundGameOver();
 
-  try {
+  try{
     await fetch(SB_URL+'/rest/v1/wepa_scores',{
       method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Prefer:'return=minimal'},
       body:JSON.stringify({passport_id:passportId,passport_type:passportData?.passport_type||'senior',score:score,countries_unlocked:sessionDishes})
@@ -1278,63 +1189,56 @@ async function endGame(){
         body:JSON.stringify({passport_id:passportId,country_code:c})
       }).catch(function(){});
     });
-  } catch(e){}
+  }catch(e){}
 
   document.getElementById('go-score').textContent=score;
   document.getElementById('go-best').textContent=isNewBest?'🎉 New personal best!':'Best: '+bestScore+' pts';
   document.getElementById('best-display').textContent=bestScore;
-
   var dishesEl=document.getElementById('go-dishes');
   dishesEl.innerHTML=sessionDishes.map(function(c){
     return '<div class="go-dish">'+WORLD[c].flag+' '+WORLD[c].dish+'</div>';
-  }).join('')||'<div style="color:var(--soft);font-size:14px;">Keep playing to cook more dishes!</div>';
-
+  }).join('')||'<div style="color:var(--soft);font-size:14px;">Keep shooting to cook dishes!</div>';
   showScreen('screen-gameover');
 }
 
-// ── DISCOVERY MAP ──
+// ── MAP + LEADERBOARD ──
 function showMap(){
-  var grid=document.getElementById('country-grid');
-  grid.innerHTML='';
+  var grid=document.getElementById('country-grid'); grid.innerHTML='';
   COUNTRY_CODES.forEach(function(code){
-    var c=WORLD[code];
-    var isDisc=discoveredCountries.includes(code);
+    var c=WORLD[code]; var isDisc=discoveredCountries.includes(code);
     var div=document.createElement('div');
     div.className='country-card '+(isDisc?'discovered':'undiscovered');
-    div.innerHTML='<div class="country-card-flag">'+c.flag+'</div>'
-      +'<div class="country-card-dish">'+c.dishEmoji+'</div>'
-      +'<div class="country-card-name">'+c.name+'</div>'
-      +'<div class="country-card-status">'+(isDisc?'✅ '+c.dish+' Mastered':'🔒 Undiscovered')+'</div>';
+    div.style.cursor='pointer';
+    div.innerHTML='<div class="country-card-flag">'+c.flag+'</div><div class="country-card-dish">'+c.dishEmoji+'</div><div class="country-card-name">'+c.name+'</div><div class="country-card-status">'+(isDisc?'✅ '+c.dish+' — tap for facts':'🔒 Undiscovered — tap to peek')+'</div>';
+    div.addEventListener('click',function(){openCountryModal(code);});
     grid.appendChild(div);
   });
-  document.getElementById('map-sub').textContent=discoveredCountries.length+' / '+COUNTRY_CODES.length+' countries discovered';
+  document.getElementById('map-sub').textContent=discoveredCountries.length+' / '+COUNTRY_CODES.length+' discovered';
   showScreen('screen-map');
 }
 
-// ── LEADERBOARD ──
 async function showLeaderboard(){
   showScreen('screen-leaderboard');
   document.getElementById('lb-prize').textContent=gameSettings.explorer_reward;
-  var now=new Date(), day=now.getDay();
+  var now=new Date(),day=now.getDay();
   var diff=(day===0?-6:1-day);
   var monday=new Date(now); monday.setDate(now.getDate()+diff); monday.setHours(0,0,0,0);
   document.getElementById('lb-week').textContent='Week of '+monday.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
-  try {
+  try{
     var res=await fetch(SB_URL+'/rest/v1/wepa_scores?played_at=gte.'+monday.toISOString()+'&order=score.desc&limit=10&select=score,passport_id,passport_type,wepa_passports(name)',{headers:{apikey:SB_KEY}});
     var rows=await res.json();
     var el=document.getElementById('lb-list');
-    if(!rows||rows.length===0){el.innerHTML='<div class="lb-empty">No scores yet this week.<br>Be the first! 🌍</div>';return;}
+    if(!rows||rows.length===0){el.innerHTML='<div class="lb-empty">No scores yet — be first! 🌍</div>';return;}
     el.innerHTML=rows.map(function(r,i){
       var name=r.wepa_passports?.name||'Explorer';
       var isYou=r.passport_id===passportId;
       var te={senior:'👑',kids:'🧒',pet:'🐾'};
       var rank=['🥇','🥈','🥉'][i]||(i+1);
-      return '<div class="lb-row"><div class="lb-rank">'+rank+'</div><div class="lb-name '+(isYou?'lb-you':'')+'">'+name+(isYou?' (You)':'')+'<br><small style="opacity:0.5;font-size:11px;">'+(te[r.passport_type]||'🐸')+'</small></div><div class="lb-score">'+r.score+'</div></div>';
+      return '<div class="lb-row"><div class="lb-rank">'+rank+'</div><div class="lb-name '+(isYou?'lb-you':'')+'">'+name+(isYou?' (You)':'')+'</div><div class="lb-score">'+r.score+'</div></div>';
     }).join('');
-  } catch(e){document.getElementById('lb-list').innerHTML='<div class="lb-empty">Could not load scores.</div>';}
+  }catch(e){document.getElementById('lb-list').innerHTML='<div class="lb-empty">Could not load.</div>';}
 }
 
-// ── SCREENS ──
 function showScreen(id){
   ['screen-loading','screen-auth','screen-start','screen-gameover','screen-map','screen-leaderboard'].forEach(function(s){
     document.getElementById(s).classList.add('hidden');
@@ -1349,26 +1253,21 @@ async function init(){
   var params=new URLSearchParams(window.location.search);
   passportId=params.get('passport');
   if(!passportId){showScreen('screen-auth');return;}
-  try {
+  try{
     var pRes=await fetch(SB_URL+'/rest/v1/wepa_passports?id=eq.'+passportId+'&select=*',{headers:{apikey:SB_KEY}});
     var passports=await pRes.json();
     if(!passports||passports.length===0){showScreen('screen-auth');return;}
     passportData=passports[0];
-
-    // Spirit check
     if(passportData.last_stamp_at){
-      var st=new Date(passportData.last_stamp_at);
-      var exp=new Date(st.getTime()+8*3600000);
+      var st=new Date(passportData.last_stamp_at),exp=new Date(st.getTime()+8*3600000);
       if(new Date()<exp){
         spiritActive=true; spiritExpiry=exp;
         var te={senior:'👑',kids:'🧒',pet:'🐾'};
         document.getElementById('spirit-strip').classList.remove('hidden');
-        document.getElementById('spirit-strip-title').textContent=(te[passportData.passport_type]||'🐸')+' Your Spirit is waiting in the game!';
+        document.getElementById('spirit-strip-title').textContent=(te[passportData.passport_type]||'🐸')+' Your Spirit is in the game!';
         startSpiritTimer();
       }
     }
-
-    // Settings
     var sRes=await fetch(SB_URL+'/rest/v1/wepa_settings?select=*',{headers:{apikey:SB_KEY}});
     var settings=await sRes.json();
     if(Array.isArray(settings)) settings.forEach(function(s){
@@ -1376,17 +1275,12 @@ async function init(){
       if(s.key==='explorer_featured_multiplier') gameSettings.featured_multiplier=parseInt(s.value)||3;
       if(s.key==='explorer_reward') gameSettings.explorer_reward=s.value;
     });
-
-    // Best score
     var bRes=await fetch(SB_URL+'/rest/v1/wepa_scores?passport_id=eq.'+passportId+'&order=score.desc&limit=1',{headers:{apikey:SB_KEY}});
     var best=await bRes.json();
     if(best&&best.length>0) bestScore=best[0].score;
-
-    // Discoveries
     var dRes=await fetch(SB_URL+'/rest/v1/wepa_discoveries?passport_id=eq.'+passportId,{headers:{apikey:SB_KEY}});
     var disc=await dRes.json();
     if(Array.isArray(disc)) discoveredCountries=disc.map(function(d){return d.country_code;});
-
     var te={senior:'👑',kids:'🧒',pet:'🐾'};
     document.getElementById('passport-badge').textContent=(te[passportData.passport_type]||'🐸')+' '+(passportData.name||'Explorer')+' · '+passportId;
     document.getElementById('best-display').textContent=bestScore;
@@ -1396,7 +1290,7 @@ async function init(){
       document.getElementById('featured-mult').textContent=gameSettings.featured_multiplier+'x';
     }
     showScreen('screen-start');
-  } catch(e){ console.error(e); showScreen('screen-auth'); }
+  }catch(e){console.error(e);showScreen('screen-auth');}
 }
 
 init();
