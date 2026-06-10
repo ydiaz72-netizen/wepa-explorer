@@ -793,12 +793,22 @@ function drawWepa(){
   ctx.ellipse(wepa.x,wy+wepa.size*0.55,wepa.size*0.45*sx,8*sy,0,0,Math.PI*2);
   ctx.fill();
 
+  // Solid background circle so Wepa is always visible
+  ctx.save();
+  ctx.fillStyle='rgba(255,255,255,0.92)';
+  ctx.beginPath();
+  ctx.arc(wepa.x, wy+bob, wepa.size*0.62, 0, Math.PI*2);
+  ctx.fill();
+  ctx.strokeStyle='rgba(232,168,62,0.5)';
+  ctx.lineWidth=2.5;
+  ctx.stroke();
+
   // Glow ring when catching
   if(wepa.catching||wepa.expression==='celebrate'){
-    ctx.strokeStyle='rgba(232,168,62,0.6)';
-    ctx.lineWidth=3;
+    ctx.strokeStyle='rgba(232,168,62,0.8)';
+    ctx.lineWidth=4;
     ctx.beginPath();
-    ctx.arc(wepa.x,wy+bob,wepa.size*0.65,0,Math.PI*2);
+    ctx.arc(wepa.x,wy+bob,wepa.size*0.75,0,Math.PI*2);
     ctx.stroke();
   }
 
