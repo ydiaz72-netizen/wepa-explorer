@@ -211,7 +211,19 @@
     #tap-hint.active { display: block; animation: hintFade 5s ease forwards; }
     @keyframes hintFade { 0%,50%{opacity:1;}100%{opacity:0;} }
 
-    /* ── LEVEL SYSTEM ── */
+    /* POWER-UP HUD */
+    #powerup-hud { position: fixed; top: 60px; right: 14px; z-index: 6; display: none; background: rgba(255,255,255,0.92); border-radius: 14px; padding: 8px 12px; border: 2px solid var(--gold); min-width: 130px; pointer-events: none; }
+    #powerup-hud.active { display: block; animation: puPop 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes puPop { from{transform:scale(0.5);opacity:0;}to{transform:scale(1);opacity:1;} }
+    .pu-emoji { font-size: 20px; display: inline-block; vertical-align: middle; margin-right: 4px; }
+    .pu-name { font-size: 11px; font-weight: 800; color: var(--text); display: block; }
+    .pu-track { height: 5px; background: rgba(26,26,26,0.1); border-radius: 99px; overflow: hidden; margin-top: 4px; }
+    .pu-fill { height: 100%; border-radius: 99px; transition: width 0.1s linear; }
+
+    /* COMBO DECAY BAR */
+    #combo-decay { position: fixed; top: 52px; left: 50%; transform: translateX(-50%); z-index: 6; display: none; width: 120px; height: 4px; background: rgba(26,26,26,0.1); border-radius: 99px; overflow: hidden; pointer-events: none; }
+    #combo-decay.active { display: block; }
+    #combo-decay-fill { height: 100%; background: var(--gold); border-radius: 99px; transition: width 0.05s linear; }
     #screen-levelcomplete { background: linear-gradient(180deg,#fff8ed,#ffefc8); }
     #screen-levelcomplete h2 { font-size: 30px; font-weight: 900; margin-bottom: 4px; }
     .lc-world { font-size: 44px; margin-bottom: 6px; }
@@ -405,6 +417,16 @@
     </div>
   </div>
 </div>
+
+<!-- POWER-UP HUD -->
+<div id="powerup-hud">
+  <span class="pu-emoji" id="pu-emoji">🥥</span>
+  <span class="pu-name" id="pu-name">Coconut Rapid Fire</span>
+  <div class="pu-track"><div class="pu-fill" id="pu-fill" style="width:100%;background:#8B4513;"></div></div>
+</div>
+
+<!-- COMBO DECAY BAR -->
+<div id="combo-decay"><div id="combo-decay-fill" style="width:100%"></div></div>
 
 <!-- BOSS HUD (in-game) -->
 <div id="boss-hud">
@@ -874,8 +896,8 @@ const SPIRIT_FACTS={senior:'Your loyalty makes Wepa what it is. Thank you. 👑'
 
 // ── LEVEL CONFIG ──
 const LEVELS = [
-  { num:1, name:'Puerto Rico', worldKey:'PR', scoreGate:400,
-    badChance:0, speed:2.8, spawnRate:90,
+  { num:1, name:'Puerto Rico', worldKey:'PR', scoreGate:1200,
+    badChance:0.10, speed:3.0, spawnRate:75,
     countries:['PR'],
     boss:{ name:'El Hambriento', emoji:'🧌', hp:3,
       quote:'"Ha! All this mofongo is MINE! You cannot stop me, little frog!"',
@@ -883,8 +905,8 @@ const LEVELS = [
       boast:'"Ay ay ay! That plantain hit me hard! But I will return STRONGER! 💪"',
       color:'#8B4513' }
   },
-  { num:2, name:'Germany', worldKey:'DE', scoreGate:700,
-    badChance:0.18, speed:3.2, spawnRate:80,
+  { num:2, name:'Germany', worldKey:'DE', scoreGate:2500,
+    badChance:0.22, speed:3.5, spawnRate:65,
     countries:['PR','DE'],
     boss:{ name:'Der Fresser', emoji:'👹', hp:3,
       quote:'"Ich esse ALLES! Your pretzels are no match for my hunger!"',
@@ -892,8 +914,8 @@ const LEVELS = [
       boast:'"Mein Gott! A pretzel hit me! Impossible! I shall return with MORE appetite! 💪"',
       color:'#4ecdc4' }
   },
-  { num:3, name:'Morocco', worldKey:'MA', scoreGate:1100,
-    badChance:0.25, speed:3.6, spawnRate:70,
+  { num:3, name:'Morocco', worldKey:'MA', scoreGate:4000,
+    badChance:0.30, speed:4.0, spawnRate:55,
     countries:['PR','DE','MA'],
     boss:{ name:'The Sand Thief', emoji:'🌀', hp:4,
       quote:'"I hide in the sands! You will NEVER find all my stolen tagines!"',
@@ -901,8 +923,8 @@ const LEVELS = [
       boast:'"The mint tea! My one weakness! I retreat to the dunes... for NOW! 💪"',
       color:'#e8965a' }
   },
-  { num:4, name:'Japan', worldKey:'JP', scoreGate:1600,
-    badChance:0.32, speed:4.0, spawnRate:60,
+  { num:4, name:'Japan', worldKey:'JP', scoreGate:6000,
+    badChance:0.38, speed:4.6, spawnRate:48,
     countries:['PR','DE','MA','JP'],
     boss:{ name:'Oni the Snatcher', emoji:'👺', hp:4,
       quote:'"RAHHH! I move between lanes faster than your bullets! All ramen is MINE!"',
@@ -910,8 +932,8 @@ const LEVELS = [
       boast:'"NANI?! A bento explosion! You are worthy, little frog! But the final world awaits... 💪"',
       color:'#ff6b9d' }
   },
-  { num:5, name:'All Worlds', worldKey:'MX', scoreGate:2200,
-    badChance:0.40, speed:4.5, spawnRate:50,
+  { num:5, name:'All Worlds', worldKey:'MX', scoreGate:9000,
+    badChance:0.45, speed:5.2, spawnRate:40,
     countries:['PR','DE','MA','JP','MX'],
     boss:{ name:'The Great Glutton', emoji:'😈', hp:5,
       quote:'"I am ALL the bosses combined! Every dish in every world belongs to ME!!!"',
@@ -921,7 +943,28 @@ const LEVELS = [
   }
 ];
 
-// ── BOSS STATE ──
+// ── POWER-UPS ──
+const POWERUPS = [
+  { id:'coconut',   emoji:'🥥', name:'Coconut Rapid Fire', country:'PR', color:'#8B4513', duration:8000,
+    desc:'3x fire rate!', effect:'rapidfire' },
+  { id:'beer',      emoji:'🍺', name:'Beer Wide Shot',     country:'DE', color:'#4ecdc4', duration:6000,
+    desc:'Hits all 3 lanes!', effect:'wideshot' },
+  { id:'lantern',   emoji:'🪔', name:'Lantern Slow-Mo',    country:'MA', color:'#e8965a', duration:7000,
+    desc:'Enemies half speed!', effect:'slowmo' },
+  { id:'matcha',    emoji:'🍵', name:'Matcha Shield',      country:'JP', color:'#2d9e6b', duration:0,
+    desc:'Next hit does nothing!', effect:'shield' },
+  { id:'chili',     emoji:'🌶️', name:'Chili Fire Burst',   country:'MX', color:'#e17055', duration:0,
+    desc:'5 rapid bullets!', effect:'burst' },
+  { id:'coffee',    emoji:'☕', name:'Coffee Score Boost',  country:'CO', color:'#fdcb6e', duration:10000,
+    desc:'3x score multiplier!', effect:'scoreboost' },
+  { id:'mate',      emoji:'🧉', name:'Maté Magnet',        country:'BR', color:'#00b894', duration:8000,
+    desc:'Food pulled to Wepa!', effect:'magnet' },
+];
+
+// ── POWER-UP STATE ──
+let activePowerup=null, powerupTimer=null;
+let powerupSpawnTimer=0, powerupSpawnInterval=900; // frames between spawns
+let comboDecayTimer=0, comboDecayMax=180; // frames before combo decays
 let currentLevelNum=1, levelConfig=LEVELS[0];
 let bossActive=false, bossPhase=false;
 let boss=null;
@@ -969,6 +1012,10 @@ function initGame(){
   dishCompleteShowing=false; envOffset=0;
   bossActive=false; bossPhase=false; boss=null;
   bossWeaponSpawned=false; bossWeaponCollected=false;
+  activePowerup=null; powerupSpawnTimer=0;
+  if(powerupTimer) clearTimeout(powerupTimer);
+  document.getElementById('powerup-hud').classList.remove('active');
+  document.getElementById('combo-decay').classList.remove('active');
   wepa={
     x:W*0.12, lane:1, laneT:1, targetLane:1,
     size:56, expression:'happy', expressionT:0,
@@ -1016,22 +1063,18 @@ function fireBullet(){
   var c=WORLD[currentCountry]||WORLD['PR'];
   var bulletEmoji=bossWeaponCollected?(levelConfig.boss.weapon):c.ingredients[currentDish.length%c.ingredients.length];
   var bulletSize=bossWeaponCollected?36:28;
-  bullets.push({
-    x:wepa.x+wepa.size*0.8,
-    y:laneY(wepa.lane),
-    lane:wepa.lane,
-    emoji:bulletEmoji,
-    speed:bossWeaponCollected?16:12+speed*0.5,
-    size:bulletSize,
-    active:true,
-    isBossWeaponBullet:bossWeaponCollected
-  });
+  var bspeed=bossWeaponCollected?16:(activePowerup==='rapidfire'?18:12+speed*0.5);
+
+  if(activePowerup==='wideshot'){
+    for(var l=0;l<3;l++){
+      bullets.push({x:wepa.x+wepa.size*0.8,y:laneY(l),lane:l,emoji:bulletEmoji,speed:bspeed,size:bulletSize,active:true,isBossWeaponBullet:bossWeaponCollected});
+    }
+  } else {
+    bullets.push({x:wepa.x+wepa.size*0.8,y:laneY(wepa.lane),lane:wepa.lane,emoji:bulletEmoji,speed:bspeed,size:bulletSize,active:true,isBossWeaponBullet:bossWeaponCollected});
+  }
   soundShoot();
   wepa.expression='shooting'; wepa.expressionT=8;
-  if(bossWeaponCollected){
-    // Flash
-    showCatchFlash(t('fireHit'));
-  }
+  if(bossWeaponCollected) showCatchFlash(t('fireHit'));
 }
 
 // ── PICK COUNTRY ──
@@ -1212,7 +1255,82 @@ function spawnItem(){
     speedMult:isBad?0.8:1});
 }
 
-// ── BULLET-ITEM COLLISION ──
+// ── POWER-UP ENGINE ──
+function spawnPowerup(){
+  if(bossPhase||bossActive) return;
+  var pu=POWERUPS[Math.floor(Math.random()*POWERUPS.length)];
+  var lane=Math.floor(Math.random()*3);
+  items.push({
+    x:W+70, lane:lane, y:laneY(lane),
+    emoji:pu.emoji, code:null, size:58, color:pu.color,
+    isSpirit:false, isGolden:false, isBad:false, isBossWeapon:false,
+    isPowerup:true, powerupId:pu.id,
+    hit:false, missed:false, wobble:Math.random()*Math.PI*2, speedMult:0.75
+  });
+}
+
+function activatePowerup(id){
+  var pu=POWERUPS.find(function(p){return p.id===id;});
+  if(!pu) return;
+  // Clear existing
+  if(powerupTimer) clearTimeout(powerupTimer);
+  activePowerup=id;
+
+  // Apply instant effects
+  if(pu.effect==='burst'){
+    for(var i=0;i<5;i++){
+      setTimeout(function(){ if(gameRunning) fireBulletForced(); },i*80);
+    }
+    activePowerup=null;
+    return;
+  }
+  if(pu.effect==='shield'){
+    // Shield is handled in takeDamage
+    showToast(pu.emoji,'🛡️ '+pu.name,pu.desc);
+    // Auto-expire after one hit or 15 sec
+    powerupTimer=setTimeout(function(){ activePowerup=null; hidePowerupHUD(); },15000);
+    showPowerupHUD(pu);
+    return;
+  }
+
+  // Timed effects
+  showPowerupHUD(pu);
+  showToast(pu.emoji,'⚡ '+pu.name,pu.desc);
+  powerupTimer=setTimeout(function(){
+    activePowerup=null;
+    hidePowerupHUD();
+  },pu.duration);
+}
+
+function fireBulletForced(){
+  var c=WORLD[currentCountry]||WORLD['PR'];
+  var bulletEmoji=c.ingredients[0];
+  for(var l=0;l<3;l++){
+    bullets.push({x:wepa.x+wepa.size*0.8,y:laneY(l),lane:l,emoji:bulletEmoji,speed:14,size:28,active:true,isBossWeaponBullet:false});
+  }
+  soundShoot();
+}
+
+function showPowerupHUD(pu){
+  document.getElementById('pu-emoji').textContent=pu.emoji;
+  document.getElementById('pu-name').textContent=pu.name;
+  document.getElementById('pu-fill').style.background=pu.color;
+  document.getElementById('pu-fill').style.width='100%';
+  document.getElementById('powerup-hud').classList.add('active');
+  if(pu.duration>0){
+    var start=Date.now();
+    var interval=setInterval(function(){
+      var elapsed=Date.now()-start;
+      var pct=Math.max(0,100-(elapsed/pu.duration*100));
+      document.getElementById('pu-fill').style.width=pct+'%';
+      if(pct<=0) clearInterval(interval);
+    },100);
+  }
+}
+
+function hidePowerupHUD(){
+  document.getElementById('powerup-hud').classList.remove('active');
+}
 function checkCollisions(){
   bullets.forEach(function(b){
     if(!b.active) return;
@@ -1244,6 +1362,8 @@ function checkCollisions(){
         item.hit=true;
         if(item.isBossWeapon){
           collectBossWeapon(item);
+        } else if(item.isPowerup){
+          collectPowerup(item);
         } else if(item.isSpirit){ spiritCaught=true; collectHit(item); showSpiritPopup(); }
         else if(item.isGolden){ goldenShown=true; collectHit(item); showGoldenPopup(); }
         else if(item.isBad){ takeDamage(item.x,item.y); }
@@ -1259,6 +1379,13 @@ function checkCollisions(){
       item.hit=true; takeDamage(wepa.x,laneY(wepa.lane));
     }
   });
+}
+
+function collectPowerup(item){
+  spawnParticles(item.x,item.y,item.color,16);
+  soundDish();
+  wepa.expression='celebrate'; wepa.expressionT=25;
+  activatePowerup(item.powerupId);
 }
 
 function collectBossWeapon(item){
@@ -1294,6 +1421,7 @@ function collectHit(item){
   var mult=isFeatured?gameSettings.featured_multiplier:1;
   var pts=40*mult*Math.max(1,combo);
   currentScore+=pts; combo++;
+  comboDecayTimer=0; // reset decay on successful hit
   clearTimeout(comboTimer);
   comboTimer=setTimeout(function(){combo=0;document.getElementById('hud-combo').classList.remove('show');},2000);
   spawnParticles(item.x,item.y,item.color||'#e8a83e',12);
@@ -1311,6 +1439,14 @@ function collectHit(item){
 }
 
 function takeDamage(x,y){
+  // Shield absorbs one hit
+  if(activePowerup==='shield'){
+    activePowerup=null;
+    hidePowerupHUD();
+    spawnParticles(x||wepa.x,y||laneY(wepa.lane),'#2d9e6b',10);
+    showCatchFlash('🛡️ BLOCKED!');
+    return;
+  }
   wepa.missed++;
   wepa.expression='hurt'; wepa.expressionT=30;
   soundHeartLost();
@@ -1415,6 +1551,18 @@ function drawWepa(){
   ctx.save();
   ctx.fillStyle='rgba(0,0,0,0.12)';
   ctx.beginPath(); ctx.ellipse(wepa.x+shakeX,wy+wepa.size*0.58,wepa.size*0.45,7,0,0,Math.PI*2); ctx.fill();
+
+  // Power-up glow
+  if(activePowerup){
+    var pu=POWERUPS.find(function(p){return p.id===activePowerup;});
+    if(pu){
+      ctx.save();
+      ctx.strokeStyle=pu.color; ctx.lineWidth=4;
+      ctx.shadowColor=pu.color; ctx.shadowBlur=18+Math.sin(frameCount*0.2)*6;
+      ctx.beginPath(); ctx.arc(wepa.x+shakeX,wy+bob,wepa.size*0.8,0,Math.PI*2); ctx.stroke();
+      ctx.restore();
+    }
+  }
 
   // White circle bg
   ctx.fillStyle=wepa.expression==='hurt'?'rgba(255,100,100,0.93)':'rgba(255,255,255,0.93)';
@@ -1602,8 +1750,29 @@ function drawItems(){
       ctx.fillText(item.emoji,0,0);
       ctx.font='bold 11px sans-serif'; ctx.fillStyle='#ffaaaa';
       ctx.fillText('⚠️ DODGE',0,item.size*0.92);
+    } else if(item.isPowerup){
+      // Golden spinning power-up
+      var spin=frameCount*0.06;
+      ctx.translate(item.x,iy);
+      ctx.rotate(Math.sin(spin)*0.15);
+      var ps2=1+Math.sin(frameCount*0.12)*0.12;
+      ctx.scale(ps2,ps2);
+      // Outer glow ring
+      ctx.shadowColor='rgba(232,168,62,0.9)'; ctx.shadowBlur=24;
+      ctx.strokeStyle='rgba(232,168,62,0.8)'; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.arc(0,0,item.size*0.78,0,Math.PI*2); ctx.stroke();
+      // Colored bg
+      ctx.fillStyle=item.color; ctx.globalAlpha=0.9;
+      ctx.beginPath(); ctx.arc(0,0,item.size*0.72,0,Math.PI*2); ctx.fill();
+      ctx.globalAlpha=1;
+      // Emoji
+      ctx.font=item.size*0.82+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(item.emoji,0,0);
+      // POWER-UP label
+      ctx.shadowBlur=0;
+      ctx.font='bold 11px sans-serif'; ctx.fillStyle='#fff';
+      ctx.fillText('⚡ POWER UP',0,item.size*0.92);
     } else {
-      // Good food bubble
       ctx.translate(item.x,iy);
       ctx.fillStyle=item.color||'#e8a83e'; ctx.globalAlpha=0.88;
       ctx.beginPath(); ctx.arc(0,0,item.size*0.72,0,Math.PI*2); ctx.fill();
@@ -1637,9 +1806,35 @@ function gameLoop(){
   if(!gameRunning||gamePaused) return;
   frameCount++; levelFrameCount++;
 
-  speed=levelConfig.speed+(Math.floor(levelFrameCount/600)*0.2);
+  speed=levelConfig.speed+(Math.floor(levelFrameCount/300)*0.25); // faster ramp
   document.getElementById('hud-level').textContent='World '+currentLevelNum+' / 5';
   document.getElementById('hud-score').textContent=Math.floor(currentScore);
+
+  // Power-up spawn
+  if(!bossPhase&&!bossActive){
+    powerupSpawnTimer++;
+    if(powerupSpawnTimer>=powerupSpawnInterval){
+      powerupSpawnTimer=0;
+      powerupSpawnInterval=800+Math.floor(Math.random()*400);
+      spawnPowerup();
+    }
+  }
+
+  // Combo decay bar
+  if(combo>1){
+    comboDecayTimer++;
+    document.getElementById('combo-decay').classList.add('active');
+    var decayPct=Math.max(0,100-(comboDecayTimer/comboDecayMax*100));
+    document.getElementById('combo-decay-fill').style.width=decayPct+'%';
+    if(comboDecayTimer>=comboDecayMax){
+      combo=0; comboDecayTimer=0;
+      document.getElementById('hud-combo').classList.remove('show');
+      document.getElementById('combo-decay').classList.remove('active');
+    }
+  } else {
+    comboDecayTimer=0;
+    document.getElementById('combo-decay').classList.remove('active');
+  }
 
   // Score gate check
   if(!bossPhase&&!bossActive) checkLevelComplete();
@@ -1647,11 +1842,27 @@ function gameLoop(){
 
   var spawnRate=bossPhase?999:(levelConfig.spawnRate||80);
   if(frameCount%spawnRate===0) spawnItem();
-  if(!bossPhase) currentScore+=speed*0.025;
+
+  // Score — apply boost powerup
+  var scoreBoost=activePowerup==='scoreboost'?3:1;
+  if(!bossPhase) currentScore+=speed*0.025*scoreBoost;
   envOffset+=speed*0.4;
 
-  // Move items
-  items.forEach(function(item){item.x-=speed*(item.speedMult||1);});
+  // Slowmo effect
+  var itemSpeed=activePowerup==='slowmo'?speed*0.4:speed;
+  items.forEach(function(item){ item.x-=itemSpeed*(item.speedMult||1); });
+
+  // Magnet effect — pull food toward Wepa's lane
+  if(activePowerup==='magnet'){
+    items.forEach(function(item){
+      if(!item.isBad&&!item.isPowerup&&!item.isBossWeapon&&!item.isSpirit&&!item.hit&&!item.missed){
+        if(item.lane!==wepa.lane){
+          item.lane=wepa.lane;
+          item.y=laneY(wepa.lane);
+        }
+      }
+    });
+  }
   // Move bullets
   bullets.forEach(function(b){if(b.active)b.x+=b.speed;});
   bullets.forEach(function(b){if(b.x>W+50)b.active=false;});
@@ -1662,8 +1873,8 @@ function gameLoop(){
   items.forEach(function(item){
     if(!item.hit&&!item.missed&&item.x<wepa.x-60){
       item.missed=true;
-      if(!item.isBad&&!item.isSpirit&&!item.isGolden&&!item.isBossWeapon&&!dishCompleteShowing){
-        combo=0; document.getElementById('hud-combo').classList.remove('show');
+      if(!item.isBad&&!item.isSpirit&&!item.isGolden&&!item.isBossWeapon&&!item.isPowerup&&!dishCompleteShowing){
+        combo=0; comboDecayTimer=0; document.getElementById('hud-combo').classList.remove('show');
       }
     }
   });
@@ -1903,6 +2114,9 @@ async function endGame(){
   document.getElementById('gameCanvas').classList.remove('active');
   document.getElementById('fire-indicator').classList.remove('active');
   document.getElementById('dish-banner').classList.remove('show');
+  activePowerup=null; if(powerupTimer) clearTimeout(powerupTimer);
+  document.getElementById('powerup-hud').classList.remove('active');
+  document.getElementById('combo-decay').classList.remove('active');
 
   var score=Math.floor(currentScore);
   var isNewBest=score>bestScore; if(isNewBest) bestScore=score;
