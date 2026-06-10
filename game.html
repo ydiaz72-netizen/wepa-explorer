@@ -259,14 +259,14 @@
   <div class="tut-title">How to Play 🐸</div>
   <div class="tut-cards">
     <div class="tut-card good">
-      <div class="tut-card-emoji">🫔</div>
-      <div class="tut-card-label">✅ TAP!</div>
-      <div class="tut-card-sub">Colorful food = points!</div>
+      <div class="tut-card-emoji">👆</div>
+      <div class="tut-card-label">TAP</div>
+      <div class="tut-card-sub">Catch food = points!</div>
     </div>
     <div class="tut-card bad">
-      <div class="tut-card-emoji">💀</div>
-      <div class="tut-card-label">❌ AVOID!</div>
-      <div class="tut-card-sub">Red skulls = lose a heart!</div>
+      <div class="tut-card-emoji">👆👇</div>
+      <div class="tut-card-label">SWIPE UP/DOWN</div>
+      <div class="tut-card-sub">Dodge 💀 danger items!</div>
     </div>
   </div>
   <button class="btn-primary" style="font-size:20px;padding:20px 48px;" onclick="closeTutorial()">Let's Cook! 🍳</button>
@@ -656,59 +656,110 @@ function updateLivesHUD(){
   }
 }
 
-// ── CLOSEST ITEM ──
-function getClosestItem(){
-  var zone=W*0.48; // wider catch zone = more reaction time
-  var closest=null; var closestD=Infinity;
-  var closestGood=null; var closestGoodD=Infinity;
+// ── INPUT — swipe to dodge, tap to catch ──
+var touchStartX=0, touchStartY=0, touchStartTime=0;
+var SWIPE_THRESHOLD=30; // min px to count as swipe
 
-  items.forEach(function(item){
-    if(item.caught||item.missed) return;
-    var d=item.x-wepa.x;
-    if(d>0&&d<zone){
-      if(!item.isBad&&d<closestGoodD){ closestGood=item; closestGoodD=d; }
-      if(d<closestD){ closest=item; closestD=d; }
-    }
-  });
-  // Always prefer good items — only return bad if no good item in zone
-  return closestGood || (closest&&closest.isBad?null:closest);
-}
-
-// ── TAP ──
-function onTap(){
-  if(!gameRunning||gamePaused||dishCompleteShowing) return;
-  // Unlock audio context on first tap (mobile requirement)
+canvas.addEventListener('touchstart',function(e){
+  e.preventDefault();
   getAudio();
-  var target=getClosestItem();
-  if(!target) return;
-  wepa.targetLane=target.lane; wepa.catching=true; wepa.catchT=1;
-  target.caught=true;
-  if(target.isSpirit){ spiritCaught=true; showSpiritPopup(); soundGoodCatch(); }
-  else if(target.isGolden){ goldenShown=true; collectItem(target); showGoldenPopup(); soundGoodCatch(); }
-  else if(target.isBad){ takeDamage(); }
-  else { collectItem(target); wepa.expression='catching'; wepa.expressionT=20; }
+  touchStartX=e.touches[0].clientX;
+  touchStartY=e.touches[0].clientY;
+  touchStartTime=Date.now();
+},{passive:false});
+
+canvas.addEventListener('touchend',function(e){
+  e.preventDefault();
+  if(!gameRunning||gamePaused) return;
+  var dx=e.changedTouches[0].clientX-touchStartX;
+  var dy=e.changedTouches[0].clientY-touchStartY;
+  var dt=Date.now()-touchStartTime;
+  var absDx=Math.abs(dx), absDy=Math.abs(dy);
+
+  if(absDy>SWIPE_THRESHOLD&&absDy>absDx&&dt<400){
+    // SWIPE — dodge
+    if(dy<0) swipeLane(-1); // swipe up → move up a lane
+    else     swipeLane(1);  // swipe down → move down a lane
+  } else if(absDx<20&&absDy<20&&dt<300){
+    // TAP — catch
+    onTap();
+  }
+},{passive:false});
+
+// Mouse/keyboard support
+var mouseStartY=0;
+canvas.addEventListener('mousedown',function(e){ mouseStartY=e.clientY; });
+canvas.addEventListener('mouseup',function(e){
+  if(!gameRunning||gamePaused) return;
+  var dy=e.clientY-mouseStartY;
+  if(Math.abs(dy)>SWIPE_THRESHOLD){ swipeLane(dy>0?1:-1); }
+  else { getAudio(); onTap(); }
+});
+document.addEventListener('keydown',function(e){
+  if(!gameRunning||gamePaused) return;
+  if(e.code==='Space'||e.code==='ArrowRight'){ e.preventDefault(); getAudio(); onTap(); }
+  if(e.code==='ArrowUp')  { e.preventDefault(); swipeLane(-1); }
+  if(e.code==='ArrowDown'){ e.preventDefault(); swipeLane(1); }
+});
+
+function swipeLane(dir){
+  var newLane=Math.max(0,Math.min(2,wepa.targetLane+dir));
+  if(newLane===wepa.targetLane) return;
+  wepa.targetLane=newLane;
+  wepa.laneT=0; // trigger smooth transition
+  // Small dodge sound
+  playTone(600,'sine',0.08,0.15);
 }
 
 function takeDamage(){
   wepa.missed++;
   wepa.expression='hurt'; wepa.expressionT=30;
   soundHeartLost();
-  // Red screen flash
   var hf=document.getElementById('hit-flash');
   hf.classList.remove('show'); void hf.offsetWidth; hf.classList.add('show');
-  // Floating heart lost
   var hl=document.getElementById('heart-lost');
   hl.classList.remove('show'); void hl.offsetWidth; hl.classList.add('show');
-  // Shake Wepa
   wepa.shaking=8;
   combo=0; document.getElementById('hud-combo').classList.remove('show');
   updateLivesHUD();
   spawnParticles(wepa.x,laneY(wepa.currentLane),'#e74c3c',10);
   if(wepa.missed>=3){ setTimeout(endGame,400); }
 }
-canvas.addEventListener('click',onTap);
-canvas.addEventListener('touchstart',function(e){e.preventDefault();onTap();},{passive:false});
-document.addEventListener('keydown',function(e){if(e.code==='Space'){e.preventDefault();onTap();}});
+
+// ── TAP — catch nearest good item ──
+function onTap(){
+  var target=getClosestGoodItem();
+  if(!target) return;
+  wepa.catching=true; wepa.catchT=1;
+  target.caught=true;
+  if(target.isSpirit){ spiritCaught=true; showSpiritPopup(); soundGoodCatch(); }
+  else if(target.isGolden){ goldenShown=true; collectItem(target); showGoldenPopup(); soundGoodCatch(); }
+  else { collectItem(target); wepa.expression='catching'; wepa.expressionT=20; }
+}
+
+// ── CLOSEST GOOD ITEM (any lane, tap catches across lanes) ──
+function getClosestGoodItem(){
+  var zone=W*0.48;
+  var closest=null; var closestD=Infinity;
+  items.forEach(function(item){
+    if(item.caught||item.missed||item.isBad) return;
+    var d=item.x-wepa.x;
+    if(d>0&&d<zone&&d<closestD){ closest=item; closestD=d; }
+  });
+  return closest;
+}
+
+// ── OLD getClosestItem kept for target ring only ──
+function getClosestItem(){
+  var zone=W*0.48;
+  var closest=null; var closestD=Infinity;
+  items.forEach(function(item){
+    if(item.caught||item.missed||item.isBad) return;
+    var d=item.x-wepa.x;
+    if(d>0&&d<zone&&d<closestD){ closest=item; closestD=d; }
+  });
+  return closest;
+}
 
 // ── SPAWN ──
 function spawnItem(){
@@ -1064,11 +1115,22 @@ function gameLoop(){
   // Move items
   items.forEach(function(item){ item.x-=speed*(item.speedMult||1); });
 
-  // Miss check — missing good items just resets combo, no heart loss
+  // Auto-hit: bad items that reach Wepa's lane hit automatically
+  items.forEach(function(item){
+    if(item.caught||item.missed||!item.isBad) return;
+    var sameLane=item.lane===wepa.currentLane||item.lane===wepa.targetLane;
+    var atWepa=item.x<=wepa.x+wepa.size*0.7&&item.x>=wepa.x-wepa.size*0.5;
+    if(sameLane&&atWepa){
+      item.caught=true; // remove it
+      takeDamage();
+    }
+  });
+
+  // Miss check — no penalty during dish banner celebration
   items.forEach(function(item){
     if(!item.caught&&!item.missed&&item.x<wepa.x-50){
       item.missed=true;
-      if(!item.isSpirit&&!item.isGolden&&!item.isBad){
+      if(!item.isSpirit&&!item.isGolden&&!item.isBad&&!dishCompleteShowing){
         combo=0; document.getElementById('hud-combo').classList.remove('show');
       }
     }
@@ -1082,6 +1144,16 @@ function gameLoop(){
   drawItems();
   drawWepa();
   drawParticles();
+
+  // Danger warning — flashing ⚠️ above Wepa when bad item in same lane
+  items.forEach(function(item){
+    if(item.caught||item.missed||!item.isBad) return;
+    if(item.lane===wepa.targetLane&&item.x<W*0.65&&item.x>wepa.x+40){
+      var alpha=0.5+Math.sin(frameCount*0.4)*0.5;
+      ctx.save(); ctx.globalAlpha=alpha; ctx.font='26px serif'; ctx.textAlign='center';
+      ctx.fillText('⚠️',wepa.x,laneY(item.lane)-55); ctx.restore();
+    }
+  });
 
   animFrame=requestAnimationFrame(gameLoop);
 }
