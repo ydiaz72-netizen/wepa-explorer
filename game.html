@@ -171,7 +171,29 @@
     .lb-score { font-size: 16px; font-weight: 900; color: var(--gold-dark); }
     .lb-empty { font-size: 15px; color: var(--soft); padding: 32px; text-align: center; }
 
-    /* TAP HINT */
+    /* TUTORIAL OVERLAY */
+    #tutorial-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.82); z-index: 80; display: none; align-items: center; justify-content: center; flex-direction: column; padding: 24px; text-align: center; }
+    #tutorial-overlay.show { display: flex; }
+    .tut-title { font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 24px; }
+    .tut-cards { display: flex; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; justify-content: center; }
+    .tut-card { background: #fff; border-radius: 20px; padding: 20px 24px; width: 140px; text-align: center; }
+    .tut-card-emoji { font-size: 48px; margin-bottom: 8px; }
+    .tut-card-label { font-size: 14px; font-weight: 900; margin-bottom: 4px; }
+    .tut-card-sub { font-size: 12px; color: var(--soft); font-weight: 600; }
+    .tut-card.good { border: 3px solid #2d7a4f; }
+    .tut-card.good .tut-card-label { color: #2d7a4f; }
+    .tut-card.bad  { border: 3px solid #e74c3c; }
+    .tut-card.bad  .tut-card-label { color: #e74c3c; }
+
+    /* HIT FLASH */
+    #hit-flash { position: fixed; inset: 0; pointer-events: none; z-index: 70; display: none; background: rgba(231,76,60,0.45); }
+    #hit-flash.show { display: block; animation: hitFlash 0.5s ease forwards; }
+    @keyframes hitFlash { 0%{opacity:1;} 100%{opacity:0;} }
+
+    /* HEART LOST */
+    #heart-lost { position: fixed; top: 60px; left: 50%; transform: translateX(-50%); font-size: 40px; pointer-events: none; display: none; z-index: 35; }
+    #heart-lost.show { display: block; animation: heartLost 0.8s ease forwards; }
+    @keyframes heartLost { 0%{opacity:1;transform:translateX(-50%) scale(1.5);} 100%{opacity:0;transform:translateX(-50%) translateY(-60px) scale(0.5);} }
     #tap-hint { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); font-size: 16px; font-weight: 900; color: var(--gold-dark); background: rgba(255,255,255,0.9); padding: 10px 22px; border-radius: 99px; border: 2px solid var(--gold); pointer-events: none; display: none; box-shadow: 0 4px 16px rgba(232,168,62,0.3); }
     #tap-hint.active { display: block; animation: hintFade 4s ease forwards; }
     @keyframes hintFade { 0%,50%{opacity:1;}100%{opacity:0;} }
@@ -232,6 +254,28 @@
   </div>
   <div class="dish-slots" id="dish-slots"></div>
 </div>
+
+<!-- TUTORIAL -->
+<div id="tutorial-overlay">
+  <div class="tut-title">How to Play 🐸</div>
+  <div class="tut-cards">
+    <div class="tut-card good">
+      <div class="tut-card-emoji">🫔</div>
+      <div class="tut-card-label">✅ TAP!</div>
+      <div class="tut-card-sub">Colorful food = points!</div>
+    </div>
+    <div class="tut-card bad">
+      <div class="tut-card-emoji">💀</div>
+      <div class="tut-card-label">❌ AVOID!</div>
+      <div class="tut-card-sub">Red skulls = lose a heart!</div>
+    </div>
+  </div>
+  <button class="btn-primary" style="font-size:20px;padding:20px 48px;" onclick="closeTutorial()">Let's Cook! 🍳</button>
+</div>
+
+<!-- HIT FLASH -->
+<div id="hit-flash"></div>
+<div id="heart-lost">💔</div>
 
 <!-- CANVAS -->
 <canvas id="gameCanvas"></canvas>
@@ -317,7 +361,32 @@
 const SB_URL='https://dgkcmyyafzhbtzdvtvji.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRna2NteXlhZnpoYnR6ZHZ0dmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1OTEzMjcsImV4cCI6MjA5MDE2NzMyN30.itt1fnbd8gcPKKDmTmdsaoi2e5yzXoNwDnzR8jD3q9M';
 
-// ── WORLD DATA ──
+// ── SOUND ENGINE (Web Audio API — no files needed) ──
+var audioCtx = null;
+function getAudio(){
+  if(!audioCtx){ try{ audioCtx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
+  return audioCtx;
+}
+function playTone(freq, type, duration, vol, startFreq){
+  var ac=getAudio(); if(!ac) return;
+  try {
+    var osc=ac.createOscillator();
+    var gain=ac.createGain();
+    osc.connect(gain); gain.connect(ac.destination);
+    osc.type=type||'sine';
+    if(startFreq){ osc.frequency.setValueAtTime(startFreq,ac.currentTime); osc.frequency.exponentialRampToValueAtTime(freq,ac.currentTime+duration*0.5); }
+    else { osc.frequency.setValueAtTime(freq,ac.currentTime); }
+    gain.gain.setValueAtTime(vol||0.3,ac.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+duration);
+    osc.start(ac.currentTime); osc.stop(ac.currentTime+duration);
+  } catch(e){}
+}
+function soundGoodCatch(){ playTone(880,'sine',0.15,0.25,440); setTimeout(function(){ playTone(1320,'sine',0.12,0.2); },80); }
+function soundBadCatch(){ playTone(150,'sawtooth',0.3,0.35,200); playTone(100,'square',0.25,0.2); }
+function soundDishComplete(){ var notes=[523,659,784,1047]; notes.forEach(function(n,i){ setTimeout(function(){ playTone(n,'sine',0.3,0.3); },i*120); }); }
+function soundLevelUp(){ var notes=[523,784,1047,1319]; notes.forEach(function(n,i){ setTimeout(function(){ playTone(n,'sine',0.2,0.25); },i*80); }); }
+function soundGameOver(){ var notes=[440,330,220,165]; notes.forEach(function(n,i){ setTimeout(function(){ playTone(n,'sawtooth',0.4,0.2); },i*180); }); }
+function soundHeartLost(){ playTone(200,'sawtooth',0.5,0.4,350); }
 const WORLD = {
   PR: {
     name:'Puerto Rico', flag:'🇵🇷',
@@ -499,7 +568,11 @@ const SPIRIT_FACTS = {
   pet:'Every paw print at Wepa tells a story. Your companion is part of our family forever. 🐾'
 };
 
+// ── BAD ITEMS ──
+const BAD_ITEMS = ['💀','🦠','⚡','🚫','💣'];
+
 // ── STATE ──
+let tutorialShown = false;
 let passportId=null, passportData=null;
 let gameSettings={featured_country:'PR',featured_multiplier:3,explorer_reward:'Secret reward 🎁'};
 let bestScore=0, currentScore=0;
@@ -576,10 +649,11 @@ function renderDishHUD(){
 function updateLivesHUD(){
   var el=document.getElementById('hud-lives');
   el.innerHTML='';
-  for(var i=0;i<5;i++){
+  for(var i=0;i<3;i++){
     var span=document.createElement('span');
-    span.style.fontSize='18px';
-    span.style.opacity=i<(wepa?wepa.missed:0)?'0.2':'1';
+    span.style.fontSize='22px';
+    span.style.opacity=i<(wepa?wepa.missed:0)?'0.15':'1';
+    span.style.transition='opacity 0.3s';
     span.textContent='❤️';
     el.appendChild(span);
   }
@@ -599,14 +673,34 @@ function getClosestItem(){
 // ── TAP ──
 function onTap(){
   if(!gameRunning||gamePaused||dishCompleteShowing) return;
+  // Unlock audio context on first tap (mobile requirement)
+  getAudio();
   var target=getClosestItem();
   if(!target) return;
   wepa.targetLane=target.lane; wepa.catching=true; wepa.catchT=1;
-  wepa.expression='catching'; wepa.expressionT=20;
   target.caught=true;
-  if(target.isSpirit){ spiritCaught=true; showSpiritPopup(); }
-  else if(target.isGolden){ goldenShown=true; collectItem(target); showGoldenPopup(); }
-  else { collectItem(target); }
+  if(target.isSpirit){ spiritCaught=true; showSpiritPopup(); soundGoodCatch(); }
+  else if(target.isGolden){ goldenShown=true; collectItem(target); showGoldenPopup(); soundGoodCatch(); }
+  else if(target.isBad){ takeDamage(); }
+  else { collectItem(target); wepa.expression='catching'; wepa.expressionT=20; }
+}
+
+function takeDamage(){
+  wepa.missed++;
+  wepa.expression='hurt'; wepa.expressionT=30;
+  soundHeartLost();
+  // Red screen flash
+  var hf=document.getElementById('hit-flash');
+  hf.classList.remove('show'); void hf.offsetWidth; hf.classList.add('show');
+  // Floating heart lost
+  var hl=document.getElementById('heart-lost');
+  hl.classList.remove('show'); void hl.offsetWidth; hl.classList.add('show');
+  // Shake Wepa
+  wepa.shaking=8;
+  combo=0; document.getElementById('hud-combo').classList.remove('show');
+  updateLivesHUD();
+  spawnParticles(wepa.x,laneY(wepa.currentLane),'#e74c3c',10);
+  if(wepa.missed>=3){ setTimeout(endGame,400); }
 }
 canvas.addEventListener('click',onTap);
 canvas.addEventListener('touchstart',function(e){e.preventDefault();onTap();},{passive:false});
@@ -616,21 +710,24 @@ document.addEventListener('keydown',function(e){if(e.code==='Space'){e.preventDe
 function spawnItem(){
   var isSpirit=spiritActive&&!spiritCaught&&Math.random()<0.07;
   var isGolden=!isSpirit&&!goldenShown&&Math.random()<0.002;
+  // Bad items start at level 2, 25% chance per spawn
+  var isBad=!isSpirit&&!isGolden&&level>=2&&Math.random()<0.28;
   var emoji,code,size,color;
   if(isSpirit){
     var te={senior:'👑',kids:'🧒',pet:'🐾'};
     emoji=(te[passportData?.passport_type]||'🐸')+'✨'; size=52; color='#ffe066';
   } else if(isGolden){
     emoji='✨🐸✨'; size=52; color='#ffd700';
+  } else if(isBad){
+    emoji=BAD_ITEMS[Math.floor(Math.random()*BAD_ITEMS.length)];
+    size=52; color='#e74c3c'; code=null;
   } else {
-    // Always spawn ingredients for current country
     var c=WORLD[currentCountry];
     var nextIdx=currentDish.length%c.ingredients.length;
-    emoji=c.ingredients[nextIdx]; size=56; color=c.color;
-    code=currentCountry;
+    emoji=c.ingredients[nextIdx]; size=56; color=c.color; code=currentCountry;
   }
   var lane=Math.floor(Math.random()*3);
-  items.push({x:W+70,lane:lane,y:laneY(lane),emoji:emoji,code:code,size:size,color:color,isSpirit:isSpirit,isGolden:isGolden,caught:false,missed:false,wobble:Math.random()*Math.PI*2});
+  items.push({x:W+70,lane:lane,y:laneY(lane),emoji:emoji,code:code,size:size,color:color,isSpirit:isSpirit,isGolden:isGolden,isBad:isBad,caught:false,missed:false,wobble:Math.random()*Math.PI*2});
 }
 
 // ── COLLECT ──
@@ -642,6 +739,7 @@ function collectItem(item){
   clearTimeout(comboTimer);
   comboTimer=setTimeout(function(){combo=0;document.getElementById('hud-combo').classList.remove('show');},2200);
   spawnParticles(item.x,item.y,item.color,12);
+  soundGoodCatch();
   showCatchFlash('+'+(Math.floor(pts))+(isFeatured?' ⭐':'')+(combo>1?' x'+combo:''));
   if(combo>1){ var hc=document.getElementById('hud-combo'); hc.textContent=combo+'x COMBO!'; hc.classList.remove('show'); void hc.offsetWidth; hc.classList.add('show'); }
   wepa.expression='happy'; wepa.expressionT=15;
@@ -680,6 +778,7 @@ function completeDish(){
   var dc=document.getElementById('dish-complete');
   dc.classList.add('show');
   wepa.expression='celebrate'; wepa.expressionT=120;
+  soundDishComplete();
 }
 
 function closeDishComplete(){
@@ -779,6 +878,10 @@ function drawWepa(){
   var bob=Math.sin(frameCount*0.09)*5;
   if(wepa.expression==='celebrate') bob=Math.sin(frameCount*0.25)*12;
 
+  // Shake on hit
+  var shakeX=0;
+  if(wepa.shaking>0){ shakeX=(Math.random()-0.5)*wepa.shaking*3; wepa.shaking-=1; }
+
   // Catching stretch
   var sx=1,sy=1;
   if(wepa.catching){ wepa.catchT-=0.07; if(wepa.catchT<=0){wepa.catching=false;} sx=1+wepa.catchT*0.5; sy=1-wepa.catchT*0.3; }
@@ -793,13 +896,13 @@ function drawWepa(){
   ctx.ellipse(wepa.x,wy+wepa.size*0.55,wepa.size*0.45*sx,8*sy,0,0,Math.PI*2);
   ctx.fill();
 
-  // Solid background circle so Wepa is always visible
+  // Solid background circle
   ctx.save();
-  ctx.fillStyle='rgba(255,255,255,0.92)';
+  ctx.fillStyle=wepa.expression==='hurt'?'rgba(255,100,100,0.92)':'rgba(255,255,255,0.92)';
   ctx.beginPath();
-  ctx.arc(wepa.x, wy+bob, wepa.size*0.62, 0, Math.PI*2);
+  ctx.arc(wepa.x+shakeX, wy+bob, wepa.size*0.62, 0, Math.PI*2);
   ctx.fill();
-  ctx.strokeStyle='rgba(232,168,62,0.5)';
+  ctx.strokeStyle=wepa.expression==='hurt'?'rgba(231,76,60,0.8)':'rgba(232,168,62,0.5)';
   ctx.lineWidth=2.5;
   ctx.stroke();
 
@@ -816,7 +919,7 @@ function drawWepa(){
   ctx.font=wepa.size+'px serif';
   ctx.textAlign='center';
   ctx.textBaseline='middle';
-  ctx.translate(wepa.x,wy+bob);
+  ctx.translate(wepa.x+shakeX,wy+bob);
   ctx.scale(sx,sy);
   ctx.fillText('🐸',0,0);
   ctx.restore();
@@ -824,7 +927,10 @@ function drawWepa(){
   // Expression emoji overlay
   if(wepa.expression==='catching'&&wepa.expressionT>0){
     ctx.save(); ctx.font='22px serif'; ctx.textAlign='center';
-    ctx.fillText('😋',wepa.x+30,wy+bob-30); ctx.restore();
+    ctx.fillText('😋',wepa.x+shakeX+32,wy+bob-32); ctx.restore();
+  } else if(wepa.expression==='hurt'&&wepa.expressionT>0){
+    ctx.save(); ctx.font='22px serif'; ctx.textAlign='center';
+    ctx.fillText('😱',wepa.x+shakeX+32,wy+bob-32); ctx.restore();
   } else if(wepa.expression==='celebrate'&&wepa.expressionT>0){
     ctx.save(); ctx.font='24px serif'; ctx.textAlign='center';
     var stars=['⭐','✨','🎉'];
@@ -874,6 +980,27 @@ function drawItems(){
       ctx.beginPath(); ctx.arc(0,0,item.size*0.7,0,Math.PI*2); ctx.fill();
       ctx.font=item.size+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
       ctx.fillText(item.emoji,0,0);
+    } else if(item.isBad){
+      // Scary red shaking bubble
+      var shake=(Math.random()-0.5)*4;
+      ctx.translate(item.x+shake,iy);
+      var badPulse=1+Math.sin(frameCount*0.2)*0.08;
+      ctx.scale(badPulse,badPulse);
+      // Dark red bubble
+      ctx.fillStyle='#c0392b';
+      ctx.globalAlpha=0.92;
+      ctx.beginPath(); ctx.arc(0,0,item.size*0.72,0,Math.PI*2); ctx.fill();
+      // Danger ring
+      ctx.globalAlpha=1;
+      ctx.strokeStyle='#ff6b6b'; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.arc(0,0,item.size*0.72,0,Math.PI*2); ctx.stroke();
+      // Emoji
+      ctx.font=item.size*0.85+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(item.emoji,0,0);
+      // AVOID label
+      ctx.font='bold 12px '+getComputedStyle(document.body).fontFamily;
+      ctx.fillStyle='#ff9999';
+      ctx.fillText('⚠️ AVOID',0,item.size*0.92);
     } else {
       // Colored country bubble
       ctx.translate(item.x,iy);
@@ -918,8 +1045,9 @@ function gameLoop(){
   if(!gameRunning||gamePaused) return;
   frameCount++;
 
-  speed=3+Math.floor(frameCount/500)*0.3;
-  level=Math.min(6,1+Math.floor(frameCount/500));
+  var newLevel=Math.min(6,1+Math.floor(frameCount/500));
+  if(newLevel>level){ level=newLevel; soundLevelUp(); }
+  level=newLevel;
   document.getElementById('hud-level').textContent='Level '+level;
   document.getElementById('hud-score').textContent=Math.floor(currentScore);
 
@@ -932,17 +1060,12 @@ function gameLoop(){
   // Move items
   items.forEach(function(item){ item.x-=speed; });
 
-  // Miss check
+  // Miss check — missing good items just resets combo, no heart loss
   items.forEach(function(item){
     if(!item.caught&&!item.missed&&item.x<wepa.x-50){
       item.missed=true;
-      if(!item.isSpirit&&!item.isGolden){
-        wepa.missed++;
-        wepa.expression='missed'; wepa.expressionT=18;
-        spawnParticles(wepa.x,laneY(1),'#ff6b6b',6);
+      if(!item.isSpirit&&!item.isGolden&&!item.isBad){
         combo=0; document.getElementById('hud-combo').classList.remove('show');
-        updateLivesHUD();
-        if(wepa.missed>=5){ endGame(); return; }
       }
     }
   });
@@ -1019,6 +1142,21 @@ function startSpiritTimer(){
   upd(); spiritTimerInterval=setInterval(upd,1000);
 }
 
+// ── TUTORIAL ──
+function showTutorial(){
+  document.getElementById('tutorial-overlay').classList.add('show');
+  gamePaused=true;
+}
+function closeTutorial(){
+  document.getElementById('tutorial-overlay').classList.remove('show');
+  tutorialShown=true;
+  gamePaused=false;
+  animFrame=requestAnimationFrame(gameLoop);
+  // Show tap hint after tutorial
+  var hint=document.getElementById('tap-hint');
+  hint.classList.remove('active'); void hint.offsetWidth; hint.classList.add('active');
+}
+
 // ── GAME FLOW ──
 function startGame(){
   showScreen(null);
@@ -1027,8 +1165,13 @@ function startGame(){
   document.getElementById('gameCanvas').classList.add('active');
   initGame(); gameRunning=true; gamePaused=false;
   animFrame=requestAnimationFrame(gameLoop);
-  var hint=document.getElementById('tap-hint');
-  hint.classList.remove('active'); void hint.offsetWidth; hint.classList.add('active');
+  // Show tutorial on first play
+  if(!tutorialShown){
+    setTimeout(showTutorial,600);
+  } else {
+    var hint=document.getElementById('tap-hint');
+    hint.classList.remove('active'); void hint.offsetWidth; hint.classList.add('active');
+  }
 }
 
 function pauseGame(){
@@ -1046,6 +1189,7 @@ async function endGame(){
 
   var score=Math.floor(currentScore);
   var isNewBest=score>bestScore; if(isNewBest) bestScore=score;
+  soundGameOver();
 
   try {
     await fetch(SB_URL+'/rest/v1/wepa_scores',{
