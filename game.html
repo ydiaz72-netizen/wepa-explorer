@@ -2167,6 +2167,15 @@ async function endGame(){
         body:JSON.stringify({passport_id:passportId,country_code:c})
       }).catch(function(){});
     });
+    // Write game points back to passport (capped at 500 per session)
+    var gamePoints=Math.min(score,500);
+    var newPassportPts=(passportData?passportData.points||0:0)+gamePoints;
+    await fetch(SB_URL+'/rest/v1/wepa_passports?id=eq.'+passportId,{
+      method:'PATCH',
+      headers:{'Content-Type':'application/json',apikey:SB_KEY,Prefer:'return=minimal'},
+      body:JSON.stringify({points:newPassportPts})
+    });
+    if(passportData) passportData.points=newPassportPts;
   }catch(e){}
 
   document.getElementById('go-score').textContent=score;
