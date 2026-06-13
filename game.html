@@ -1184,17 +1184,40 @@ function updateBossHUD(){
   document.getElementById('boss-hud-hits').textContent=t('hitsRemaining')+' '+boss.hp+' / '+boss.maxHp;
 }
 
+var bossWeaponRespawnTimer=null;
+
 function spawnBossWeapon(){
   if(bossWeaponSpawned) return;
   bossWeaponSpawned=true;
   var bd=levelConfig.boss;
-  // Spawn weapon item in Wepa's current lane
+  var spawnLane=wepa.lane;
   items.push({
-    x:W*0.5, lane:wepa.lane, y:laneY(wepa.lane),
-    emoji:bd.weapon, code:null, size:60, color:'#e8a83e',
+    x:W*0.55, lane:spawnLane, y:laneY(spawnLane),
+    emoji:bd.weapon, code:null, size:68, color:'#e8a83e',
     isSpirit:false, isGolden:false, isBad:false, isBossWeapon:true,
-    hit:false, missed:false, wobble:0, speedMult:0.5
+    hit:false, missed:false, wobble:0, speedMult:0.45
   });
+  // Flash the screen gold so player never misses it
+  var sf=document.getElementById('spirit-flash');
+  sf.classList.remove('show'); void sf.offsetWidth; sf.classList.add('show');
+  showCatchFlash('🗡️ GRAB THE WEAPON!');
+}
+
+function scheduleBossWeaponRespawn(){
+  if(bossWeaponRespawnTimer) clearTimeout(bossWeaponRespawnTimer);
+  // Respawn delay scales with level: harder = longer wait
+  var delays=[4000,4000,6000,6000,9000];
+  var delay=delays[(currentLevelNum-1)]||6000;
+  // Speed of weapon item also scales: harder = faster moving
+  var speedMults=[0.45,0.45,0.60,0.65,0.80];
+  bossWeaponRespawnTimer=setTimeout(function(){
+    if(!bossActive||!gameRunning) return;
+    bossWeaponSpawned=false;
+    spawnBossWeapon();
+    // Override speedMult on the just-spawned weapon
+    var w=items[items.length-1];
+    if(w&&w.isBossWeapon) w.speedMult=speedMults[(currentLevelNum-1)]||0.6;
+  },delay);
 }
 
 function updateLivesHUD(){
